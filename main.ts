@@ -148,10 +148,10 @@ let char_speed_decel_rate = 0
 let char_speed_rate = 0
 let char_speed_max = 0
 let buildable_blocks: Image[] = []
+let selected_block: Sprite = null
 let tool_active = ""
 let char_button_direction = 0
 let char: Sprite = null
-let selected_block: Sprite = null
 setupVariables()
 tiles.setTilemap(tilemap`level1`)
 char = sprites.create(img`
