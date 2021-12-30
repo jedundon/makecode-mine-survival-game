@@ -1,3 +1,6 @@
+function groundLevelAtColumn (col: number) {
+    return world_ground_height[col]
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tool_active == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
@@ -80,7 +83,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         if (!(char_button_direction < 0)) {
             if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
                 if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
-                    if (tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), tiles.XY.row) >= 10) {
+                    if (isActionLocationAboveGround(char, char_button_direction)) {
                         tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
                         tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
                     } else {
@@ -121,23 +124,23 @@ function generateWorld () {
     world_rows = tiles.tilemapRows() - 0
     world_cols = tiles.tilemapColumns() - 0
     generateGroundHeight()
-    for (let col = 0; col <= world_cols - 1; col++) {
+    for (let col2 = 0; col2 <= world_cols - 1; col2++) {
         for (let row = 0; row <= world_rows - 1; row++) {
             if (row == world_rows - 1) {
-                tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`CORE`)
-                tiles.setWallAt(tiles.getTileLocation(col, row), true)
-            } else if (row > world_ground_height[col]) {
+                tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`CORE`)
+                tiles.setWallAt(tiles.getTileLocation(col2, row), true)
+            } else if (row > world_ground_height[col2]) {
                 if (Math.percentChance(75)) {
-                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`stone`)
-                    tiles.setWallAt(tiles.getTileLocation(col, row), true)
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
                 } else {
-                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`Dirt`)
-                    tiles.setWallAt(tiles.getTileLocation(col, row), true)
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
                 }
             } else if (Math.percentChance(100)) {
-                if (row == world_ground_height[col]) {
-                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`Grass`)
-                    tiles.setWallAt(tiles.getTileLocation(col, row), true)
+                if (row == world_ground_height[col2]) {
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Grass`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
                 }
             } else {
             	
@@ -146,18 +149,21 @@ function generateWorld () {
     }
     generatePlants()
 }
+function isActionLocationAboveGround (char: Sprite, button_direction: number) {
+    return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
+}
 function generatePlants () {
-    for (let col = 0; col <= world_cols - 1; col++) {
-        ground_current = world_ground_height[col]
+    for (let col3 = 0; col3 <= world_cols - 1; col3++) {
+        ground_current = world_ground_height[col3]
         if (Math.percentChance(10)) {
-            tiles.setTileAt(tiles.getTileLocation(col, ground_current - 1), assets.tile`BushEmpty`)
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`BushEmpty`)
         } else if (Math.percentChance(25)) {
             tree_height = randint(2, 5)
-            tiles.setTileAt(tiles.getTileLocation(col, ground_current - 1), assets.tile`TreeTrunk0`)
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`TreeTrunk0`)
             for (let index = 0; index <= tree_height - 2; index++) {
-                tiles.setTileAt(tiles.getTileLocation(col, ground_current - (index + 2)), assets.tile`TreeLog0`)
+                tiles.setTileAt(tiles.getTileLocation(col3, ground_current - (index + 2)), assets.tile`TreeLog0`)
             }
-            tiles.setTileAt(tiles.getTileLocation(col, ground_current - tree_height), assets.tile`TreeTop`)
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - tree_height), assets.tile`TreeTop`)
         }
     }
 }
@@ -209,8 +215,8 @@ let world_cols = 0
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
-let world_ground_height: number[] = []
 let tool_active = ""
+let world_ground_height: number[] = []
 let char_button_direction = 0
 let char: Sprite = null
 let selected_block: Sprite = null
