@@ -1,5 +1,5 @@
 {
-    "name": "SurMine",
+    "name": "MineSur",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -23,7 +23,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.5.46",
+        "target": "1.7.24",
         "targetId": "arcade"
     },
     "supportedTargets": [

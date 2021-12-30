@@ -14,6 +14,27 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         char.say("hammer", 200)
     }
 })
+function generateGroundHeight () {
+    world_ground_height = []
+    ground_prev = 15
+    ground_min = 8
+    ground_max = 25
+    for (let col = 0; col <= world_cols - 1; col++) {
+        if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
+        } else if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev - randint(2, 5), ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev + randint(2, 5), ground_min, ground_max)
+        } else {
+            ground_current = ground_prev
+        }
+        ground_prev = ground_current
+        world_ground_height.push(ground_current)
+    }
+}
 function buildValid () {
     if (char.overlapsWith(selected_block)) {
         return 0
@@ -58,12 +79,15 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tool_active == "pickaxe") {
         if (!(char_button_direction < 0)) {
             if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
-                if (tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), tiles.XY.row) >= 10) {
-                    tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`tile6`)
-                } else {
-                    tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`tile2`)
+                if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
+                    if (tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), tiles.XY.row) >= 10) {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
+                        tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
+                    } else {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
+                        tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
+                    }
                 }
-                tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
             }
         }
     } else if (tool_active == "hammer") {
@@ -79,7 +103,8 @@ sprites.setDataNumber(selected_block, "blink", 0)
     }
 })
 function setupVariables () {
-    char_speed_max = 150
+    tick_speed = 1000
+    char_speed_max = 125
     char_speed_rate = 10
     char_speed_decel_rate = 0.85
     char_speed_jump = -150
@@ -93,22 +118,46 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function generateWorld () {
-    for (let col = 0; col <= 99; col++) {
-        for (let row = 0; row <= 99; row++) {
-            if (row > 10) {
-                if (Math.percentChance(50)) {
+    world_rows = tiles.tilemapRows() - 0
+    world_cols = tiles.tilemapColumns() - 0
+    generateGroundHeight()
+    for (let col = 0; col <= world_cols - 1; col++) {
+        for (let row = 0; row <= world_rows - 1; row++) {
+            if (row == world_rows - 1) {
+                tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`CORE`)
+                tiles.setWallAt(tiles.getTileLocation(col, row), true)
+            } else if (row > world_ground_height[col]) {
+                if (Math.percentChance(75)) {
                     tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`stone`)
                     tiles.setWallAt(tiles.getTileLocation(col, row), true)
                 } else {
-                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`ruby ore`)
+                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(col, row), true)
+                }
+            } else if (Math.percentChance(100)) {
+                if (row == world_ground_height[col]) {
+                    tiles.setTileAt(tiles.getTileLocation(col, row), assets.tile`Grass`)
                     tiles.setWallAt(tiles.getTileLocation(col, row), true)
                 }
             } else {
-                if (row == 10) {
-                    tiles.setTileAt(tiles.getTileLocation(col, row), sprites.castle.tilePath2)
-                    tiles.setWallAt(tiles.getTileLocation(col, row), true)
-                }
+            	
             }
+        }
+    }
+    generatePlants()
+}
+function generatePlants () {
+    for (let col = 0; col <= world_cols - 1; col++) {
+        ground_current = world_ground_height[col]
+        if (Math.percentChance(10)) {
+            tiles.setTileAt(tiles.getTileLocation(col, ground_current - 1), assets.tile`BushEmpty`)
+        } else if (Math.percentChance(25)) {
+            tree_height = randint(2, 5)
+            tiles.setTileAt(tiles.getTileLocation(col, ground_current - 1), assets.tile`TreeTrunk0`)
+            for (let index = 0; index <= tree_height - 2; index++) {
+                tiles.setTileAt(tiles.getTileLocation(col, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            }
+            tiles.setTileAt(tiles.getTileLocation(col, ground_current - tree_height), assets.tile`TreeTop`)
         }
     }
 }
@@ -135,6 +184,10 @@ controller.A.onEvent(ControllerButtonEvent.Released, function () {
 function setupBuildables () {
     buildable_blocks = []
     buildable_blocks.push(assets.tile`brick_block`)
+    buildable_blocks.push(assets.tile`Rock_Block`)
+    buildable_blocks.push(assets.tile`Dirt`)
+    buildable_blocks.push(assets.tile`stone`)
+    buildable_blocks.push(assets.tile`BushEmpty`)
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tool_active == "hammer" && controller.A.isPressed()) {
@@ -143,40 +196,33 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+let tree_height = 0
+let world_rows = 0
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
 let char_speed_rate = 0
 let char_speed_max = 0
+let tick_speed = 0
 let buildable_blocks: Image[] = []
-let selected_block: Sprite = null
+let ground_current = 0
+let world_cols = 0
+let ground_max = 0
+let ground_min = 0
+let ground_prev = 0
+let world_ground_height: number[] = []
 let tool_active = ""
 let char_button_direction = 0
 let char: Sprite = null
+let selected_block: Sprite = null
 setupVariables()
-tiles.setTilemap(tilemap`level1`)
-char = sprites.create(img`
-    . . . . f f f f . . . . 
-    . . f f f 2 2 f f f . . 
-    . f f f 2 2 2 2 f f f . 
-    f f f e e e e e e f f f 
-    f f e 2 2 2 2 2 2 e e f 
-    f e 2 f f f f f f 2 e f 
-    f f f f e e e e f f f f 
-    f e f b f 4 4 f b f e f 
-    e e 4 1 f d d f 1 4 e e 
-    f e e d d d d d d e e f 
-    . f e e 4 4 4 4 e e f . 
-    e 4 f 2 2 2 2 2 2 f 4 e 
-    4 d f 2 2 2 2 2 2 f d 4 
-    4 4 f 4 4 5 5 4 4 f 4 4 
-    . . . f f f f f f . . . 
-    . . . f f . . f f . . . 
-    `, SpriteKind.Player)
+tiles.setTilemap(tilemap`World`)
+char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
 char.ay = 250
 char_button_direction = -1
 generateWorld()
 setupBuildables()
 scene.cameraFollowSprite(char)
+tiles.placeOnTile(char, tiles.getTileLocation(50, 7))
 game.onUpdate(function () {
     if (controller.down.isPressed()) {
         char_button_direction = 3
@@ -242,6 +288,31 @@ game.onUpdate(function () {
         }
     }
 })
-game.onUpdateInterval(200, function () {
-	
+forever(function () {
+    if (Math.percentChance(75)) {
+        music.playMelody("C B A G A G F G ", 150)
+        music.playMelody("G F G A B A D G ", 150)
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("E D G F B A C5 B ", 150)
+            music.playMelody("B C5 G A E F D E ", 150)
+        }
+        music.playMelody("C D E F G A B C ", 150)
+        music.playMelody("C5 B A G F E D C5 ", 150)
+    } else {
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C5 E D B D F B - ", 150)
+        }
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("C5 B A G F E D C ", 150)
+            music.playMelody("C D E F G A B C5 ", 150)
+        }
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C C C C5 C5 C C C ", 150)
+        }
+        music.playMelody("C C C C5 C5 C F C ", 150)
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("E B C5 A B G A F ", 150)
+        }
+        music.playMelody("A F E F D G E F ", 150)
+    }
 })
