@@ -14,16 +14,6 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "OldApple"
     },
-    "image5": {
-        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R////Tv7/HdH7/+/k//8d0bv/Tv7//x3Ry+vk////HdHL6/7///8d0bu8+////x3Rvsu8////HdHku7v7//8d0d3d3d3d3R0REREREREREQ==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "TOOLpicaxePLATE"
-    },
-    "image6": {
-        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R7/7/Tv7/HdFO5O/k//8d0U5ETv7//x3RTkTk////HdHvRET+//8d0e9OROT//x3R/+5E5P//HdH//+7+//8d0d3d3d3d3R0REREREREREQ==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "TOOLhammer"
-    },
     "image7": {
         "data": "hwQQABAAAAAAwPz/AAAAAADMu7vM/wD/ADyzzLzd/L8AO8PM3b39u7Abw9zMvd27sBHD29293f+wMTPb3d3d/7AzM9vd3N0MOzMz283dzQw7MzOz3d3NuzszM7Pd3bvdOxMxM8vM/N2wGzEzzMz72wC7yzPDzPv/AAAAPDO7/wAAAADA/P8PAA==",
         "mimeType": "image/x-mkcd-f4",
@@ -38,11 +28,6 @@
         "data": "hwQNAAkAAAAAAAAEAAAAAAAAQEMAAAAAAEA0RAQAAAAAQDMzBAAAAABAM0MEAAAAAEAzQwAAAAAAQDNDAAAAAEREREMAAAAANDNDQwAAAAD0/0NDBAAAADQzQzMEAAAA9P9DRAQAAABEREQAAAAAAA==",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "anamalPig"
-    },
-    "image4": {
-        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f///////x3R////////HdH/7u7u7v8d0f9ORETk/x3R/05EROT/HdH/TkRE5P8d0f9ORETk/x3R/05EROT/HdH/TkRE5P8d0f/u7u7u/x3R////////HdH///////8d0d3d3d3d3R0REREREREREQ==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "TOOLhand"
     },
     "image11": {
         "data": "hwQNAAkAAAAAAAAEAAAAAAAAQEMAAAAAAEA0RAQAAAAAQDMzBAAAAABAM0MEAAAAAEAzQwAAAAAAQDNDAAAAAEREREMAAAAANDNDQwAAAAD0/0NDBAAAADQzQzMEAAAA9P9DRAQAAABEREQAAAAAAA==",
@@ -73,6 +58,21 @@
         "data": "hwQMAA4AAAAAAAAA7g4AAAAAAABODgAAAAAAAO4OAADu7u4AAAAIAP7/5IiIiAgATkTkaGYIAABORORoZggAAP7/5IiIiAgA7u7uAAAACAAAAAAA7g4AAAAAAABODgAAAAAAAO4OAAA=",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "PlayerIdle1"
+    },
+    "image5": {
+        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R////Tv7/HdH7/+/k//8d0bv/Tv7//x3Ry+vk////HdHL6/7///8d0bu8+////x3Rvsu8////HdHku7v7//8d0d3d3d3d3R0REREREREREQ==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "TOOLpicaxePLATE"
+    },
+    "image4": {
+        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f///////x3R////////HdH/7u7u7v8d0f9ORETk/x3R/05EROT/HdH/TkRE5P8d0f9ORETk/x3R/05EROT/HdH/TkRE5P8d0f/u7u7u/x3R////////HdH///////8d0d3d3d3d3R0REREREREREQ==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "TOOLhand"
+    },
+    "image6": {
+        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R7/7/Tv7/HdFO5O/k//8d0U5ETv7//x3RTkTk////HdHvRET+//8d0e9OROT//x3R/+5E5P//HdH//+7+//8d0d3d3d3d3R0REREREREREQ==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "TOOLhammer"
     },
     "anim1": {
         "namespace": "myAnimations",

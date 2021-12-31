@@ -46,44 +46,6 @@ f . . . . . . . . . . . . . . f
 . 7 2 2 2 4 7 2 . 
 . 2 2 2 2 2 2 2 . 
 `;
-            case "image5":
-            case "TOOLpicaxePLATE":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f b b b b b e 4 d 1 
-1 d f f f f f f b c c b b e d 1 
-1 d f f f f f f f b b c b b d 1 
-1 d f f f f f f f e e b c b d 1 
-1 d f f f f f f e 4 e b c b d 1 
-1 d f f f f f e 4 e f f b b d 1 
-1 d f f f f e 4 e f f f f b d 1 
-1 d f f f e 4 e f f f f f f d 1 
-1 d f f e 4 e f f f f f f f d 1 
-1 d f e 4 e f f f f f f f f d 1 
-1 d e 4 e f f f f f f f f f d 1 
-1 d e e f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-`;
-            case "image6":
-            case "TOOLhammer":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f e e e f f f f d 1 
-1 d f f f f e 4 4 4 e e f f d 1 
-1 d f f f f e 4 4 4 4 e e f d 1 
-1 d f f f f f e 4 4 4 4 e f d 1 
-1 d f f f f f f e 4 4 4 4 e d 1 
-1 d f f f f f e 4 e 4 4 4 e d 1 
-1 d f f f f e 4 e f e 4 4 e d 1 
-1 d f f f e 4 e f f f e e f d 1 
-1 d f f e 4 e f f f f f f f d 1 
-1 d f e 4 e f f f f f f f f d 1 
-1 d e 4 e f f f f f f f f f d 1 
-1 d e e f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-`;
             case "image7":
             case "anamalMuchroom":return img`
 . . . . . . . . b b b b . . . . 
@@ -122,25 +84,6 @@ f b c c d d d d d b b 3 3 3 3 c
 4 3 4 3 3 3 3 3 3 3 3 4 . 
 . 4 4 3 4 4 4 4 4 4 3 4 . 
 . . 4 4 4 . . . . 4 4 4 . 
-`;
-            case "image4":
-            case "TOOLhand":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f f f f f f f f d 1 
-1 d f f f f f f f f f f f f d 1 
-1 d f f e e e e e e e e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e 4 4 4 4 4 4 e f f d 1 
-1 d f f e e e e e e e e f f d 1 
-1 d f f f f f f f f f f f f d 1 
-1 d f f f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 `;
             case "image11":
             case "anamalPig0":return img`
@@ -239,6 +182,63 @@ e e e . 8 8 8 8 . e e e
 . . . . 8 . . 8 . . . . 
 . . . 8 8 . . 8 8 . . . 
 . . . . . . . . . . . . 
+`;
+            case "image5":
+            case "TOOLpicaxePLATE":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f b b b b b e 4 d 1 
+1 d f f f f f f b c c b b e d 1 
+1 d f f f f f f f b b c b b d 1 
+1 d f f f f f f f e e b c b d 1 
+1 d f f f f f f e 4 e b c b d 1 
+1 d f f f f f e 4 e f f b b d 1 
+1 d f f f f e 4 e f f f f b d 1 
+1 d f f f e 4 e f f f f f f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image4":
+            case "TOOLhand":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f f f f f f f f d 1 
+1 d f f f f f f f f f f f f d 1 
+1 d f f e e e e e e e e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e 4 4 4 4 4 4 e f f d 1 
+1 d f f e e e e e e e e f f d 1 
+1 d f f f f f f f f f f f f d 1 
+1 d f f f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image6":
+            case "TOOLhammer":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f e e e f f f f d 1 
+1 d f f f f e 4 4 4 e e f f d 1 
+1 d f f f f e 4 4 4 4 e e f d 1 
+1 d f f f f f e 4 4 4 4 e f d 1 
+1 d f f f f f f e 4 4 4 4 e d 1 
+1 d f f f f f e 4 e 4 4 4 e d 1 
+1 d f f f f e 4 e f e 4 4 e d 1 
+1 d f f f e 4 e f f f e e f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 `;
         }
         return null;

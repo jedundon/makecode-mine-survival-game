@@ -1,22 +1,25 @@
+namespace SpriteKind {
+    export const Icon = SpriteKind.create()
+}
 function groundLevelAtColumn (col: number) {
     return world_ground_height[col]
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "hammer" && controller.A.isPressed()) {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
             grid.move(selected_block, 0, -1)
         }
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "hammer") {
-        tool_active = "pickaxe"
-        char.say("pickaxe", 200)
-    } else {
-        tool_active = "hammer"
-        char.say("hammer", 200)
-    }
+    toolChangeNext()
 })
+function toolChangeNext () {
+    // Picks the next item ID in the list. Goes back to 0 if bigger than list.
+    tool_selected = (tool_selected + 1) % tools_inventory.length
+    tool_selected_icon.setImage(toolCurrentIcon())
+    uiMessage(toolCurrentLabel())
+}
 function generateGroundHeight () {
     world_ground_height = []
     ground_prev = 15
@@ -79,7 +82,7 @@ function buildValid () {
 // 
 // fun
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "pickaxe") {
+    if (toolCurrentLabel() == "pickaxe") {
         if (!(char_button_direction < 0)) {
             if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
                 if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
@@ -93,7 +96,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 }
             }
         }
-    } else if (tool_active == "hammer") {
+    } else if (toolCurrentLabel() == "hammer") {
         selected_block = sprites.create(buildable_blocks._pickRandom(), SpriteKind.Food)
         sprites.setDataImage(selected_block, "img", selected_block.image)
 sprites.setDataNumber(selected_block, "blink", 0)
@@ -114,7 +117,7 @@ function setupVariables () {
     tool_active = "hammer"
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "hammer" && controller.A.isPressed()) {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
             grid.move(selected_block, -1, 0)
         }
@@ -168,14 +171,14 @@ function generatePlants () {
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "hammer" && controller.A.isPressed()) {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
             grid.move(selected_block, 1, 0)
         }
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    if (tool_active == "hammer") {
+    if (toolCurrentLabel() == "hammer") {
         if (buildValid() == 1) {
             tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
             tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
@@ -187,6 +190,9 @@ controller.A.onEvent(ControllerButtonEvent.Released, function () {
     	
     }
 })
+function toolCurrentLabel () {
+    return tools_all[tools_inventory[tool_selected]]
+}
 function setupBuildables () {
     buildable_blocks = []
     buildable_blocks.push(assets.tile`brick_block`)
@@ -196,14 +202,43 @@ function setupBuildables () {
     buildable_blocks.push(assets.tile`BushEmpty`)
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (tool_active == "hammer" && controller.A.isPressed()) {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (grid.spriteRow(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) < 3) {
             grid.move(selected_block, 0, 1)
         }
     }
 })
+function toolCurrentIcon () {
+    return tools_all_icons[tools_inventory[tool_selected]]
+}
+function setupPlayerInventory () {
+    tools_all = [
+    "pickaxe",
+    "hammer",
+    "hand",
+    "axe"
+    ]
+    tools_all_icons = [assets.image`TOOLpicaxePLATE`, assets.image`TOOLhammer`, assets.image`TOOLhand`]
+    tools_inventory = [2, 1, 0]
+    tool_selected = 0
+    tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
+    tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
+    tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
+}
+function uiMessage (text: string) {
+    ui_message = textsprite.create(text, 1, 15)
+    ui_message.setMaxFontHeight(3)
+    ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
+    ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
+    pause(1000)
+    ui_message.destroy(effects.disintegrate, 200)
+}
+let ui_message: TextSprite = null
+let tools_all_icons: Image[] = []
+let tools_all: string[] = []
 let tree_height = 0
 let world_rows = 0
+let tool_active = ""
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
 let char_speed_rate = 0
@@ -215,7 +250,9 @@ let world_cols = 0
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
-let tool_active = ""
+let tool_selected_icon: Sprite = null
+let tools_inventory: number[] = []
+let tool_selected = 0
 let world_ground_height: number[] = []
 let char_button_direction = 0
 let char: Sprite = null
@@ -226,6 +263,7 @@ char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
 char.ay = 250
 char_button_direction = -1
 generateWorld()
+setupPlayerInventory()
 setupBuildables()
 scene.cameraFollowSprite(char)
 tiles.placeOnTile(char, tiles.getTileLocation(50, 7))
@@ -243,7 +281,7 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    if (tool_active == "hammer" && controller.A.isPressed()) {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
         if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
             selected_block.setImage(img`
