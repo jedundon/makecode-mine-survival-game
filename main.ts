@@ -18,7 +18,7 @@ function toolChangeNext () {
     // Picks the next item ID in the list. Goes back to 0 if bigger than list.
     tool_selected = (tool_selected + 1) % tools_inventory.length
     tool_selected_icon.setImage(toolCurrentIcon())
-    uiMessage(toolCurrentLabel())
+    uiAddMessageToQueue(toolCurrentLabel())
 }
 function generateGroundHeight () {
     world_ground_height = []
@@ -114,6 +114,7 @@ function setupVariables () {
     char_speed_rate = 10
     char_speed_decel_rate = 0.85
     char_speed_jump = -150
+    ui_message_queue = []
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -176,6 +177,13 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function uiShowMessage (text: string) {
+    ui_message.setText(text)
+    ui_message.ay = 0
+    ui_message.setVelocity(0, 0)
+    ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
+    ui_message.ay = 2
+}
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     if (toolCurrentLabel() == "hammer") {
         if (buildValid() == 1) {
@@ -207,6 +215,9 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function uiAddMessageToQueue (text: string) {
+    ui_message_queue.push(text)
+}
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
 }
@@ -224,19 +235,17 @@ function setupPlayerInventory () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
-function uiMessage (text: string) {
-    ui_message = textsprite.create(text, 1, 15)
+function setupUIMessaging () {
+    ui_message = textsprite.create("", 1, 15)
     ui_message.setMaxFontHeight(3)
     ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
-    ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
-    pause(1000)
-    ui_message.destroy(effects.disintegrate, 200)
 }
-let ui_message: TextSprite = null
 let tools_all_icons: Image[] = []
 let tools_all: string[] = []
+let ui_message: TextSprite = null
 let tree_height = 0
 let world_rows = 0
+let ui_message_queue: string[] = []
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
 let char_speed_rate = 0
@@ -256,6 +265,7 @@ let char_button_direction = 0
 let char: Sprite = null
 let selected_block: Sprite = null
 setupVariables()
+setupUIMessaging()
 tiles.setTilemap(tilemap`World`)
 char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
 char.ay = 250
@@ -356,5 +366,16 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
+    }
+})
+// For handling UI messages.
+game.onUpdateInterval(200, function () {
+    if (ui_message_queue.length > 0) {
+        uiShowMessage(ui_message_queue.shift())
+    } else {
+        if (ui_message.y > scene.screenHeight() + 200) {
+            ui_message.ay = 0
+            ui_message.setVelocity(0, 0)
+        }
     }
 })
