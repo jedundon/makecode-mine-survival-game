@@ -114,7 +114,6 @@ function setupVariables () {
     char_speed_rate = 10
     char_speed_decel_rate = 0.85
     char_speed_jump = -150
-    tool_active = "hammer"
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -238,7 +237,6 @@ let tools_all_icons: Image[] = []
 let tools_all: string[] = []
 let tree_height = 0
 let world_rows = 0
-let tool_active = ""
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
 let char_speed_rate = 0
