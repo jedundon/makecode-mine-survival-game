@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const Icon = SpriteKind.create()
+    export const UI = SpriteKind.create()
 }
 function groundLevelAtColumn (col: number) {
     return world_ground_height[col]
@@ -123,6 +124,11 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function setupUIMessages () {
+    ui_message = textsprite.create("", 1, 15)
+    ui_message.setMaxFontHeight(3)
+    ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
+}
 function generateWorld () {
     world_rows = tiles.tilemapRows() - 0
     world_cols = tiles.tilemapColumns() - 0
@@ -218,6 +224,21 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 function uiAddMessageToQueue (text: string) {
     ui_message_queue.push(text)
 }
+function setupUIStatBars () {
+    char_health_max = 25
+    char_health_current = char_health_max
+    char_health_bar = sprites.create(image.create(scene.screenWidth() - 22, 9), SpriteKind.UI)
+    char_health_bar.setFlag(SpriteFlag.RelativeToCamera, true)
+    char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
+    uiUpdateStatBars()
+}
+function uiUpdateStatBars () {
+    char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
+    char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 4)
+    char_health_bar.image.fillRect(1, 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 2)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 8)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 6)
+}
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
 }
@@ -235,16 +256,14 @@ function setupPlayerInventory () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
-function setupUIMessaging () {
-    ui_message = textsprite.create("", 1, 15)
-    ui_message.setMaxFontHeight(3)
-    ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
-}
 let tools_all_icons: Image[] = []
+let char_health_bar: Sprite = null
+let char_health_current = 0
+let char_health_max = 0
 let tools_all: string[] = []
-let ui_message: TextSprite = null
 let tree_height = 0
 let world_rows = 0
+let ui_message: TextSprite = null
 let ui_message_queue: string[] = []
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
@@ -265,7 +284,8 @@ let char_button_direction = 0
 let char: Sprite = null
 let selected_block: Sprite = null
 setupVariables()
-setupUIMessaging()
+setupUIMessages()
+setupUIStatBars()
 tiles.setTilemap(tilemap`World`)
 char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
 char.ay = 250
@@ -366,6 +386,15 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
+    }
+})
+// temporary test of stat bars (to be deleted)
+// 
+game.onUpdateInterval(500, function () {
+    char_health_current += -1
+    uiUpdateStatBars()
+    if (char_health_current == 0) {
+        char_health_current = char_health_max
     }
 })
 // For handling UI messages.
