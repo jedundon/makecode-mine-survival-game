@@ -252,7 +252,7 @@ function toolCurrentIcon () {
 }
 function spawnEnemy (_type: string) {
     if (_type == "mushroom") {
-        enemy_sprite = sprites.create(assets.image`animalMushroom`, SpriteKind.Enemy)
+        enemy_sprite = sprites.create(assets.image`animalMushroom0`, SpriteKind.Enemy)
         sprites.setDataNumber(enemy_sprite, "gravity", 250)
         sprites.setDataNumber(enemy_sprite, "jump", randint(-100, -125))
         sprites.setDataNumber(enemy_sprite, "detection", 60)

@@ -70,9 +70,19 @@
         "displayName": "TOOLhammer"
     },
     "image7": {
-        "data": "hwQQABAAAAAAwPz/AAAAAADMu7vM/wD/ADyzzLzd/L8AO8PM3b39u7Abw9zMvd27sBHD29293f+wMTPb3d3d/7AzM9vd3N0MOzMz283dzQw7MzOz3d3NuzszM7Pd3bvdOxMxM8vM/N2wGzEzzMz72wC7yzPDzPv/AAAAPDO7/wAAAADA/P8PAA==",
+        "data": "hwQNAA0AAAAAALsLAAAAAACwOwsAAAAAALsTC7u7CwCwGzO7290LALsRM93d3QsAOzMz/93dCwA7MzHd3bsLADsxM//d3QsAuzMz3d3dCwCwGzG7290LAAC7MQu7uwsAALA7CwAAAAAAALsLAAAAAA==",
         "mimeType": "image/x-mkcd-f4",
-        "displayName": "animalMushroom"
+        "displayName": "animalMushroom0"
+    },
+    "image14": {
+        "data": "hwQNAA0AAAAAALsLAAAAAACwOwu7uwsAALsTC9vdCwCwGzO7290LALsRM93d3QsAOzMz/927CwA7MzHd3QsAADsxM//duwsAuzMz3d3dCwCwGzG7290LAAC7MQvb3QsAALA7C7u7CwAAALsLAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "animalMushroom1"
+    },
+    "image15": {
+        "data": "hwQNAA0AAAAAALC7AAAAAAAAu7MAAAAAALA7sbu7CwAAuzGz290LALAbMdPd3QsAsDMz89/dCwCwMxPT3bsLALATM/Pf3QsAsDsz093dCwAAuxGz290LAACwG7O7uwsAAAC7swAAAAAAALC7AAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "animalMushroom2"
     },
     "anim1": {
         "namespace": "myAnimations",
