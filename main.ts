@@ -176,6 +176,14 @@ function generatePlants () {
         }
     }
 }
+scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
+    if (sprite.isHittingTile(CollisionDirection.Left)) {
+        sprites.setDataNumber(sprite, "direction", 1)
+    } else if (sprite.isHittingTile(CollisionDirection.Right)) {
+        sprites.setDataNumber(sprite, "direction", -1)
+    }
+    sprite.sayText(sprite.vx)
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
@@ -242,6 +250,30 @@ function uiUpdateStatBars () {
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
 }
+function spawnEnemy (_type: string) {
+    if (_type == "mushroom") {
+        enemy_sprite = sprites.create(assets.image`animalMushroom`, SpriteKind.Enemy)
+        sprites.setDataNumber(enemy_sprite, "gravity", 250)
+        sprites.setDataNumber(enemy_sprite, "jump", randint(-100, -125))
+        sprites.setDataNumber(enemy_sprite, "detection", 60)
+        sprites.setDataBoolean(enemy_sprite, "detected", false)
+        if (Math.percentChance(50)) {
+            sprites.setDataNumber(enemy_sprite, "direction", 1)
+        } else {
+            sprites.setDataNumber(enemy_sprite, "direction", -1)
+        }
+        sprites.setDataNumber(enemy_sprite, "speed_normal", 10)
+        sprites.setDataNumber(enemy_sprite, "speed_detected", 20)
+        enemy_sprite.vx = sprites.readDataNumber(enemy_sprite, "speed_normal") * sprites.readDataNumber(enemy_sprite, "direction")
+        if (Math.percentChance(50)) {
+            enemy_sprite.x = char.x + (scene.screenWidth() + randint(-10, 20))
+        } else {
+            enemy_sprite.x = char.x - (scene.screenWidth() - randint(-10, 20))
+        }
+        enemy_sprite.y = 0
+        enemy_sprite.ay = sprites.readDataNumber(enemy_sprite, "gravity")
+    }
+}
 function setupPlayerInventory () {
     tools_all = [
     "pickaxe",
@@ -256,6 +288,7 @@ function setupPlayerInventory () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
+let enemy_sprite: Sprite = null
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
 let char_health_current = 0
@@ -360,6 +393,9 @@ game.onUpdate(function () {
         }
     }
 })
+game.onUpdateInterval(2000, function () {
+    spawnEnemy("mushroom")
+})
 forever(function () {
     if (Math.percentChance(75)) {
         music.playMelody("C B A G A G F G ", 150)
@@ -395,6 +431,27 @@ game.onUpdateInterval(500, function () {
     uiUpdateStatBars()
     if (char_health_current == 0) {
         char_health_current = char_health_max
+    }
+})
+game.onUpdateInterval(200, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
     }
 })
 // For handling UI messages.

@@ -14,11 +14,6 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "OldApple"
     },
-    "image7": {
-        "data": "hwQQABAAAAAAwPz/AAAAAADMu7vM/wD/ADyzzLzd/L8AO8PM3b39u7Abw9zMvd27sBHD29293f+wMTPb3d3d/7AzM9vd3N0MOzMz283dzQw7MzOz3d3NuzszM7Pd3bvdOxMxM8vM/N2wGzEzzMz72wC7yzPDzPv/AAAAPDO7/wAAAADA/P8PAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "anamalMuchroom"
-    },
     "image2": {
         "data": "hwQFAAUAAAAgIgAAQiICACIiAgAiQgIAICIAAA==",
         "mimeType": "image/x-mkcd-f4",
@@ -73,6 +68,11 @@
         "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R7/7/Tv7/HdFO5O/k//8d0U5ETv7//x3RTkTk////HdHvRET+//8d0e9OROT//x3R/+5E5P//HdH//+7+//8d0d3d3d3d3R0REREREREREQ==",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "TOOLhammer"
+    },
+    "image7": {
+        "data": "hwQQABAAAAAAwPz/AAAAAADMu7vM/wD/ADyzzLzd/L8AO8PM3b39u7Abw9zMvd27sBHD29293f+wMTPb3d3d/7AzM9vd3N0MOzMz283dzQw7MzOz3d3NuzszM7Pd3bvdOxMxM8vM/N2wGzEzzMz72wC7yzPDzPv/AAAAPDO7/wAAAADA/P8PAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "animalMushroom"
     },
     "anim1": {
         "namespace": "myAnimations",
