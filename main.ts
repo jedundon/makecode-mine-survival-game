@@ -13,6 +13,11 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        otherSprite.destroy(effects.disintegrate, 500)
+    }
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     toolChangeNext()
 })
@@ -106,8 +111,6 @@ sprites.setDataNumber(selected_block, "blink", 0)
         sprites.setDataNumber(selected_block, "blink_max", 30)
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
-    } else {
-    	
     }
 })
 function setupVariables () {
@@ -287,7 +290,8 @@ function spawnEnemy (_type: string) {
 function tooltest () {
     char_tool_sprite = sprites.create(assets.image`toolPickaxe0`, SpriteKind.Tool)
     sprites.setDataNumber(char_tool_sprite, "direction", 1)
-    char_tool_sprite.setFlag(SpriteFlag.Ghost, true)
+    char_tool_sprite.setFlag(SpriteFlag.GhostThroughTiles, true)
+    char_tool_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     char_tool_sprite.z = 3
 }
 function setupPlayerInventory () {
