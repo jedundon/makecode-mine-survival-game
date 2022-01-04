@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const Icon = SpriteKind.create()
     export const UI = SpriteKind.create()
+    export const Tool = SpriteKind.create()
 }
 function groundLevelAtColumn (col: number) {
     return world_ground_height[col]
@@ -116,6 +117,7 @@ function setupVariables () {
     char_speed_decel_rate = 0.85
     char_speed_jump = -150
     ui_message_queue = []
+    entities_max = 10
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -182,7 +184,9 @@ scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
     } else if (sprite.isHittingTile(CollisionDirection.Right)) {
         sprites.setDataNumber(sprite, "direction", -1)
     }
-    sprite.sayText(sprite.vx)
+    if (debug_mode) {
+        sprite.sayText(sprite.vx)
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -272,7 +276,19 @@ function spawnEnemy (_type: string) {
         }
         enemy_sprite.y = 0
         enemy_sprite.ay = sprites.readDataNumber(enemy_sprite, "gravity")
+        animation.runImageAnimation(
+        enemy_sprite,
+        assets.animation`AnimalMushroomWalking`,
+        200,
+        true
+        )
     }
+}
+function tooltest () {
+    char_tool_sprite = sprites.create(assets.image`toolPickaxe0`, SpriteKind.Tool)
+    sprites.setDataNumber(char_tool_sprite, "direction", 1)
+    char_tool_sprite.setFlag(SpriteFlag.Ghost, true)
+    char_tool_sprite.z = 3
 }
 function setupPlayerInventory () {
     tools_all = [
@@ -288,6 +304,7 @@ function setupPlayerInventory () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
+let char_tool_sprite: Sprite = null
 let enemy_sprite: Sprite = null
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
@@ -297,6 +314,7 @@ let tools_all: string[] = []
 let tree_height = 0
 let world_rows = 0
 let ui_message: TextSprite = null
+let entities_max = 0
 let ui_message_queue: string[] = []
 let char_speed_jump = 0
 let char_speed_decel_rate = 0
@@ -315,6 +333,8 @@ let tool_selected = 0
 let world_ground_height: number[] = []
 let char_button_direction = 0
 let char: Sprite = null
+let debug_mode = false
+debug_mode = false
 let selected_block: Sprite = null
 setupVariables()
 setupUIMessages()
@@ -322,12 +342,14 @@ setupUIStatBars()
 tiles.setTilemap(tilemap`World`)
 char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
 char.ay = 250
+char.z = 1
 char_button_direction = -1
 generateWorld()
 setupPlayerInventory()
 setupBuildables()
 scene.cameraFollowSprite(char)
 tiles.placeOnTile(char, tiles.getTileLocation(50, 7))
+tooltest()
 game.onUpdate(function () {
     if (controller.down.isPressed()) {
         char_button_direction = 3
@@ -393,8 +415,28 @@ game.onUpdate(function () {
         }
     }
 })
+game.onUpdate(function () {
+    if (char_button_direction == 0) {
+        sprites.setDataNumber(char_tool_sprite, "direction", -1)
+        if (char_tool_sprite.image.equals(assets.image`toolPickaxe0`)) {
+            char_tool_sprite.image.flipX()
+        }
+    } else if (char_button_direction == 2) {
+        sprites.setDataNumber(char_tool_sprite, "direction", 1)
+        if (!(char_tool_sprite.image.equals(assets.image`toolPickaxe0`))) {
+            char_tool_sprite.image.flipX()
+        }
+    }
+    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
+        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+    } else {
+        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
+    }
+})
 game.onUpdateInterval(2000, function () {
-    spawnEnemy("mushroom")
+    if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
+        spawnEnemy("mushroom")
+    }
 })
 forever(function () {
     if (Math.percentChance(75)) {

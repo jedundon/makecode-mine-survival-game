@@ -269,6 +269,55 @@ b b b b d f d f d b b b b
 . . b d d d b d d d b . . 
 . . b b b b b b b b b . . 
 `;
+            case "image16":
+            case "TOOLpicaxePLATE0":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f b b b b b e 4 d 1 
+1 d f f f f f f b c c b b e d 1 
+1 d f f f f f f f b b c b b d 1 
+1 d f f f f f f f e e b c b d 1 
+1 d f f f f f f e 4 e b c b d 1 
+1 d f f f f f e 4 e f f b b d 1 
+1 d f f f f e 4 e f f f f b d 1 
+1 d f f f e 4 e f f f f f f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image18":
+            case "Empty":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image17":
+            case "toolPickaxe0":return img`
+. . . . . . . . 
+. . . b b b b e 
+. . b c c c c b 
+. . . . e 4 c b 
+. . . e 4 e c b 
+. . e 4 e . c b 
+. e 4 e . . b . 
+. e e . . . . . 
+`;
         }
         return null;
     })
@@ -306,6 +355,86 @@ e e e . 8 8 8 8 . e e e
 . . . . 8 . . 8 . . . . 
 . . . 8 8 . . 8 8 . . . 
 . . . . . . . . . . . . 
+`];
+            case "myAnim":
+            case "anim2":return [img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`];
+            case "AnimalMushroomWalking":
+            case ")``yG!ptO17Z4[?-,o,p":return [img`
+. . . . b b b b b . . . . 
+. . . b b 3 3 3 b b . . . 
+. . b b 1 3 3 1 3 b b . . 
+. b b 1 1 3 3 3 3 1 b b . 
+b b 3 3 3 3 1 3 3 1 1 b b 
+b 3 1 3 3 3 3 3 3 3 3 3 b 
+b b b b d f d f d b b b b 
+. . . b d f d f d b . . . 
+. . b b d d d d d b b . . 
+. . b d d d d d d d b . . 
+. . b d d d b d d d b . . 
+. . b d d d b d d d b . . 
+. . b b b b b b b b b . . 
+`, img`
+. . . . b b b b b . . . . 
+. . . b b 3 3 3 b b . . . 
+. . b b 1 3 3 1 3 b b . . 
+. b b 1 1 3 3 3 3 1 b b . 
+b b 3 3 3 3 1 3 3 1 1 b b 
+b 3 1 3 3 3 3 3 3 3 3 3 b 
+b b b b d f d f d b b b b 
+. . . b d f d f d b . . . 
+. b b b d d d d d b b b . 
+. b d d d d d d d d d b . 
+. b d d d b b b d d d b . 
+. b d d d b . b d d d b . 
+. b b b b b . b b b b b . 
+`, img`
+. . . . . . . . . . . . . 
+. . . . b b b b b . . . . 
+. . . b b 3 3 3 b b . . . 
+. . b b 1 3 3 1 3 b b . . 
+. b b 1 1 3 3 3 3 1 b b . 
+b b 3 3 3 3 1 3 3 1 1 b b 
+b 3 1 3 3 3 3 3 3 3 3 3 b 
+b b b b d f d f d b b b b 
+. . b b d f d f d b b . . 
+. . b d d d d d d d b . . 
+. . b d d d b d d d b . . 
+. . b d d d b d d d b . . 
+. . b b b b b b b b b . . 
 `];
         }
         return null;

@@ -84,12 +84,41 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "animalMushroom2"
     },
+    "image16": {
+        "data": "hwQQABAAAAAREREREREREdHd3d3d3d0d0f//////7h3R/////+/kHdH/////Tv4d0f///+/k/x3R////Tv7/HdH7/+/k//8d0bv/Tv7//x3Ry+vk////HdHL6/7///8d0bu8+////x3Rvsu8////HdHku7v7//8d0d3d3d3d3R0REREREREREQ==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "TOOLpicaxePLATE0"
+    },
+    "image18": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Empty"
+    },
+    "image17": {
+        "data": "hwQIAAgAAAAAAAAAAAAA7gAL4OSwDE4OsOzkALBMDgCwzMwL4Lu7AA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "toolPickaxe0"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
         "mimeType": "application/mkcd-animation",
         "data": "YzgwMDBjMDAwZTAwMDIwMDAwZTBlZWVlMGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMGUwZWU2ODg2ZWUwZWUwZTQ2ODg2NGUwZWUwZWU2ODg2ZWUwZTAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMGVlMGU2ODg2ZTBlZTRlMGU2ODg2ZTBlNGVlMGU4ODg4ZTBlZTAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMA==",
         "displayName": "playerIdle"
+    },
+    "anim2": {
+        "namespace": "myAnimations",
+        "id": "anim2",
+        "mimeType": "application/mkcd-animation",
+        "data": "YzgwMDEwMDAxMDAwMDIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw",
+        "displayName": "myAnim"
+    },
+    ")``yG!ptO17Z4[?-,o,p": {
+        "namespace": "myImages",
+        "id": ")``yG!ptO17Z4[?-,o,p",
+        "mimeType": "application/mkcd-animation",
+        "data": "ZjQwMTBkMDAwZDAwMDMwMDAwMDBiYmJiMGIwMDAwMDBiYjMzYjMwYjAwMDBiYjMxMTNiMzBiMDBiYjExMzMzM2IxMGJiYjMzMzMzMTEzYjFiYjEzMzMzMzMzMzNiM2JiYmJmZGZkYmRiYjBiMDBkYmRmZGYwYjAwMDBiYmRkZGRiZDBiMDBiMGRkZGRkZGJkMDAwMGRiZGRkYmRkMGIwMGIwZGRiZGRkYmQwMDAwYmJiYmJiYmIwYjAwMDAwMGJiYmIwYjAwMDAwMGJiMzNiMzBiMDAwMGJiMzExM2IzMGIwMGJiMTEzMzMzYjEwYmJiMzMzMzMxMTNiMWJiMTMzMzMzMzMzM2IzYmJiYmZkZmRiZGJiMGIwMGRiZGZkZjBiMDBiMGJiZGRkZGJkYmIwMGRiZGRkZGRkZGQwYmIwZGRiZGJiZGRiZDAwZGJkZDBiZGJkZDBiYjBiYmJiYjBiYmJiMDAwMDAwMDAwMDAwMDAwMDAwYjBiYmJiMDAwMDAwYjAzYjMzYmIwMDAwYjAxYjMzMzFiYjAwYjAxYjMxMzMxM2JiYjAzYjMzMTMzMzExYmIzYjMxMzMzMzMzMzNiYmJiZGJkZmRmYmJiYjAwYmJmZGZkYmQwYjAwYjBkZGRkZGRiZDAwMDBkYmRkZGJkZDBiMDBiMGRkYmRkZGJkMDAwMGJiYmJiYmJiMGIwMA==",
+        "displayName": "AnimalMushroomWalking"
     },
     "*": {
         "mimeType": "image/x-mkcd-f4",
