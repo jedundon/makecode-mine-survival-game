@@ -66,18 +66,6 @@ f . . . . . . . . . . . . . . f
 . 4 4 3 4 4 4 4 4 4 3 4 . 
 . . 4 4 4 . . . . 4 4 4 . 
 `;
-            case "image11":
-            case "anamalPig0":return img`
-. . . . . . . 4 4 4 4 4 4 
-. . . . . . . 4 3 f 3 f 4 
-. . . . . . . 4 3 f 3 f 4 
-. . 4 4 4 4 4 4 3 f 3 f 4 
-. . 4 3 3 3 3 4 3 3 3 3 4 
-. 4 3 3 3 3 3 4 4 4 4 4 4 
-4 3 4 3 3 3 3 3 3 3 3 4 . 
-. 4 4 3 4 4 4 4 4 4 3 4 . 
-. . 4 4 4 . . . . 4 4 4 . 
-`;
             case "image12":
             case "anamalPigderpmcderp":return img`
 . f 2 2 f f 2 2 . . . . . . 
@@ -163,25 +151,6 @@ e e e . 8 8 8 8 . e e e
 . . . . 8 . . 8 . . . . 
 . . . 8 8 . . 8 8 . . . 
 . . . . . . . . . . . . 
-`;
-            case "image5":
-            case "TOOLpicaxePLATE":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f b b b b b e 4 d 1 
-1 d f f f f f f b c c b b e d 1 
-1 d f f f f f f f b b c b b d 1 
-1 d f f f f f f f e e b c b d 1 
-1 d f f f f f f e 4 e b c b d 1 
-1 d f f f f f e 4 e f f b b d 1 
-1 d f f f f e 4 e f f f f b d 1 
-1 d f f f e 4 e f f f f f f d 1 
-1 d f f e 4 e f f f f f f f d 1 
-1 d f e 4 e f f f f f f f f d 1 
-1 d e 4 e f f f f f f f f f d 1 
-1 d e e f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
 `;
             case "image4":
             case "TOOLhand":return img`
@@ -269,25 +238,6 @@ b b b b d f d f d b b b b
 . . b d d d b d d d b . . 
 . . b b b b b b b b b . . 
 `;
-            case "image16":
-            case "TOOLpicaxePLATE0":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f b b b b b e 4 d 1 
-1 d f f f f f f b c c b b e d 1 
-1 d f f f f f f f b b c b b d 1 
-1 d f f f f f f f e e b c b d 1 
-1 d f f f f f f e 4 e b c b d 1 
-1 d f f f f f e 4 e f f b b d 1 
-1 d f f f f e 4 e f f f f b d 1 
-1 d f f f e 4 e f f f f f f d 1 
-1 d f f e 4 e f f f f f f f d 1 
-1 d f e 4 e f f f f f f f f d 1 
-1 d e 4 e f f f f f f f f f d 1 
-1 d e e f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-`;
             case "image18":
             case "Empty":return img`
 . . . . . . . . . . . . . . . . 
@@ -317,6 +267,97 @@ b b b b d f d f d b b b b
 . . e 4 e . c b 
 . e 4 e . . b . 
 . e e . . . . . 
+`;
+            case "image5":
+            case "TOOLpicaxePLATE":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f b b b b b e 4 d 1 
+1 d f f f f b c c c c c c e d 1 
+1 d f f f f f f f f e 4 c b d 1 
+1 d f f f f f f f e 4 e c b d 1 
+1 d f f f f f f e 4 e f c b d 1 
+1 d f f f f f e 4 e f f c b d 1 
+1 d f f f f e 4 e f f f c b d 1 
+1 d f f f e 4 e f f f f b f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image16":
+            case "toolHammer":return img`
+. . . . . . . . 
+. . . e e e e . 
+. . . e 4 4 e e 
+. . . . e 4 4 e 
+. . . e 4 e 4 e 
+. . e 4 e . e e 
+. e 4 e . . . . 
+. e e . . . . . 
+`;
+            case "image19":
+            case "toolAxe0":return img`
+. . . . . . . . 
+. . . . . . e b 
+. . . . . e c b 
+. . . . e c c b 
+. . . e b b b b 
+. . e 4 e . . . 
+. e 4 e . . . . 
+. e e . . . . . 
+`;
+            case "image20":
+            case "TOOLaxePLATE":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f f f f f f e b d 1 
+1 d f f f f f f f f f e c b d 1 
+1 d f f f f f f f f e c c b d 1 
+1 d f f f f f f f e c c c b d 1 
+1 d f f f f f f e c c c c b d 1 
+1 d f f f f f e b b b b b b d 1 
+1 d f f f f e 4 e f f f f f d 1 
+1 d f f f e 4 e f f f f f f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image11":
+            case "anamalPig0":return img`
+. . . . . . . 4 4 4 4 4 4 
+. . . . . . . 4 3 f 3 f 4 
+. . . . . . . 4 3 f 3 f 4 
+. . 4 4 4 4 4 4 3 f 3 f 4 
+. . 4 3 3 3 3 4 3 3 3 3 4 
+. 4 3 3 3 3 3 4 4 4 4 4 4 
+4 3 4 3 3 3 3 3 3 3 3 4 . 
+. 4 4 4 3 4 4 4 4 3 4 4 . 
+. . . 4 4 4 . . 4 4 4 . . 
+`;
+            case "image21":
+            case "TereMuint":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . e e e e e e e e e . 
+. . . . . . e 7 7 7 7 7 7 7 e . 
+. . . . . . e 7 f 7 4 7 f 7 e . 
+. . . . . . e 4 4 f d f 4 3 e . 
+. . e e e e e 4 d f 4 f 4 3 e . 
+. . e 7 7 4 4 4 4 f 4 f d 4 e . 
+. . e 7 4 f 4 3 3 4 4 4 4 4 e . 
+. . e 4 4 f d 4 4 4 4 4 4 4 e . 
+. . e 4 d f 4 4 4 4 e e e e e . 
+. . e 4 4 f f f 3 4 e . . . . . 
+. . e 7 4 4 4 d 3 4 e . . . . . 
+. . e 7 7 4 4 4 4 4 e . . . . . 
+. . e e e e e e e e e . . . . . 
 `;
         }
         return null;
@@ -355,42 +396,6 @@ e e e . 8 8 8 8 . e e e
 . . . . 8 . . 8 . . . . 
 . . . 8 8 . . 8 8 . . . 
 . . . . . . . . . . . . 
-`];
-            case "myAnim":
-            case "anim2":return [img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`, img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
 `];
             case "AnimalMushroomWalking":
             case ")``yG!ptO17Z4[?-,o,p":return [img`
