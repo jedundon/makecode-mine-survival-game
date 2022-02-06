@@ -25,6 +25,7 @@ function toolChangeNext () {
     // Picks the next item ID in the list. Goes back to 0 if bigger than list.
     tool_selected = (tool_selected + 1) % tools_inventory.length
     tool_selected_icon.setImage(toolCurrentIcon())
+    char_tool_sprite.setImage(toolCurrentImage())
     uiAddMessageToQueue(toolCurrentLabel())
 }
 function generateGroundHeight () {
@@ -288,8 +289,11 @@ function spawnEnemy (_type: string) {
         )
     }
 }
+function toolCurrentImage () {
+    return tools_all_images[tools_inventory[tool_selected]]
+}
 function tooltest () {
-    char_tool_sprite = sprites.create(assets.image`toolPickaxe0`, SpriteKind.Tool)
+    char_tool_sprite = sprites.create(toolCurrentImage().clone(), SpriteKind.Tool)
     sprites.setDataNumber(char_tool_sprite, "direction", 1)
     char_tool_sprite.setFlag(SpriteFlag.GhostThroughTiles, true)
     char_tool_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
@@ -302,14 +306,30 @@ function setupPlayerInventory () {
     "hand",
     "axe"
     ]
-    tools_all_icons = [assets.image`TOOLpicaxePLATE`, assets.image`TOOLhammer`, assets.image`TOOLhand`]
-    tools_inventory = [2, 1, 0]
+    tools_all_icons = [
+    assets.image`TOOLpicaxePLATE`,
+    assets.image`TOOLhammer`,
+    assets.image`TOOLhand`,
+    assets.image`TOOLaxePLATE`
+    ]
+    tools_all_images = [
+    assets.image`toolPickaxe0`,
+    assets.image`toolHammer`,
+    assets.image`Empty`,
+    assets.image`toolAxe0`
+    ]
+    tools_inventory = [
+    2,
+    1,
+    0,
+    3
+    ]
     tool_selected = 0
     tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
-let char_tool_sprite: Sprite = null
+let tools_all_images: Image[] = []
 let enemy_sprite: Sprite = null
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
@@ -332,6 +352,7 @@ let world_cols = 0
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
+let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
@@ -339,8 +360,8 @@ let world_ground_height: number[] = []
 let char_button_direction = 0
 let char: Sprite = null
 let debug_mode = false
-debug_mode = false
 let selected_block: Sprite = null
+debug_mode = false
 setupVariables()
 setupUIMessages()
 setupUIStatBars()
@@ -423,13 +444,14 @@ game.onUpdate(function () {
 game.onUpdate(function () {
     if (char_button_direction == 0) {
         sprites.setDataNumber(char_tool_sprite, "direction", -1)
-        if (char_tool_sprite.image.equals(assets.image`toolPickaxe0`)) {
+        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
             char_tool_sprite.image.flipX()
         }
     } else if (char_button_direction == 2) {
         sprites.setDataNumber(char_tool_sprite, "direction", 1)
-        if (!(char_tool_sprite.image.equals(assets.image`toolPickaxe0`))) {
-            char_tool_sprite.image.flipX()
+        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
         }
     }
     if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
@@ -472,7 +494,6 @@ forever(function () {
     }
 })
 // temporary test of stat bars (to be deleted)
-// 
 game.onUpdateInterval(500, function () {
     char_health_current += -1
     uiUpdateStatBars()

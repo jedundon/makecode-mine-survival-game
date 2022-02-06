@@ -238,25 +238,6 @@ b b b b d f d f d b b b b
 . . b d d d b d d d b . . 
 . . b b b b b b b b b . . 
 `;
-            case "image18":
-            case "Empty":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`;
             case "image17":
             case "toolPickaxe0":return img`
 . . . . . . . . 
@@ -280,47 +261,6 @@ b b b b d f d f d b b b b
 1 d f f f f f e 4 e f f c b d 1 
 1 d f f f f e 4 e f f f c b d 1 
 1 d f f f e 4 e f f f f b f d 1 
-1 d f f e 4 e f f f f f f f d 1 
-1 d f e 4 e f f f f f f f f d 1 
-1 d e 4 e f f f f f f f f f d 1 
-1 d e e f f f f f f f f f f d 1 
-1 d d d d d d d d d d d d d d 1 
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-`;
-            case "image16":
-            case "toolHammer":return img`
-. . . . . . . . 
-. . . e e e e . 
-. . . e 4 4 e e 
-. . . . e 4 4 e 
-. . . e 4 e 4 e 
-. . e 4 e . e e 
-. e 4 e . . . . 
-. e e . . . . . 
-`;
-            case "image19":
-            case "toolAxe0":return img`
-. . . . . . . . 
-. . . . . . e b 
-. . . . . e c b 
-. . . . e c c b 
-. . . e b b b b 
-. . e 4 e . . . 
-. e 4 e . . . . 
-. e e . . . . . 
-`;
-            case "image20":
-            case "TOOLaxePLATE":return img`
-1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-1 d d d d d d d d d d d d d d 1 
-1 d f f f f f f f f f f e b d 1 
-1 d f f f f f f f f f e c b d 1 
-1 d f f f f f f f f e c c b d 1 
-1 d f f f f f f f e c c c b d 1 
-1 d f f f f f f e c c c c b d 1 
-1 d f f f f f e b b b b b b d 1 
-1 d f f f f e 4 e f f f f f d 1 
-1 d f f f e 4 e f f f f f f d 1 
 1 d f f e 4 e f f f f f f f d 1 
 1 d f e 4 e f f f f f f f f d 1 
 1 d e 4 e f f f f f f f f f d 1 
@@ -434,6 +374,66 @@ b b b b d f d f d b b b b
 1 d 2 . . . 2 . 2 . 2 . 2 . d 1 
 1 d d d d d d d d d d d d d d 1 
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image20":
+            case "TOOLaxePLATE":return img`
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 d d d d d d d d d d d d d d 1 
+1 d f f f f f f f f f f e b d 1 
+1 d f f f f f f f f f e c b d 1 
+1 d f f f f f f f f e c c b d 1 
+1 d f f f f f f f e c c c b d 1 
+1 d f f f f f f e c c c c b d 1 
+1 d f f f f f e b b b b b b d 1 
+1 d f f f f e 4 e f f f f f d 1 
+1 d f f f e 4 e f f f f f f d 1 
+1 d f f e 4 e f f f f f f f d 1 
+1 d f e 4 e f f f f f f f f d 1 
+1 d e 4 e f f f f f f f f f d 1 
+1 d e e f f f f f f f f f f d 1 
+1 d d d d d d d d d d d d d d 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+`;
+            case "image16":
+            case "toolHammer":return img`
+. . . . . . . . 
+. . . e e e e . 
+. . . e 4 4 e e 
+. . . . e 4 4 e 
+. . . e 4 e 4 e 
+. . e 4 e . e e 
+. e 4 e . . . . 
+. e e . . . . . 
+`;
+            case "image18":
+            case "Empty":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`;
+            case "image19":
+            case "toolAxe0":return img`
+. . . . . . . . 
+. . . . . . e b 
+. . . . . e c b 
+. . . . e c c b 
+. . . e b b b b 
+. . e 4 e . . . 
+. e 4 e . . . . 
+. e e . . . . . 
 `;
         }
         return null;
