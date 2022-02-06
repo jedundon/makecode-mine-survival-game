@@ -242,7 +242,9 @@ function uiAddMessageToQueue (text: string) {
 }
 function setupUIStatBars () {
     char_health_max = 25
+    char_xp_max = 100
     char_health_current = char_health_max
+    char_xp_current = 0
     char_health_bar = sprites.create(image.create(scene.screenWidth() - 22, 9), SpriteKind.UI)
     char_health_bar.setFlag(SpriteFlag.RelativeToCamera, true)
     char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
@@ -250,10 +252,10 @@ function setupUIStatBars () {
 }
 function uiUpdateStatBars () {
     char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
-    char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 4)
+    char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
     char_health_bar.image.fillRect(1, 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 2)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 8)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 6)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 7)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_xp_current / char_xp_max), char_health_bar.height / 2 - 1, 8)
 }
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
@@ -333,7 +335,9 @@ let tools_all_images: Image[] = []
 let enemy_sprite: Sprite = null
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
+let char_xp_current = 0
 let char_health_current = 0
+let char_xp_max = 0
 let char_health_max = 0
 let tools_all: string[] = []
 let tree_height = 0
@@ -460,9 +464,30 @@ game.onUpdate(function () {
         char_tool_sprite.setPosition(char.x + 5, char.y - 1)
     }
 })
-game.onUpdateInterval(2000, function () {
+game.onUpdateInterval(tick_speed * 2, function () {
     if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
         spawnEnemy("mushroom")
+    }
+})
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
     }
 })
 forever(function () {
@@ -491,35 +516,6 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
-    }
-})
-// temporary test of stat bars (to be deleted)
-game.onUpdateInterval(500, function () {
-    char_health_current += -1
-    uiUpdateStatBars()
-    if (char_health_current == 0) {
-        char_health_current = char_health_max
-    }
-})
-game.onUpdateInterval(200, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
     }
 })
 // For handling UI messages.
