@@ -16,12 +16,6 @@
         "tilemapTile": true,
         "displayName": "stone"
     },
-    "tile6": {
-        "data": "hwQQABAAAAD////+/+///////////////v7/////////////////////////7v//////7////+////7//////+////////////////////////7////+/////////////+/+/+//////7/7//////+///////////////////////v/////+/w==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "Stone_Background"
-    },
     "tile3": {
         "data": "hwQQABAAAAB3R0RERERERHdEREREREREd0fU3URERER3RNTdRERERHdH1N1ERE1Ed0RERERERER3R0RERERERHdERERETUREd0dETURERER3RERERERERHdHREREREREd0TU3UTU3UR3R9TdRNTdRHdE1N3U1N1Ed0dERERERER3RERERERERA==",
         "mimeType": "image/x-mkcd-f4",
@@ -135,6 +129,12 @@
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true,
         "displayName": "Sky_Block"
+    },
+    "tile6": {
+        "data": "hwQQABAAAAD//////////+////////////////7//////+/+////////7/7//+////7///////////////////////////////7//+7///7/////7v///////////////////////+/////+/////+/////v/////////////////////////w==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "Stone_Background"
     },
     "level": {
         "id": "level",
