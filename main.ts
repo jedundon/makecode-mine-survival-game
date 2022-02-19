@@ -94,13 +94,13 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         if (!(char_button_direction < 0)) {
             if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
                 if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
+                    inventoryAddItemByTileImage(tiles.tileImageAtLocation(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction)))
                     if (isActionLocationAboveGround(char, char_button_direction)) {
                         tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
-                        tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
                     } else {
                         tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
-                        tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
                     }
+                    tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
                 }
             }
         }
@@ -344,6 +344,9 @@ function spawnEnemy (_type: string) {
 function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
 }
+function inventoryAddItemByTileImage (image2: Image) {
+	
+}
 function tooltest () {
     char_tool_sprite = sprites.create(toolCurrentImage().clone(), SpriteKind.Tool)
     sprites.setDataNumber(char_tool_sprite, "direction", 1)
@@ -358,11 +361,35 @@ function setupPlayerInventory () {
     "stone",
     "dirt"
     ]
+    items_tile_images = [
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    myTiles.tile1,
+    myTiles.tile5,
+    myTiles.tile4
+    ]
     items_inventory = []
     for (let value of items_all) {
         items_inventory.push(0)
     }
 }
+let items_tile_images: Image[] = []
 let enemy_sprite: Sprite = null
 let items_all: string[] = []
 let tools_all_images: Image[] = []
@@ -407,19 +434,6 @@ generateWorld()
 setupPlayer()
 setupBuildables()
 tooltest()
-game.onUpdate(function () {
-    if (controller.down.isPressed()) {
-        char_button_direction = 3
-    } else if (controller.up.isPressed()) {
-        char_button_direction = 1
-    } else if (controller.right.isPressed()) {
-        char_button_direction = 2
-    } else if (controller.left.isPressed()) {
-        char_button_direction = 0
-    } else {
-        char_button_direction = -1
-    }
-})
 game.onUpdate(function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
@@ -496,27 +510,6 @@ game.onUpdateInterval(tick_speed * 2, function () {
         spawnEnemy("mushroom")
     }
 })
-game.onUpdateInterval(tick_speed / 5, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
-    }
-})
 forever(function () {
     if (Math.percentChance(75)) {
         music.playMelody("C B A G A G F G ", 150)
@@ -543,6 +536,41 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
+    }
+})
+// Enemy AI Logic
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
+    }
+})
+game.onUpdate(function () {
+    if (controller.down.isPressed()) {
+        char_button_direction = 3
+    } else if (controller.up.isPressed()) {
+        char_button_direction = 1
+    } else if (controller.right.isPressed()) {
+        char_button_direction = 2
+    } else if (controller.left.isPressed()) {
+        char_button_direction = 0
+    } else {
+        char_button_direction = -1
     }
 })
 // For handling UI messages.
