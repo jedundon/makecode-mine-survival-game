@@ -136,6 +136,7 @@ function setupUIMessages () {
     ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
 }
 function generateWorld () {
+    tiles.setTilemap(tilemap`World`)
     world_rows = tiles.tilemapRows() - 0
     world_cols = tiles.tilemapColumns() - 0
     generateGroundHeight()
@@ -239,6 +240,14 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function uiAddMessageToQueue (text: string) {
     ui_message_queue.push(text)
+}
+function setupPlayer () {
+    char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
+    char.ay = 250
+    char.z = 1
+    char_button_direction = -1
+    scene.cameraFollowSprite(char)
+    tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
 }
 function setupUIStatBars () {
     char_health_max = 25
@@ -351,6 +360,7 @@ let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
 let buildable_blocks: Image[] = []
+let char_button_direction = 0
 let ground_current = 0
 let world_cols = 0
 let ground_max = 0
@@ -360,25 +370,18 @@ let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
-let world_ground_height: number[] = []
-let char_button_direction = 0
 let char: Sprite = null
+let world_ground_height: number[] = []
 let debug_mode = false
 let selected_block: Sprite = null
 debug_mode = false
 setupVariables()
 setupUIMessages()
 setupUIStatBars()
-tiles.setTilemap(tilemap`World`)
-char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
-char.ay = 250
-char.z = 1
-char_button_direction = -1
 generateWorld()
+setupPlayer()
 setupPlayerInventory()
 setupBuildables()
-scene.cameraFollowSprite(char)
-tiles.placeOnTile(char, tiles.getTileLocation(50, 7))
 tooltest()
 game.onUpdate(function () {
     if (controller.down.isPressed()) {
