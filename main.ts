@@ -13,11 +13,23 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function itemsLabelForId (id: number) {
+    return items_all[id]
+}
 sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         otherSprite.destroy(effects.disintegrate, 500)
     }
 })
+function inventoryGetItemLabelByTileImage (image2: Image) {
+    if (items_tile_images.indexOf(image2) > 0) {
+        return itemsLabelForId(items_tile_images.indexOf(image2))
+    } else if (items_tile_images_alt.indexOf(image2) > 0) {
+        return itemsLabelForId(items_tile_images_alt.indexOf(image2))
+    } else {
+        return ""
+    }
+}
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     toolChangeNext()
 })
@@ -345,7 +357,8 @@ function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
 }
 function inventoryAddItemByTileImage (image2: Image) {
-	
+    inventoryAddAmountByLabel(inventoryGetItemLabelByTileImage(image2), 5)
+    uiShowMessage("Added " + "5 " + inventoryGetItemLabelByTileImage(image2) + " (Total: " + inventoryGetAmountByLabel(inventoryGetItemLabelByTileImage(image2)) + ")")
 }
 function tooltest () {
     char_tool_sprite = sprites.create(toolCurrentImage().clone(), SpriteKind.Tool)
@@ -384,14 +397,69 @@ function setupPlayerInventory () {
     myTiles.tile5,
     myTiles.tile4
     ]
+    items_tile_images_alt = [
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    myTiles.tile3
+    ]
     items_inventory = []
     for (let value of items_all) {
         items_inventory.push(0)
     }
 }
-let items_tile_images: Image[] = []
 let enemy_sprite: Sprite = null
-let items_all: string[] = []
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
@@ -422,6 +490,9 @@ let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
+let items_tile_images_alt: Image[] = []
+let items_tile_images: Image[] = []
+let items_all: string[] = []
 let char: Sprite = null
 let world_ground_height: number[] = []
 let debug_mode = false
