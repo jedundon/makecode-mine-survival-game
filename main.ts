@@ -168,6 +168,9 @@ function generateWorld () {
 function isActionLocationAboveGround (char: Sprite, button_direction: number) {
     return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
 }
+function inventoryAddAmountByLabel (item: string, amount: number) {
+    items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
+}
 function generatePlants () {
     for (let col3 = 0; col3 <= world_cols - 1; col3++) {
         ground_current = world_ground_height[col3]
@@ -248,6 +251,11 @@ function setupPlayer () {
     char_button_direction = -1
     scene.cameraFollowSprite(char)
     tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
+    setupPlayerTools()
+    setupPlayerInventory()
+}
+function inventoryGetAmountByLabel (item: string) {
+    return items_inventory[itemsIdForLabel(item)]
 }
 function setupUIStatBars () {
     char_health_max = 25
@@ -259,6 +267,36 @@ function setupUIStatBars () {
     char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
     uiUpdateStatBars()
 }
+function setupPlayerTools () {
+    tools_all = [
+    "pickaxe",
+    "hammer",
+    "hand",
+    "axe"
+    ]
+    tools_all_icons = [
+    assets.image`TOOLpicaxePLATE`,
+    assets.image`TOOLhammer`,
+    assets.image`TOOLhand`,
+    assets.image`TOOLaxePLATE`
+    ]
+    tools_all_images = [
+    assets.image`toolPickaxe0`,
+    assets.image`toolHammer`,
+    assets.image`Empty`,
+    assets.image`toolAxe0`
+    ]
+    tools_inventory = [
+    2,
+    1,
+    0,
+    3
+    ]
+    tool_selected = 0
+    tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
+    tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
+    tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
+}
 function uiUpdateStatBars () {
     char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
     char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
@@ -268,6 +306,9 @@ function uiUpdateStatBars () {
 }
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
+}
+function itemsIdForLabel (item: string) {
+    return items_all.indexOf(item)
 }
 function spawnEnemy (_type: string) {
     if (_type == "mushroom") {
@@ -311,37 +352,20 @@ function tooltest () {
     char_tool_sprite.z = 3
 }
 function setupPlayerInventory () {
-    tools_all = [
-    "pickaxe",
-    "hammer",
-    "hand",
-    "axe"
+    items_all = [
+    "wood",
+    "brick",
+    "stone",
+    "dirt"
     ]
-    tools_all_icons = [
-    assets.image`TOOLpicaxePLATE`,
-    assets.image`TOOLhammer`,
-    assets.image`TOOLhand`,
-    assets.image`TOOLaxePLATE`
-    ]
-    tools_all_images = [
-    assets.image`toolPickaxe0`,
-    assets.image`toolHammer`,
-    assets.image`Empty`,
-    assets.image`toolAxe0`
-    ]
-    tools_inventory = [
-    2,
-    1,
-    0,
-    3
-    ]
-    tool_selected = 0
-    tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
-    tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
-    tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
+    items_inventory = []
+    for (let value of items_all) {
+        items_inventory.push(0)
+    }
 }
-let tools_all_images: Image[] = []
 let enemy_sprite: Sprite = null
+let items_all: string[] = []
+let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
 let char_xp_current = 0
@@ -350,6 +374,7 @@ let char_xp_max = 0
 let char_health_max = 0
 let tools_all: string[] = []
 let tree_height = 0
+let items_inventory: number[] = []
 let world_rows = 0
 let ui_message: TextSprite = null
 let entities_max = 0
@@ -380,7 +405,6 @@ setupUIMessages()
 setupUIStatBars()
 generateWorld()
 setupPlayer()
-setupPlayerInventory()
 setupBuildables()
 tooltest()
 game.onUpdate(function () {
