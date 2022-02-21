@@ -19,6 +19,8 @@ function itemsLabelForId (id: number) {
 sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         otherSprite.destroy(effects.disintegrate, 500)
+        char_xp_current += 5
+        uiUpdateStatBars()
     }
 })
 function inventoryGetItemLabelByTileImage (image2: Image) {
@@ -313,8 +315,8 @@ function uiUpdateStatBars () {
     char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
     char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
     char_health_bar.image.fillRect(1, 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 2)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 7)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_xp_current / char_xp_max), char_health_bar.height / 2 - 1, 8)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 6)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_xp_current / char_xp_max), char_health_bar.height / 2 - 1, 7)
 }
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
@@ -463,7 +465,6 @@ let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let char_health_bar: Sprite = null
-let char_xp_current = 0
 let char_health_current = 0
 let char_xp_max = 0
 let char_health_max = 0
@@ -492,6 +493,7 @@ let tools_inventory: number[] = []
 let tool_selected = 0
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
+let char_xp_current = 0
 let items_all: string[] = []
 let char: Sprite = null
 let world_ground_height: number[] = []
@@ -505,6 +507,19 @@ generateWorld()
 setupPlayer()
 setupBuildables()
 tooltest()
+game.onUpdate(function () {
+    if (controller.down.isPressed()) {
+        char_button_direction = 3
+    } else if (controller.up.isPressed()) {
+        char_button_direction = 1
+    } else if (controller.right.isPressed()) {
+        char_button_direction = 2
+    } else if (controller.left.isPressed()) {
+        char_button_direction = 0
+    } else {
+        char_button_direction = -1
+    }
+})
 game.onUpdate(function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
@@ -581,6 +596,28 @@ game.onUpdateInterval(tick_speed * 2, function () {
         spawnEnemy("mushroom")
     }
 })
+// Enemy AI Logic
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
+    }
+})
 forever(function () {
     if (Math.percentChance(75)) {
         music.playMelody("C B A G A G F G ", 150)
@@ -607,41 +644,6 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
-    }
-})
-// Enemy AI Logic
-game.onUpdateInterval(tick_speed / 5, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
-    }
-})
-game.onUpdate(function () {
-    if (controller.down.isPressed()) {
-        char_button_direction = 3
-    } else if (controller.up.isPressed()) {
-        char_button_direction = 1
-    } else if (controller.right.isPressed()) {
-        char_button_direction = 2
-    } else if (controller.left.isPressed()) {
-        char_button_direction = 0
-    } else {
-        char_button_direction = -1
     }
 })
 // For handling UI messages.
