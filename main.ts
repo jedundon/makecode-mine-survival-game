@@ -524,24 +524,7 @@ game.onUpdate(function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
         if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
-            selected_block.setImage(img`
-                5 5 f f f f f 5 5 f f f f f 5 5 
-                5 . . . . . . . . . . . . . . 5 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . 5 5 . . . . . . f 
-                5 . . . . . 5 f f 5 . . . . . 5 
-                5 . . . . . 5 f f 5 . . . . . 5 
-                f . . . . . . 5 5 . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                f . . . . . . . . . . . . . . f 
-                5 . . . . . . . . . . . . . . 5 
-                5 5 f f f f f 5 5 f f f f f 5 5 
-                `)
+            selected_block.setImage(assets.image`Target`)
         } else {
             selected_block.setImage(sprites.readDataImage(selected_block, "img"))
         }

@@ -124,6 +124,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "TOOLblockUNKHOUN"
     },
+    "(da1g26Tac4qN-tkHvF,": {
+        "data": "hwQQABAAAABV//9f9f//VQUAAAAAAABQDwAAAAAAAPAPAAAAAAAA8A8AAAAAAADwDwAAAAAAAPAPAABQBQAA8AUAAPVfAABQBQAA9V8AAFAPAABQBQAA8A8AAAAAAADwDwAAAAAAAPAPAAAAAAAA8A8AAAAAAADwBQAAAAAAAFBV//9f9f//VQ==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Target"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
