@@ -79,45 +79,6 @@ f f 2 . . f 2 . f 3 3 3 3 f
 . . 4 4 3 4 4 4 4 4 4 3 4 . 
 . . . 4 4 4 . . . . 4 4 4 . 
 `;
-            case "image13":
-            case "PlayerIdle2":return img`
-. . e e e e e e . . 
-. . e f 4 4 f e . . 
-. . e f 4 4 f e . . 
-. . e f 4 4 f e . . 
-. . e 4 4 4 4 e . . 
-. . e e e e e e . . 
-. . . . . . . . . . 
-. . . 8 8 8 8 . . . 
-. . . 8 6 6 8 . . . 
-e e e 8 6 6 8 e e e 
-e 4 e 8 6 6 8 e 4 e 
-e e e 8 6 6 8 e e e 
-. . . 8 8 8 8 . . . 
-. . . . . . . . . . 
-. . . . . . . . . . 
-. . . . . . . . . . 
-`;
-            case "image10":
-            case "PlayerTEMPLATENOTOFICFOL":return img`
-. . e e e e e e . . f 
-. . e f 4 4 f e . . 5 
-. . e f 4 4 f e . . f 
-. . e f 4 4 f e . . 5 
-. . e 4 4 4 4 e . . f 
-. . e e e e e e . . 5 
-. . . . . . . . . . f 
-. . . 8 8 8 8 . . . 5 
-. . . 8 6 6 8 . . . f 
-e e e 8 6 6 8 e e e 5 
-e 4 e 8 6 6 8 e 4 e f 
-e e e 8 6 6 8 e e e 5 
-. . . 8 8 8 8 . . . f 
-. . . . . . . . . . 5 
-. . . 8 . . 8 . . . f 
-. . 8 8 . . 8 8 . . 5 
-f 5 f 5 f 5 f 5 f 5 f 
-`;
             case "/K)%327V~S~iy1ajTrIh":
             case "PlayerIdle0":return img`
 . . e e e e e e . . 

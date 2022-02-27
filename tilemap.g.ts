@@ -15,19 +15,9 @@ namespace myTiles {
     //% fixedInstance jres blockIdentity=images._tile
     export const tile14 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
-    export const tile7 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile15 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
     export const tile12 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile11 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile19 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile20 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile21 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile9 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
@@ -46,6 +36,20 @@ namespace myTiles {
     export const tile2 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile6 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile23 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile24 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile21 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile20 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile19 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile15 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile7 = image.ofBuffer(hex``);
 
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
@@ -245,20 +249,10 @@ namespace myTiles {
             case "tile10":return tile10;
             case "Water":
             case "tile14":return tile14;
-            case "ruby ore":
-            case "tile7":return tile7;
-            case "CopperOre":
-            case "tile15":return tile15;
             case "TreeTrunk0":
             case "tile12":return tile12;
             case "TreeTop":
             case "tile11":return tile11;
-            case "IronOre":
-            case "tile19":return tile19;
-            case "GoldOre":
-            case "tile20":return tile20;
-            case "DimOre":
-            case "tile21":return tile21;
             case "Lava":
             case "tile9":return tile9;
             case "CORE":
@@ -277,6 +271,20 @@ namespace myTiles {
             case "tile2":return tile2;
             case "Stone_Background":
             case "tile6":return tile6;
+            case "Cokin":
+            case "tile23":return tile23;
+            case "Darkstone":
+            case "tile24":return tile24;
+            case "DimOre":
+            case "tile21":return tile21;
+            case "GoldOre":
+            case "tile20":return tile20;
+            case "IronOre":
+            case "tile19":return tile19;
+            case "CopperOre":
+            case "tile15":return tile15;
+            case "RubyOre":
+            case "tile7":return tile7;
         }
         return null;
     })
