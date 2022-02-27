@@ -119,15 +119,20 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             }
         }
     } else if (toolCurrentLabel() == "hammer") {
-        selected_block = sprites.create(buildable_blocks._pickRandom(), SpriteKind.Food)
+        selected_block = sprites.create(buildables_tile_images[2], SpriteKind.Food)
         sprites.setDataImage(selected_block, "img", selected_block.image)
-sprites.setDataNumber(selected_block, "blink", 0)
+sprites.setDataString(selected_block, "label", "brick")
+        sprites.setDataNumber(selected_block, "id", 2)
+        sprites.setDataNumber(selected_block, "blink", 0)
         sprites.setDataNumber(selected_block, "blink_at", 15)
         sprites.setDataNumber(selected_block, "blink_max", 30)
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
     }
 })
+function buildablesIdForLabel (label: string) {
+    return buildables_all.indexOf(label)
+}
 function setupVariables () {
     tick_speed = 1000
     char_speed_max = 125
@@ -185,6 +190,40 @@ function isActionLocationAboveGround (char: Sprite, button_direction: number) {
 function inventoryAddAmountByLabel (item: string, amount: number) {
     items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
 }
+function buildablesCanPlayerBuild (label: string) {
+    temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
+    for (let value of temp_recipe) {
+        temp_recipe_item = itemsLabelForId(value[0])
+        temp_recipe_amount = value[1]
+        if (inventoryGetAmountByLabel(temp_recipe_item) < temp_recipe_amount) {
+            return false
+        }
+    }
+    return true
+}
+function setupBuildableTiles () {
+    buildables_all = [
+    "dirt",
+    "dirt_grass",
+    "brick",
+    "stone",
+    "rock_block"
+    ]
+    buildables_tile_images = [
+    myTiles.tile4,
+    myTiles.tile3,
+    myTiles.tile1,
+    myTiles.tile5,
+    myTiles.tile10
+    ]
+    buildables_recipe_items = [
+    [[itemsIdForLabel("dirt"), 1]],
+    [[itemsIdForLabel("dirt"), 1]],
+    [[itemsIdForLabel("dirt"), 1], [itemsIdForLabel("stone"), 1]],
+    [[itemsIdForLabel("stone"), 1]],
+    [[itemsIdForLabel("stone"), 2]]
+    ]
+}
 function generatePlants () {
     for (let col3 = 0; col3 <= world_cols - 1; col3++) {
         ground_current = world_ground_height[col3]
@@ -226,7 +265,7 @@ function uiShowMessage (text: string) {
 }
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     if (toolCurrentLabel() == "hammer") {
-        if (buildValid() == 1) {
+        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
             tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
             tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
             selected_block.destroy()
@@ -468,8 +507,13 @@ let char_health_bar: Sprite = null
 let char_health_current = 0
 let char_xp_max = 0
 let char_health_max = 0
+let buildable_blocks: Image[] = []
 let tools_all: string[] = []
 let tree_height = 0
+let temp_recipe_amount = 0
+let temp_recipe_item = ""
+let buildables_recipe_items: number[][][] = []
+let temp_recipe: number[][] = []
 let items_inventory: number[] = []
 let world_rows = 0
 let ui_message: TextSprite = null
@@ -480,7 +524,8 @@ let char_speed_decel_rate = 0
 let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
-let buildable_blocks: Image[] = []
+let buildables_all: string[] = []
+let buildables_tile_images: Image[] = []
 let char_button_direction = 0
 let ground_current = 0
 let world_cols = 0
@@ -506,6 +551,7 @@ setupUIStatBars()
 generateWorld()
 setupPlayer()
 setupBuildables()
+setupBuildableTiles()
 tooltest()
 game.onUpdate(function () {
     if (controller.down.isPressed()) {
@@ -579,28 +625,6 @@ game.onUpdateInterval(tick_speed * 2, function () {
         spawnEnemy("mushroom")
     }
 })
-// Enemy AI Logic
-game.onUpdateInterval(tick_speed / 5, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
-    }
-})
 forever(function () {
     if (Math.percentChance(75)) {
         music.playMelody("C B A G A G F G ", 150)
@@ -627,6 +651,28 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
+    }
+})
+// Enemy AI Logic
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
     }
 })
 // For handling UI messages.

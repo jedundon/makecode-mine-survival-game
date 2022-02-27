@@ -1,5 +1,5 @@
 {
-    "name": "MineSur - Copy",
+    "name": "MineSur",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -8,7 +8,8 @@
         "tilemaps": "github:microsoft/pxt-tilemaps#v1.10.0",
         "arcade-text": "github:microsoft/arcade-text#v1.3.0",
         "arcade-minimap": "github:microsoft/arcade-minimap#v0.6.1",
-        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0"
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
+        "settings-blocks": "github:microsoft/pxt-settings-blocks#v1.0.0"
     },
     "files": [
         "main.blocks",
@@ -23,7 +24,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.8.20",
+        "target": "1.8.22",
         "targetId": "arcade"
     },
     "supportedTargets": [
