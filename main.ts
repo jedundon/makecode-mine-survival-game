@@ -197,6 +197,8 @@ function buildablesCanPlayerBuild (label: string) {
         temp_recipe_amount = value[1]
         if (inventoryGetAmountByLabel(temp_recipe_item) < temp_recipe_amount) {
             return false
+        } else {
+            inventoryAddAmountByLabel(temp_recipe_item, temp_recipe_amount * -1)
         }
     }
     return true
@@ -567,6 +569,25 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
+    if (char_button_direction == 0) {
+        sprites.setDataNumber(char_tool_sprite, "direction", -1)
+        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+            char_tool_sprite.image.flipX()
+        }
+    } else if (char_button_direction == 2) {
+        sprites.setDataNumber(char_tool_sprite, "direction", 1)
+        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+        }
+    }
+    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
+        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+    } else {
+        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
+    }
+})
+game.onUpdate(function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
         if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
@@ -601,28 +622,31 @@ game.onUpdate(function () {
         }
     }
 })
-game.onUpdate(function () {
-    if (char_button_direction == 0) {
-        sprites.setDataNumber(char_tool_sprite, "direction", -1)
-        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-            char_tool_sprite.image.flipX()
-        }
-    } else if (char_button_direction == 2) {
-        sprites.setDataNumber(char_tool_sprite, "direction", 1)
-        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-        }
-    }
-    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
-        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
-    } else {
-        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
-    }
-})
 game.onUpdateInterval(tick_speed * 2, function () {
     if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
         spawnEnemy("mushroom")
+    }
+})
+// Enemy AI Logic
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
     }
 })
 forever(function () {
@@ -651,28 +675,6 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
-    }
-})
-// Enemy AI Logic
-game.onUpdateInterval(tick_speed / 5, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
     }
 })
 // For handling UI messages.
