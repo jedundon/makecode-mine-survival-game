@@ -212,11 +212,11 @@ function setupBuildableTiles () {
     "rock_block"
     ]
     buildables_tile_images = [
-    myTiles.tile4,
-    myTiles.tile3,
-    myTiles.tile1,
-    myTiles.tile5,
-    myTiles.tile10
+    assets.tile`Dirt`,
+    assets.tile`Grass`,
+    assets.tile`brick_block`,
+    assets.tile`stone`,
+    assets.tile`Rock_Block`
     ]
     buildables_recipe_items = [
     [[itemsIdForLabel("dirt"), 1]],
@@ -436,9 +436,9 @@ function setupPlayerInventory () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `,
-    myTiles.tile1,
-    myTiles.tile5,
-    myTiles.tile4
+    assets.tile`brick_block`,
+    assets.tile`stone`,
+    assets.tile`Dirt`
     ]
     items_tile_images_alt = [
     img`
@@ -495,10 +495,10 @@ function setupPlayerInventory () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `,
-    myTiles.tile3
+    assets.tile`Grass`
     ]
     items_inventory = []
-    for (let value of items_all) {
+    for (let value2 of items_all) {
         items_inventory.push(0)
     }
 }
@@ -569,25 +569,6 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    if (char_button_direction == 0) {
-        sprites.setDataNumber(char_tool_sprite, "direction", -1)
-        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-            char_tool_sprite.image.flipX()
-        }
-    } else if (char_button_direction == 2) {
-        sprites.setDataNumber(char_tool_sprite, "direction", 1)
-        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-        }
-    }
-    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
-        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
-    } else {
-        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
-    }
-})
-game.onUpdate(function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         char.vx = 0
         if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
@@ -620,6 +601,25 @@ game.onUpdate(function () {
                 char.vx = 0
             }
         }
+    }
+})
+game.onUpdate(function () {
+    if (char_button_direction == 0) {
+        sprites.setDataNumber(char_tool_sprite, "direction", -1)
+        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+            char_tool_sprite.image.flipX()
+        }
+    } else if (char_button_direction == 2) {
+        sprites.setDataNumber(char_tool_sprite, "direction", 1)
+        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+        }
+    }
+    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
+        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+    } else {
+        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
     }
 })
 game.onUpdateInterval(tick_speed * 2, function () {
