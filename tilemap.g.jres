@@ -154,6 +154,18 @@
         "tilemapTile": true,
         "displayName": "Darkstone"
     },
+    "tile27": {
+        "data": "hwQQABAAAADkRO7uREREROTu//9ORERE5OT//+7u7u7k5P//TkREROTk///u7u7u5OT//05E/v/k5P//TkT+/+Tk//9ORP7/5OT//05E/v/k5P//TkT+/+Tk//9ORP7/5OT//+7u7u7k5P//TkREROTk///u7u7u5O7//05ERETkRO7uRERERA==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "simpleBurner"
+    },
+    "tile26": {
+        "data": "hwQQABAAAABEREVERFRERURERUREVERFVFREVERFREVUVERUREVERURURERERVRERFRERFREVERERUREVERURERFRERURFREREVERUVEVFRURERFRVRUVFREVEVFVFRUVEREVERUVERURERURERFREVERFREREVERURERURERURERERFRERFRA==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "Sand"
+    },
     "level": {
         "id": "level",
         "mimeType": "application/mkcd-tilemap",
