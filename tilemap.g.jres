@@ -172,6 +172,12 @@
         "tilemapTile": true,
         "displayName": "SnowGrass"
     },
+    "tile29": {
+        "data": "hwQQABAAAADLu7vLu7u7u8u7u8u7u7u7y8zMzMzMzMzL///Pu/z/9Mvd/8/L/8/0yxH9z8v/zPTLFdHPy//M5MtU0c/L/8/ky1TRz8v/zOTLFdHPy//M5MsR/c/L/8z0y93/z8v///TL///Pu/z/9MvMzMzMzMzMy7u7y7u7u7vLu7vLu7u7uw==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "advanceBurner"
+    },
     "level": {
         "id": "level",
         "mimeType": "application/mkcd-tilemap",
