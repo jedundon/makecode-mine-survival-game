@@ -141,6 +141,7 @@ function setupVariables () {
     char_speed_jump = -150
     ui_message_queue = []
     entities_max = 10
+    seed = game.askForString("Put in Seed will ya?", 24)
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -519,6 +520,7 @@ let temp_recipe: number[][] = []
 let items_inventory: number[] = []
 let world_rows = 0
 let ui_message: TextSprite = null
+let seed = ""
 let entities_max = 0
 let ui_message_queue: string[] = []
 let char_speed_jump = 0
