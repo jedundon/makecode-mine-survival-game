@@ -32,6 +32,26 @@ function inventoryGetItemLabelByTileImage (image2: Image) {
         return ""
     }
 }
+function generateWorldBiomeLocations () {
+    world_biome_types = [
+    "plains",
+    "snow",
+    "desert",
+    "middle",
+    "bottom"
+    ]
+    world_biome_locations = []
+    world_biome_cols_min = 20
+    world_biome_cols_max = 40
+    world_col_index = 0
+    while (world_col_index < world_cols) {
+        world_biome_width = Math.constrain(randint(world_biome_cols_min, world_biome_cols_max), 0, world_cols - world_col_index)
+        world_biome_locations.push(generateWorldBiomeLocationArray(getRandomWorldBiome(), world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
+        world_col_index += world_biome_width
+    }
+    world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.floor(world_rows * 0.25)))
+    world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
+}
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     toolChangeNext()
 })
@@ -133,6 +153,15 @@ sprites.setDataString(selected_block, "label", "brick")
 function buildablesIdForLabel (label: string) {
     return buildables_all.indexOf(label)
 }
+function generateWorldBiomeLocationArray (biome: string, x: number, y: number, w: number, h: number) {
+    return [
+    world_biome_types.indexOf(biome),
+    x,
+    y,
+    w,
+    h
+    ]
+}
 function setupVariables () {
     tick_speed = 1000
     char_speed_max = 125
@@ -195,9 +224,9 @@ function inventoryAddAmountByLabel (item: string, amount: number) {
 }
 function buildablesCanPlayerBuild (label: string) {
     temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
-    for (let value of temp_recipe) {
-        temp_recipe_item = itemsLabelForId(value[0])
-        temp_recipe_amount = value[1]
+    for (let b of temp_recipe) {
+        temp_recipe_item = itemsLabelForId(b[0])
+        temp_recipe_amount = b[1]
         if (inventoryGetAmountByLabel(temp_recipe_item) < temp_recipe_amount) {
             return false
         } else {
@@ -325,6 +354,19 @@ function setupUIStatBars () {
     char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
     uiUpdateStatBars()
 }
+function generateWorldNew () {
+    tiles.setTilemap(tilemap`World`)
+    scene.setBackgroundImage(assets.image`biomePlains`)
+    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
+    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer0)
+    world_rows = tiles.tilemapRows() - 0
+    world_cols = tiles.tilemapColumns() - 0
+    generateWorldBiomeLocations()
+    world_ground_height = []
+    for (let b of world_biome_locations) {
+        generateWorldBiome(b)
+    }
+}
 function setupPlayerTools () {
     tools_all = [
     "pickaxe",
@@ -368,6 +410,30 @@ function toolCurrentIcon () {
 function itemsIdForLabel (item: string) {
     return items_all.indexOf(item)
 }
+function generateBiomeGroundHeight (biome: string, col_start: number, col_end: number) {
+    if (col_start > 0) {
+        ground_prev = world_ground_height[world_ground_height.length - 1]
+    } else {
+        ground_prev = 15
+    }
+    ground_min = 8
+    ground_max = 25
+    for (let col = 0; col <= world_cols - 1; col++) {
+        if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
+        } else if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev - randint(2, 5), ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev + randint(2, 5), ground_min, ground_max)
+        } else {
+            ground_current = ground_prev
+        }
+        ground_prev = ground_current
+        world_ground_height.push(ground_current)
+    }
+}
 function spawnEnemy (_type: string) {
     if (_type == "mushroom") {
         sprites.allOfKind(SpriteKind.Enemy).push(enemy_sprite)
@@ -401,6 +467,15 @@ function spawnEnemy (_type: string) {
 }
 function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
+}
+function getRandomWorldBiome () {
+    if (Math.percentChance(25)) {
+        return "Snow"
+    } else if (Math.percentChance(30)) {
+        return "Desert"
+    } else {
+        return "Plains"
+    }
 }
 function inventoryAddItemByTileImage (image2: Image) {
     inventoryAddAmountByLabel(inventoryGetItemLabelByTileImage(image2), 5)
@@ -505,6 +580,19 @@ function setupPlayerInventory () {
         items_inventory.push(0)
     }
 }
+function generateWorldBiome (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    generateBiomeGroundHeight("plains", temp_biome_y, temp_biome_y + temp_biome_width)
+}
+let temp_biome_height: any = null
+let temp_biome_width: any = null
+let temp_biome_y: any = null
+let temp_biome_x: any = null
+let temp_biome: any = null
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
@@ -520,7 +608,6 @@ let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
 let temp_recipe: number[][] = []
 let items_inventory: number[] = []
-let world_rows = 0
 let ui_message: TextSprite = null
 let entities_max = 0
 let ui_message_queue: string[] = []
@@ -533,7 +620,6 @@ let buildables_all: string[] = []
 let buildables_tile_images: Image[] = []
 let char_button_direction = 0
 let ground_current = 0
-let world_cols = 0
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
@@ -541,6 +627,14 @@ let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
+let world_rows = 0
+let world_biome_width = 0
+let world_cols = 0
+let world_col_index = 0
+let world_biome_cols_max = 0
+let world_biome_cols_min = 0
+let world_biome_locations: number[][] = []
+let world_biome_types: string[] = []
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
 let char_xp_current = 0
