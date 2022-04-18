@@ -6,6 +6,31 @@ namespace SpriteKind {
 function groundLevelAtColumn (col: number) {
     return world_ground_height[col]
 }
+function generateWorldBiomePlains (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
+        for (let row = 0; row <= temp_biome_height; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (temp_y == world_ground_height[temp_x]) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Grass`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else if (temp_y > world_ground_height[temp_x]) {
+                if (Math.percentChance(75)) {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                } else {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                }
+            }
+        }
+    }
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
@@ -41,20 +66,53 @@ function generateWorldBiomeLocations () {
     "bottom"
     ]
     world_biome_locations = []
+    world_biome_cols_lookup = []
     world_biome_cols_min = 20
     world_biome_cols_max = 40
     world_col_index = 0
     while (world_col_index < world_cols) {
         world_biome_width = Math.constrain(randint(world_biome_cols_min, world_biome_cols_max), 0, world_cols - world_col_index)
-        world_biome_locations.push(generateWorldBiomeLocationArray(getRandomWorldBiome(), world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
+        temp_biome = getRandomWorldBiome()
+        world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
+        for (let index = 0; index < world_biome_width; index++) {
+            world_biome_cols_lookup.push(temp_biome)
+        }
         world_col_index += world_biome_width
     }
     world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.floor(world_rows * 0.25)))
     world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
+    for (let value of world_biome_locations) {
+        console.log(value)
+    }
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     toolChangeNext()
 })
+function generateWorldBiomeDesert (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
+        for (let row = 0; row <= temp_biome_height; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (temp_y == world_ground_height[temp_x]) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Sand`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else if (temp_y > world_ground_height[temp_x]) {
+                if (Math.percentChance(75)) {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                } else {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Sand`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                }
+            }
+        }
+    }
+}
 function toolChangeNext () {
     // Picks the next item ID in the list. Goes back to 0 if bigger than list.
     tool_selected = (tool_selected + 1) % tools_inventory.length
@@ -219,6 +277,31 @@ function generateWorld () {
 function isActionLocationAboveGround (char: Sprite, button_direction: number) {
     return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
 }
+function generateWorldBiomeSnow (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
+        for (let row = 0; row <= temp_biome_height; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (temp_y == world_ground_height[temp_x]) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`SnowGrass`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else if (temp_y > world_ground_height[temp_x]) {
+                if (Math.percentChance(75)) {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                } else {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                }
+            }
+        }
+    }
+}
 function inventoryAddAmountByLabel (item: string, amount: number) {
     items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
 }
@@ -297,6 +380,9 @@ function uiShowMessage (text: string) {
     ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
     ui_message.ay = 2
 }
+function getPlayerBiome () {
+    return world_biome_cols_lookup[char.tilemapLocation().column]
+}
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     if (toolCurrentLabel() == "hammer") {
         if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
@@ -338,6 +424,8 @@ function setupPlayer () {
     char_button_direction = -1
     scene.cameraFollowSprite(char)
     tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
+    tiles.placeOnRandomTile(char, assets.tile`Grass`)
+    grid.move(char, 0, -1)
     setupPlayerTools()
     setupPlayerInventory()
 }
@@ -470,11 +558,11 @@ function toolCurrentImage () {
 }
 function getRandomWorldBiome () {
     if (Math.percentChance(25)) {
-        return "Snow"
+        return "snow"
     } else if (Math.percentChance(30)) {
-        return "Desert"
+        return "desert"
     } else {
-        return "Plains"
+        return "plains"
     }
 }
 function inventoryAddItemByTileImage (image2: Image) {
@@ -586,13 +674,15 @@ function generateWorldBiome (biome_location: any[]) {
     temp_biome_y = biome_location[2]
     temp_biome_width = biome_location[3]
     temp_biome_height = biome_location[4]
-    generateBiomeGroundHeight("plains", temp_biome_y, temp_biome_y + temp_biome_width)
+    generateBiomeGroundHeight(temp_biome, temp_biome_y, temp_biome_y + temp_biome_width)
+    if (temp_biome == 0) {
+        generateWorldBiomePlains(biome_location)
+    } else if (temp_biome == 1) {
+        generateWorldBiomeSnow(biome_location)
+    } else if (temp_biome == 2) {
+        generateWorldBiomeDesert(biome_location)
+    }
 }
-let temp_biome_height: any = null
-let temp_biome_width: any = null
-let temp_biome_y: any = null
-let temp_biome_x: any = null
-let temp_biome: any = null
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
@@ -633,6 +723,7 @@ let world_cols = 0
 let world_col_index = 0
 let world_biome_cols_max = 0
 let world_biome_cols_min = 0
+let world_biome_cols_lookup: any[] = []
 let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
 let items_tile_images_alt: Image[] = []
@@ -640,6 +731,13 @@ let items_tile_images: Image[] = []
 let char_xp_current = 0
 let items_all: string[] = []
 let char: Sprite = null
+let temp_y = 0
+let temp_x = 0
+let temp_biome_height: any = null
+let temp_biome_width: any = null
+let temp_biome_y: any = null
+let temp_biome_x: any = null
+let temp_biome: any = null
 let world_ground_height: number[] = []
 let debug_mode = false
 let selected_block: Sprite = null
@@ -647,7 +745,7 @@ debug_mode = false
 setupVariables()
 setupUIMessages()
 setupUIStatBars()
-generateWorld()
+generateWorldNew()
 setupPlayer()
 setupBuildables()
 setupBuildableTiles()
@@ -772,6 +870,17 @@ forever(function () {
             music.playMelody("E B C5 A B G A F ", 150)
         }
         music.playMelody("A F E F D G E F ", 150)
+    }
+})
+game.onUpdateInterval(500, function () {
+    console.log(getPlayerBiome())
+    console.log(char.tilemapLocation().column)
+    if (getPlayerBiome() == "snow") {
+        scene.setBackgroundImage(assets.image`biomeSnow`)
+    } else if (getPlayerBiome() == "desert") {
+        scene.setBackgroundImage(assets.image`biomeSand`)
+    } else {
+        scene.setBackgroundImage(assets.image`biomePlains`)
     }
 })
 // For handling UI messages.
