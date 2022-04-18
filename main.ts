@@ -243,7 +243,7 @@ function setupUIMessages () {
 }
 function generateWorld () {
     tiles.setTilemap(tilemap`World`)
-    scene.setBackgroundImage(assets.image`biomePlains`)
+    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
     scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
     scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer0)
     world_rows = tiles.tilemapRows() - 0
@@ -444,9 +444,11 @@ function setupUIStatBars () {
 }
 function generateWorldNew () {
     tiles.setTilemap(tilemap`World`)
-    scene.setBackgroundImage(assets.image`biomePlains`)
+    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
     scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
-    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer0)
+    scroller.setCameraScrollingMultipliers(0.15, 0, scroller.BackgroundLayer.Layer0)
+    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer1)
+    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer1)
     world_rows = tiles.tilemapRows() - 0
     world_cols = tiles.tilemapColumns() - 0
     generateWorldBiomeLocations()
@@ -876,11 +878,14 @@ game.onUpdateInterval(500, function () {
     console.log(getPlayerBiome())
     console.log(char.tilemapLocation().column)
     if (getPlayerBiome() == "snow") {
-        scene.setBackgroundImage(assets.image`biomeSnow`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
     } else if (getPlayerBiome() == "desert") {
-        scene.setBackgroundImage(assets.image`biomeSand`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
     } else {
-        scene.setBackgroundImage(assets.image`biomePlains`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
     }
 })
 // For handling UI messages.
