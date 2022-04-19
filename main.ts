@@ -12,8 +12,8 @@ function generateWorldBiomePlains (biome_location: any[]) {
     temp_biome_y = biome_location[2]
     temp_biome_width = biome_location[3]
     temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
-        for (let row = 0; row <= temp_biome_height; row++) {
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
             temp_x = temp_biome_x + col2
             temp_y = temp_biome_y + row
             if (temp_y == world_ground_height[temp_x]) {
@@ -67,9 +67,6 @@ function generateWorldBiomeLocations () {
     }
     world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.floor(world_rows * 0.25)))
     world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
-    for (let value of world_biome_locations) {
-        console.log(value)
-    }
 }
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     if (toolCurrentLabel() == "hammer") {
@@ -90,8 +87,8 @@ function generateWorldBiomeDesert (biome_location: any[]) {
     temp_biome_y = biome_location[2]
     temp_biome_width = biome_location[3]
     temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
-        for (let row = 0; row <= temp_biome_height; row++) {
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
             temp_x = temp_biome_x + col2
             temp_y = temp_biome_y + row
             if (temp_y == world_ground_height[temp_x]) {
@@ -231,8 +228,8 @@ function generateWorldBiomeSnow (biome_location: any[]) {
     temp_biome_y = biome_location[2]
     temp_biome_width = biome_location[3]
     temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width; col2++) {
-        for (let row = 0; row <= temp_biome_height; row++) {
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
             temp_x = temp_biome_x + col2
             temp_y = temp_biome_y + row
             if (temp_y == world_ground_height[temp_x]) {
@@ -677,7 +674,7 @@ function generateWorldBiome (biome_location: any[]) {
     temp_biome_y = biome_location[2]
     temp_biome_width = biome_location[3]
     temp_biome_height = biome_location[4]
-    generateBiomeGroundHeight(temp_biome, temp_biome_y, temp_biome_y + temp_biome_width)
+    generateBiomeGroundHeight(temp_biome, temp_biome_x, temp_biome_x + temp_biome_width)
     if (temp_biome == 0) {
         generateWorldBiomePlains(biome_location)
     } else if (temp_biome == 1) {
