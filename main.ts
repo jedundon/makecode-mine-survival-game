@@ -31,23 +31,9 @@ function generateWorldBiomePlains (biome_location: any[]) {
         }
     }
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
-            grid.move(selected_block, 0, -1)
-        }
-    }
-})
 function itemsLabelForId (id: number) {
     return items_all[id]
 }
-sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (controller.A.isPressed()) {
-        otherSprite.destroy(effects.disintegrate, 500)
-        char_xp_current += 5
-        uiUpdateStatBars()
-    }
-})
 function inventoryGetItemLabelByTileImage (image2: Image) {
     if (items_tile_images.indexOf(image2) > 0) {
         return itemsLabelForId(items_tile_images.indexOf(image2))
@@ -67,8 +53,8 @@ function generateWorldBiomeLocations () {
     ]
     world_biome_locations = []
     world_biome_cols_lookup = []
-    world_biome_cols_min = 20
-    world_biome_cols_max = 40
+    world_biome_cols_min = 15
+    world_biome_cols_max = 30
     world_col_index = 0
     while (world_col_index < world_cols) {
         world_biome_width = Math.constrain(randint(world_biome_cols_min, world_biome_cols_max), 0, world_cols - world_col_index)
@@ -85,8 +71,18 @@ function generateWorldBiomeLocations () {
         console.log(value)
     }
 }
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    toolChangeNext()
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    if (toolCurrentLabel() == "hammer") {
+        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
+            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
+            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
+            selected_block.destroy()
+        } else {
+            selected_block.destroy(effects.disintegrate, 100)
+        }
+    } else {
+    	
+    }
 })
 function generateWorldBiomeDesert (biome_location: any[]) {
     temp_biome = biome_location[0]
@@ -141,6 +137,13 @@ function generateGroundHeight () {
         world_ground_height.push(ground_current)
     }
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
+            grid.move(selected_block, 0, -1)
+        }
+    }
+})
 function buildValid () {
     if (char.overlapsWith(selected_block)) {
         return 0
@@ -150,64 +153,6 @@ function buildValid () {
         return 1
     }
 }
-// Game Systems
-// 
-// -----------
-// 
-// crafting
-// 
-// inventory
-// 
-// monsters
-// 
-// day/night cycle
-// 
-// equipment
-// 
-// - pickaxe
-// 
-// - axe
-// 
-// - hammer
-// 
-// - sword
-// 
-// multiplayer
-// 
-// bosses?
-// 
-// build
-// 
-// mining/getting resources
-// 
-// fun
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "pickaxe") {
-        if (!(char_button_direction < 0)) {
-            if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
-                if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
-                    inventoryAddItemByTileImage(tiles.tileImageAtLocation(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction)))
-                    if (isActionLocationAboveGround(char, char_button_direction)) {
-                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
-                    } else {
-                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
-                    }
-                    tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
-                }
-            }
-        }
-    } else if (toolCurrentLabel() == "hammer") {
-        selected_block = sprites.create(buildables_tile_images[2], SpriteKind.Food)
-        sprites.setDataImage(selected_block, "img", selected_block.image)
-sprites.setDataString(selected_block, "label", "brick")
-        sprites.setDataNumber(selected_block, "id", 2)
-        sprites.setDataNumber(selected_block, "blink", 0)
-        sprites.setDataNumber(selected_block, "blink_at", 15)
-        sprites.setDataNumber(selected_block, "blink_max", 30)
-        selected_block.z = -1
-        grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
-    }
-})
 function buildablesIdForLabel (label: string) {
     return buildables_all.indexOf(label)
 }
@@ -229,11 +174,14 @@ function setupVariables () {
     ui_message_queue = []
     entities_max = 10
 }
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
-            grid.move(selected_block, -1, 0)
-        }
+scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
+    if (sprite.isHittingTile(CollisionDirection.Left)) {
+        sprites.setDataNumber(sprite, "direction", 1)
+    } else if (sprite.isHittingTile(CollisionDirection.Right)) {
+        sprites.setDataNumber(sprite, "direction", -1)
+    }
+    if (debug_mode) {
+        sprite.sayText(sprite.vx)
     }
 })
 function setupUIMessages () {
@@ -318,6 +266,9 @@ function buildablesCanPlayerBuild (label: string) {
     }
     return true
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    toolChangeNext()
+})
 function setupBuildableTiles () {
     buildables_all = [
     "dirt",
@@ -356,23 +307,6 @@ function generatePlants () {
         }
     }
 }
-scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
-    if (sprite.isHittingTile(CollisionDirection.Left)) {
-        sprites.setDataNumber(sprite, "direction", 1)
-    } else if (sprite.isHittingTile(CollisionDirection.Right)) {
-        sprites.setDataNumber(sprite, "direction", -1)
-    }
-    if (debug_mode) {
-        sprite.sayText(sprite.vx)
-    }
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
-            grid.move(selected_block, 1, 0)
-        }
-    }
-})
 function uiShowMessage (text: string) {
     ui_message.setText(text)
     ui_message.ay = 0
@@ -383,17 +317,11 @@ function uiShowMessage (text: string) {
 function getPlayerBiome () {
     return world_biome_cols_lookup[char.tilemapLocation().column]
 }
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    if (toolCurrentLabel() == "hammer") {
-        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
-            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
-            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
-            selected_block.destroy()
-        } else {
-            selected_block.destroy(effects.disintegrate, 100)
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
+            grid.move(selected_block, -1, 0)
         }
-    } else {
-    	
     }
 })
 function toolCurrentLabel () {
@@ -407,13 +335,6 @@ function setupBuildables () {
     buildable_blocks.push(assets.tile`stone`)
     buildable_blocks.push(assets.tile`BushEmpty`)
 }
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (grid.spriteRow(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) < 3) {
-            grid.move(selected_block, 0, 1)
-        }
-    }
-})
 function uiAddMessageToQueue (text: string) {
     ui_message_queue.push(text)
 }
@@ -423,12 +344,19 @@ function setupPlayer () {
     char.z = 1
     char_button_direction = -1
     scene.cameraFollowSprite(char)
-    tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
     tiles.placeOnRandomTile(char, assets.tile`Grass`)
     grid.move(char, 0, -1)
+    tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
     setupPlayerTools()
     setupPlayerInventory()
 }
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
+            grid.move(selected_block, 1, 0)
+        }
+    }
+})
 function inventoryGetAmountByLabel (item: string) {
     return items_inventory[itemsIdForLabel(item)]
 }
@@ -443,6 +371,7 @@ function setupUIStatBars () {
     uiUpdateStatBars()
 }
 function generateWorldNew () {
+    world_rand_gen = Math.createRando(12)
     tiles.setTilemap(tilemap`World`)
     scene.setBackgroundImage(assets.image`biomePlainsOLD`)
     scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
@@ -497,6 +426,13 @@ function uiUpdateStatBars () {
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
 }
+sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        otherSprite.destroy(effects.disintegrate, 500)
+        char_xp_current += 5
+        uiUpdateStatBars()
+    }
+})
 function itemsIdForLabel (item: string) {
     return items_all.indexOf(item)
 }
@@ -508,15 +444,15 @@ function generateBiomeGroundHeight (biome: string, col_start: number, col_end: n
     }
     ground_min = 8
     ground_max = 25
-    for (let col = 0; col <= world_cols - 1; col++) {
-        if (Math.percentChance(15)) {
+    for (let index = 0; index < col_end - col_start + 1; index++) {
+        if (world_rand_gen.pseudoPercentChance(15)) {
             ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
-        } else if (Math.percentChance(15)) {
+        } else if (world_rand_gen.pseudoPercentChance(15)) {
             ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
-        } else if (Math.percentChance(5)) {
-            ground_current = Math.constrain(ground_prev - randint(2, 5), ground_min, ground_max)
-        } else if (Math.percentChance(5)) {
-            ground_current = Math.constrain(ground_prev + randint(2, 5), ground_min, ground_max)
+        } else if (world_rand_gen.pseudoPercentChance(5)) {
+            ground_current = Math.constrain(ground_prev - world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
+        } else if (world_rand_gen.pseudoPercentChance(5)) {
+            ground_current = Math.constrain(ground_prev + world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
         } else {
             ground_current = ground_prev
         }
@@ -555,9 +491,74 @@ function spawnEnemy (_type: string) {
         )
     }
 }
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (grid.spriteRow(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) < 3) {
+            grid.move(selected_block, 0, 1)
+        }
+    }
+})
 function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
 }
+// Game Systems
+// 
+// -----------
+// 
+// crafting
+// 
+// inventory
+// 
+// monsters
+// 
+// day/night cycle
+// 
+// equipment
+// 
+// - pickaxe
+// 
+// - axe
+// 
+// - hammer
+// 
+// - sword
+// 
+// multiplayer
+// 
+// bosses?
+// 
+// build
+// 
+// mining/getting resources
+// 
+// fun
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "pickaxe") {
+        if (!(char_button_direction < 0)) {
+            if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
+                if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
+                    inventoryAddItemByTileImage(tiles.tileImageAtLocation(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction)))
+                    if (isActionLocationAboveGround(char, char_button_direction)) {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
+                    } else {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
+                    }
+                    tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
+                }
+            }
+        }
+    } else if (toolCurrentLabel() == "hammer") {
+        selected_block = sprites.create(buildables_tile_images[2], SpriteKind.Food)
+        sprites.setDataImage(selected_block, "img", selected_block.image)
+sprites.setDataString(selected_block, "label", "brick")
+        sprites.setDataNumber(selected_block, "id", 2)
+        sprites.setDataNumber(selected_block, "blink", 0)
+        sprites.setDataNumber(selected_block, "blink_at", 15)
+        sprites.setDataNumber(selected_block, "blink_max", 30)
+        selected_block.z = -1
+        grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
+    }
+})
 function getRandomWorldBiome () {
     if (Math.percentChance(25)) {
         return "snow"
@@ -688,13 +689,17 @@ function generateWorldBiome (biome_location: any[]) {
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
+let world_rand_gen: Rando = null
 let char_health_bar: Sprite = null
+let char_xp_current = 0
 let char_health_current = 0
 let char_xp_max = 0
 let char_health_max = 0
+let char_button_direction = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
 let tree_height = 0
+let buildables_tile_images: Image[] = []
 let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
@@ -709,8 +714,7 @@ let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
 let buildables_all: string[] = []
-let buildables_tile_images: Image[] = []
-let char_button_direction = 0
+let char: Sprite = null
 let ground_current = 0
 let ground_max = 0
 let ground_min = 0
@@ -730,9 +734,7 @@ let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
-let char_xp_current = 0
 let items_all: string[] = []
-let char: Sprite = null
 let temp_y = 0
 let temp_x = 0
 let temp_biome_height: any = null
@@ -752,17 +754,15 @@ setupPlayer()
 setupBuildables()
 setupBuildableTiles()
 tooltest()
-game.onUpdate(function () {
-    if (controller.down.isPressed()) {
-        char_button_direction = 3
-    } else if (controller.up.isPressed()) {
-        char_button_direction = 1
-    } else if (controller.right.isPressed()) {
-        char_button_direction = 2
-    } else if (controller.left.isPressed()) {
-        char_button_direction = 0
+// For handling UI messages.
+game.onUpdateInterval(200, function () {
+    if (ui_message_queue.length > 0) {
+        uiShowMessage(ui_message_queue.shift())
     } else {
-        char_button_direction = -1
+        if (ui_message.y > scene.screenHeight() + 200) {
+            ui_message.ay = 0
+            ui_message.setVelocity(0, 0)
+        }
     }
 })
 game.onUpdate(function () {
@@ -800,50 +800,18 @@ game.onUpdate(function () {
         }
     }
 })
-game.onUpdate(function () {
-    if (char_button_direction == 0) {
-        sprites.setDataNumber(char_tool_sprite, "direction", -1)
-        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-            char_tool_sprite.image.flipX()
-        }
-    } else if (char_button_direction == 2) {
-        sprites.setDataNumber(char_tool_sprite, "direction", 1)
-        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
-            char_tool_sprite.setImage(toolCurrentImage().clone())
-        }
-    }
-    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
-        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+game.onUpdateInterval(500, function () {
+    console.log(getPlayerBiome())
+    console.log(char.tilemapLocation().column)
+    if (getPlayerBiome() == "snow") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
+    } else if (getPlayerBiome() == "desert") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
     } else {
-        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
-    }
-})
-game.onUpdateInterval(tick_speed * 2, function () {
-    if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
-        spawnEnemy("mushroom")
-    }
-})
-// Enemy AI Logic
-game.onUpdateInterval(tick_speed / 5, function () {
-    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
-        if (Math.percentChance(20)) {
-            if (e.isHittingTile(CollisionDirection.Bottom)) {
-                e.vy = sprites.readDataNumber(e, "jump")
-            }
-        }
-        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
-            sprites.setDataBoolean(e, "detected", true)
-            if (char.x <= e.x) {
-                sprites.setDataNumber(e, "direction", -1)
-            } else {
-                sprites.setDataNumber(e, "direction", 1)
-            }
-            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
-        } else {
-            sprites.setDataBoolean(e, "detected", false)
-            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
-        }
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
     }
 })
 forever(function () {
@@ -874,28 +842,62 @@ forever(function () {
         music.playMelody("A F E F D G E F ", 150)
     }
 })
-game.onUpdateInterval(500, function () {
-    console.log(getPlayerBiome())
-    console.log(char.tilemapLocation().column)
-    if (getPlayerBiome() == "snow") {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
-    } else if (getPlayerBiome() == "desert") {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
-    } else {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
+// Enemy AI Logic
+game.onUpdateInterval(tick_speed / 5, function () {
+    for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
+        if (Math.percentChance(20)) {
+            if (e.isHittingTile(CollisionDirection.Bottom)) {
+                e.vy = sprites.readDataNumber(e, "jump")
+            }
+        }
+        if (Math.abs(char.x - e.x) <= sprites.readDataNumber(e, "detection") && Math.abs(char.y - e.y) <= sprites.readDataNumber(e, "detection")) {
+            sprites.setDataBoolean(e, "detected", true)
+            if (char.x <= e.x) {
+                sprites.setDataNumber(e, "direction", -1)
+            } else {
+                sprites.setDataNumber(e, "direction", 1)
+            }
+            e.vx = sprites.readDataNumber(e, "speed_detected") * sprites.readDataNumber(e, "direction")
+        } else {
+            sprites.setDataBoolean(e, "detected", false)
+            e.vx = sprites.readDataNumber(e, "speed_normal") * sprites.readDataNumber(e, "direction")
+        }
     }
 })
-// For handling UI messages.
-game.onUpdateInterval(200, function () {
-    if (ui_message_queue.length > 0) {
-        uiShowMessage(ui_message_queue.shift())
+game.onUpdateInterval(tick_speed * 2, function () {
+    if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
+        spawnEnemy("mushroom")
+    }
+})
+game.onUpdate(function () {
+    if (controller.down.isPressed()) {
+        char_button_direction = 3
+    } else if (controller.up.isPressed()) {
+        char_button_direction = 1
+    } else if (controller.right.isPressed()) {
+        char_button_direction = 2
+    } else if (controller.left.isPressed()) {
+        char_button_direction = 0
     } else {
-        if (ui_message.y > scene.screenHeight() + 200) {
-            ui_message.ay = 0
-            ui_message.setVelocity(0, 0)
+        char_button_direction = -1
+    }
+})
+game.onUpdate(function () {
+    if (char_button_direction == 0) {
+        sprites.setDataNumber(char_tool_sprite, "direction", -1)
+        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+            char_tool_sprite.image.flipX()
         }
+    } else if (char_button_direction == 2) {
+        sprites.setDataNumber(char_tool_sprite, "direction", 1)
+        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+        }
+    }
+    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
+        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+    } else {
+        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
     }
 })
