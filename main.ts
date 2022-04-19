@@ -740,11 +740,16 @@ let temp_biome_y: any = null
 let temp_biome_x: any = null
 let temp_biome: any = null
 let world_ground_height: number[] = []
-let debug_mode = false
 let world_seed = 0
-world_seed = game.askForNumber("What seed would you like to use?", 10)
-let selected_block: Sprite = null
+let debug_mode = false
 debug_mode = false
+let seed_prompt = false
+world_seed = randint(0, 1000000)
+if (seed_prompt) {
+    world_seed = game.askForNumber("What seed would you like to use?", 10)
+}
+console.log("Using seed value of: " + world_seed)
+let selected_block: Sprite = null
 setupVariables()
 setupUIMessages()
 setupUIStatBars()
@@ -797,20 +802,6 @@ game.onUpdate(function () {
                 char.vx = 0
             }
         }
-    }
-})
-game.onUpdateInterval(500, function () {
-    console.log(getPlayerBiome())
-    console.log(char.tilemapLocation().column)
-    if (getPlayerBiome() == "snow") {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
-    } else if (getPlayerBiome() == "desert") {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
-    } else {
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
-        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
     }
 })
 forever(function () {
@@ -879,6 +870,18 @@ game.onUpdate(function () {
         char_button_direction = 0
     } else {
         char_button_direction = -1
+    }
+})
+game.onUpdateInterval(500, function () {
+    if (getPlayerBiome() == "snow") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
+    } else if (getPlayerBiome() == "desert") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
+    } else {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
     }
 })
 game.onUpdate(function () {
