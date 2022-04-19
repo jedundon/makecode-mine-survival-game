@@ -148,12 +148,6 @@
         "tilemapTile": true,
         "displayName": "BushEmpty"
     },
-    "tile16": {
-        "data": "hwQQABAAAAAAAHd3dwAA0ABw13d3AABNAHe9fXcH0ERwddd3dXfQTVd3d1d3d9DUd3d3d3d33UR3d9d313dE1Nd3vX29fdREvX3Xd9d31ETXd3d3d3dE1Hd1d3d3d93Ud1d313d10ERwd3e9XXfQRHB3d9d3B9BEAAB3d3cHAE0AAHB3dwcA0A==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "BushThouns"
-    },
     "tile22": {
         "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHB3dwAAAABwd1d3AAAAcFd3d3UAANBwdVd3d93dTXB3d3V3RNTUcHd3d9dETdRwV3d31d3dTQBwdVcHAADQAHB3dwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
         "mimeType": "image/x-mkcd-f4",
@@ -177,6 +171,12 @@
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true,
         "displayName": "TreeTop"
+    },
+    "tile16": {
+        "data": "hwQQABAAAAAAAHd3dwAA0ABw13d3AABNAHe9fXcH0ERwddd3dXfQTVd3d1d3d9DUd3d3d3d33UR3d9d313dE1Nd3vX29fdREvX3Xd9d31ETXd3d3d3dE1Hd1d3d3d93Ud1d313d10ERwd3e9XXfQRHB3d9d3B9BEAAB3d3cHAE0AAHB3dwcA0A==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "BushThorns"
     },
     "level": {
         "id": "level",

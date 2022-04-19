@@ -30,6 +30,7 @@ function generateWorldBiomePlains (biome_location: any[]) {
             }
         }
     }
+    generatePlainsPlants(temp_biome_x, temp_biome_width)
 }
 function itemsLabelForId (id: number) {
     return items_all[id]
@@ -244,6 +245,22 @@ function generateWorldBiomeSnow (biome_location: any[]) {
                     tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
                 }
             }
+        }
+    }
+}
+function generatePlainsPlants (col_start: number, width: number) {
+    for (let col3 = 0; col3 <= width - 1; col3++) {
+        temp_x = col_start + col3
+        ground_current = world_ground_height[temp_x]
+        if (world_rand_gen.pseudoPercentChance(10)) {
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushFull`)
+        } else if (world_rand_gen.pseudoPercentChance(25)) {
+            tree_height = world_rand_gen.getNumber(2, 5, true)
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`TreeTrunk0`)
+            for (let index = 0; index <= tree_height - 2; index++) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            }
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
         }
     }
 }
@@ -694,13 +711,13 @@ let char_health_max = 0
 let char_button_direction = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
-let tree_height = 0
 let buildables_tile_images: Image[] = []
 let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
 let temp_recipe: number[][] = []
 let items_inventory: number[] = []
+let tree_height = 0
 let ui_message: TextSprite = null
 let entities_max = 0
 let ui_message_queue: string[] = []
