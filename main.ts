@@ -20,7 +20,7 @@ function generateWorldBiomePlains (biome_location: any[]) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Grass`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             } else if (temp_y > world_ground_height[temp_x]) {
-                if (Math.percentChance(75)) {
+                if (world_rand_gen.pseudoPercentChance(75)) {
                     tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
                     tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
                 } else {
@@ -57,7 +57,7 @@ function generateWorldBiomeLocations () {
     world_biome_cols_max = 30
     world_col_index = 0
     while (world_col_index < world_cols) {
-        world_biome_width = Math.constrain(randint(world_biome_cols_min, world_biome_cols_max), 0, world_cols - world_col_index)
+        world_biome_width = Math.constrain(world_rand_gen.getNumber(world_biome_cols_min, world_biome_cols_max, true), 0, world_cols - world_col_index)
         temp_biome = getRandomWorldBiome()
         world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
         for (let index = 0; index < world_biome_width; index++) {
@@ -95,7 +95,7 @@ function generateWorldBiomeDesert (biome_location: any[]) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Sand`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             } else if (temp_y > world_ground_height[temp_x]) {
-                if (Math.percentChance(75)) {
+                if (world_rand_gen.pseudoPercentChance(75)) {
                     tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
                     tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
                 } else {
@@ -236,7 +236,7 @@ function generateWorldBiomeSnow (biome_location: any[]) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`SnowGrass`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             } else if (temp_y > world_ground_height[temp_x]) {
-                if (Math.percentChance(75)) {
+                if (world_rand_gen.pseudoPercentChance(75)) {
                     tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
                     tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
                 } else {
@@ -368,7 +368,7 @@ function setupUIStatBars () {
     uiUpdateStatBars()
 }
 function generateWorldNew () {
-    world_rand_gen = Math.createRando(12)
+    world_rand_gen = Math.createRando(world_seed)
     tiles.setTilemap(tilemap`World`)
     scene.setBackgroundImage(assets.image`biomePlainsOLD`)
     scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
@@ -557,9 +557,9 @@ sprites.setDataString(selected_block, "label", "brick")
     }
 })
 function getRandomWorldBiome () {
-    if (Math.percentChance(25)) {
+    if (world_rand_gen.pseudoPercentChance(25)) {
         return "snow"
-    } else if (Math.percentChance(30)) {
+    } else if (world_rand_gen.pseudoPercentChance(30)) {
         return "desert"
     } else {
         return "plains"
@@ -686,7 +686,6 @@ function generateWorldBiome (biome_location: any[]) {
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
-let world_rand_gen: Rando = null
 let char_health_bar: Sprite = null
 let char_xp_current = 0
 let char_health_current = 0
@@ -732,6 +731,7 @@ let world_biome_types: string[] = []
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
 let items_all: string[] = []
+let world_rand_gen: Rando = null
 let temp_y = 0
 let temp_x = 0
 let temp_biome_height: any = null
@@ -741,6 +741,8 @@ let temp_biome_x: any = null
 let temp_biome: any = null
 let world_ground_height: number[] = []
 let debug_mode = false
+let world_seed = 0
+world_seed = game.askForNumber("What seed would you like to use?", 10)
 let selected_block: Sprite = null
 debug_mode = false
 setupVariables()
