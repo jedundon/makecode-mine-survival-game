@@ -784,7 +784,8 @@ let debug_mode = false
 debug_mode = false
 game_state = "menu"
 let selected_block: Sprite = null
-blockMenu.setColors(8, 1)
+blockMenu.setColors(8, 0)
+scene.setBackgroundImage(assets.image`biomePlainsOLD`)
 blockMenu.showMenu([
 "Preset Seed",
 "Random Seed",
