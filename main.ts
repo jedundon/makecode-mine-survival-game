@@ -596,7 +596,7 @@ function tooltest () {
 blockMenu.onMenuOptionSelected(function (option, index) {
     world_seed = 0
     if (index == 1) {
-        world_seed = randint(0, 1000000)
+        world_seed = randint(0, 9999999999)
     } else if (index == 2) {
         world_seed = game.askForNumber("Enter world seed:", 10)
     }
