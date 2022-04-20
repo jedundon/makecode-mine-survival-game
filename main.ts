@@ -594,23 +594,25 @@ function tooltest () {
     char_tool_sprite.z = 3
 }
 blockMenu.onMenuOptionSelected(function (option, index) {
-    world_seed = 0
-    if (index == 1) {
-        world_seed = randint(0, 9999999999)
-    } else if (index == 2) {
-        world_seed = game.askForNumber("Enter world seed:", 10)
+    if (blockMenu.isMenuOpen()) {
+        world_seed = 0
+        if (index == 1) {
+            world_seed = randint(0, 9999999999)
+        } else if (index == 2) {
+            world_seed = game.askForNumber("Enter world seed:", 10)
+        }
+        console.log("Using seed value of: " + world_seed)
+        blockMenu.closeMenu()
+        setupVariables()
+        setupUIMessages()
+        setupUIStatBars()
+        generateWorldNew()
+        setupPlayer()
+        setupBuildables()
+        setupBuildableTiles()
+        tooltest()
+        game_state = "running"
     }
-    console.log("Using seed value of: " + world_seed)
-    blockMenu.closeMenu()
-    setupVariables()
-    setupUIMessages()
-    setupUIStatBars()
-    generateWorldNew()
-    setupPlayer()
-    setupBuildables()
-    setupBuildableTiles()
-    tooltest()
-    game_state = "running"
 })
 function setupPlayerInventory () {
     items_all = [
