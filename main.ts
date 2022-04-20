@@ -594,25 +594,23 @@ function tooltest () {
     char_tool_sprite.z = 3
 }
 blockMenu.onMenuOptionSelected(function (option, index) {
-    if (blockMenu.isMenuOpen()) {
-        world_seed = 0
-        if (index == 1) {
-            world_seed = randint(0, 9999999999)
-        } else if (index == 2) {
-            world_seed = game.askForNumber("Enter world seed:", 10)
-        }
-        console.log("Using seed value of: " + world_seed)
-        blockMenu.closeMenu()
-        setupVariables()
-        setupUIMessages()
-        setupUIStatBars()
-        generateWorldNew()
-        setupPlayer()
-        setupBuildables()
-        setupBuildableTiles()
-        tooltest()
-        game_state = "running"
+    world_seed = 0
+    if (index == 1) {
+        world_seed = randint(-999999999, 9999999999)
+    } else if (index == 2) {
+        world_seed = game.askForNumber("Enter world seed:", 10)
     }
+    console.log("Using seed value of: " + world_seed)
+    blockMenu.closeMenu()
+    setupVariables()
+    setupUIMessages()
+    setupUIStatBars()
+    generateWorldNew()
+    setupPlayer()
+    setupBuildables()
+    setupBuildableTiles()
+    tooltest()
+    game_state = "running"
 })
 function setupPlayerInventory () {
     items_all = [
@@ -784,8 +782,7 @@ let debug_mode = false
 debug_mode = false
 game_state = "menu"
 let selected_block: Sprite = null
-blockMenu.setColors(8, 0)
-scene.setBackgroundImage(assets.image`biomePlainsOLD`)
+blockMenu.setColors(8, 1)
 blockMenu.showMenu([
 "Preset Seed",
 "Random Seed",
