@@ -215,6 +215,8 @@ sprites.setDataString(selected_block, "label", "brick")
         sprites.setDataNumber(selected_block, "blink_max", 30)
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
+    } else if (toolCurrentLabel() == "hand") {
+        generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3)
     }
 })
 function buildablesIdForLabel (label: string) {
@@ -323,8 +325,8 @@ function generatePlainsPlants (col_start: number, width: number) {
         } else if (world_rand_gen.pseudoPercentChance(25)) {
             tree_height = world_rand_gen.getNumber(2, 5, true)
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`TreeTrunk0`)
-            for (let index = 0; index <= tree_height - 2; index++) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            for (let temp_row = 0; temp_row <= tree_height - 2; temp_row++) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
             }
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
         }
@@ -332,6 +334,39 @@ function generatePlainsPlants (col_start: number, width: number) {
 }
 function inventoryAddAmountByLabel (item: string, amount: number) {
     items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
+}
+function generateWorldCave (row: number, col: number, size: number) {
+    if (size <= 0) {
+        return
+    }
+    for (let temp_x = 0; temp_x <= size - 1; temp_x++) {
+        for (let temp_y = 0; temp_y <= size - 1; temp_y++) {
+            console.logValue("col", col + cave_direction * (temp_x - 1))
+            console.logValue("row", row + (temp_y - 1))
+            if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)))) {
+                if (!(tiles.tileIs(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`CORE`))) {
+                    if (!(isLocationAboveGround(row + (temp_y - 1), col + cave_direction * (temp_x - 1)))) {
+                        console.log("yep, gotta go!")
+                        tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
+                        tiles.setWallAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), false)
+                    }
+                }
+            }
+        }
+    }
+    cave_direction = -1
+    cave_drop_percent = 75
+    cave_shrink_percent = 25
+    cave_row = row
+    cave_col = col
+    cave_size = size
+    if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
+        cave_row += 1
+    }
+    cave_col += cave_direction
+    if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
+        cave_size += -1
+    }
 }
 function buildablesCanPlayerBuild (label: string) {
     temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
@@ -380,8 +415,8 @@ function generatePlants () {
         } else if (Math.percentChance(25)) {
             tree_height = randint(2, 5)
             tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`TreeTrunk0`)
-            for (let index = 0; index <= tree_height - 2; index++) {
-                tiles.setTileAt(tiles.getTileLocation(col3, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            for (let temp_row = 0; temp_row <= tree_height - 2; temp_row++) {
+                tiles.setTileAt(tiles.getTileLocation(col3, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
             }
             tiles.setTileAt(tiles.getTileLocation(col3, ground_current - tree_height), assets.tile`TreeTop`)
         }
@@ -772,6 +807,9 @@ function generateWorldBiome (biome_location: any[]) {
         generateWorldBiomeDesert(biome_location)
     }
 }
+function isLocationAboveGround (row: number, col: number) {
+    return row > groundLevelAtColumn(col)
+}
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
@@ -785,6 +823,12 @@ let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
 let temp_recipe: number[][] = []
+let cave_size = 0
+let cave_col = 0
+let cave_row = 0
+let cave_shrink_percent = 0
+let cave_drop_percent = 0
+let cave_direction = 0
 let items_inventory: number[] = []
 let tree_height = 0
 let ui_message: TextSprite = null
