@@ -35,6 +35,14 @@ function generateWorldBiomePlains (biome_location: any[]) {
 function itemsLabelForId (id: number) {
     return items_all[id]
 }
+sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        otherSprite.destroy(effects.disintegrate, 500)
+        char_xp_current += 5
+        char_health_current += 3
+        uiUpdateStatBars()
+    }
+})
 function inventoryGetItemLabelByTileImage (image2: Image) {
     if (items_tile_images.indexOf(image2) > 0) {
         return itemsLabelForId(items_tile_images.indexOf(image2))
@@ -331,6 +339,14 @@ function uiShowMessage (text: string) {
 function getPlayerBiome () {
     return world_biome_cols_lookup[char.tilemapLocation().column]
 }
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
+    pause(500)
+    char_health_current += -2
+    uiUpdateStatBars()
+    if (char_health_current < 1) {
+        game.over(false)
+    }
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
@@ -430,6 +446,27 @@ function setupPlayerTools () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
+blockMenu.onMenuOptionSelected(function (option, index) {
+    if (blockMenu.isMenuOpen()) {
+        world_seed = 0
+        if (index == 1) {
+            world_seed = randint(0, 9999999999)
+        } else if (index == 2) {
+            world_seed = game.askForNumber("Enter world seed:", 10)
+        }
+        console.log("Using seed value of: " + world_seed)
+        blockMenu.closeMenu()
+        setupVariables()
+        setupUIMessages()
+        setupUIStatBars()
+        generateWorldNew()
+        setupPlayer()
+        setupBuildables()
+        setupBuildableTiles()
+        tooltest()
+        game_state = "running"
+    }
+})
 function uiUpdateStatBars () {
     char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
     char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
@@ -440,13 +477,6 @@ function uiUpdateStatBars () {
 function toolCurrentIcon () {
     return tools_all_icons[tools_inventory[tool_selected]]
 }
-sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (controller.A.isPressed()) {
-        otherSprite.destroy(effects.disintegrate, 500)
-        char_xp_current += 5
-        uiUpdateStatBars()
-    }
-})
 function itemsIdForLabel (item: string) {
     return items_all.indexOf(item)
 }
@@ -593,25 +623,6 @@ function tooltest () {
     char_tool_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     char_tool_sprite.z = 3
 }
-blockMenu.onMenuOptionSelected(function (option, index) {
-    world_seed = 0
-    if (index == 1) {
-        world_seed = randint(-999999999, 9999999999)
-    } else if (index == 2) {
-        world_seed = game.askForNumber("Enter world seed:", 10)
-    }
-    console.log("Using seed value of: " + world_seed)
-    blockMenu.closeMenu()
-    setupVariables()
-    setupUIMessages()
-    setupUIStatBars()
-    generateWorldNew()
-    setupPlayer()
-    setupBuildables()
-    setupBuildableTiles()
-    tooltest()
-    game_state = "running"
-})
 function setupPlayerInventory () {
     items_all = [
     "wood",
@@ -724,8 +735,6 @@ let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let world_seed = 0
 let char_health_bar: Sprite = null
-let char_xp_current = 0
-let char_health_current = 0
 let char_xp_max = 0
 let char_health_max = 0
 let char_button_direction = 0
@@ -767,6 +776,8 @@ let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
+let char_health_current = 0
+let char_xp_current = 0
 let items_all: string[] = []
 let world_rand_gen: Rando = null
 let temp_y = 0
@@ -782,19 +793,13 @@ let debug_mode = false
 debug_mode = false
 game_state = "menu"
 let selected_block: Sprite = null
-blockMenu.setColors(8, 1)
+blockMenu.setColors(8, 0)
+scene.setBackgroundImage(assets.image`biomePlainsOLD`)
 blockMenu.showMenu([
 "Preset Seed",
 "Random Seed",
 "Choose Seed"
 ], MenuStyle.List, MenuLocation.BottomHalf)
-game.onUpdateInterval(tick_speed * 2, function () {
-    if (game_state == "running") {
-        if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
-            spawnEnemy("mushroom")
-        }
-    }
-})
 // For handling UI messages.
 game.onUpdateInterval(200, function () {
     if (game_state == "running") {
@@ -805,6 +810,20 @@ game.onUpdateInterval(200, function () {
                 ui_message.ay = 0
                 ui_message.setVelocity(0, 0)
             }
+        }
+    }
+})
+game.onUpdateInterval(500, function () {
+    if (game_state == "running") {
+        if (getPlayerBiome() == "snow") {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
+        } else if (getPlayerBiome() == "desert") {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
+        } else {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
         }
     }
 })
@@ -931,17 +950,10 @@ game.onUpdate(function () {
         }
     }
 })
-game.onUpdateInterval(500, function () {
+game.onUpdateInterval(tick_speed * 2, function () {
     if (game_state == "running") {
-        if (getPlayerBiome() == "snow") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
-        } else if (getPlayerBiome() == "desert") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
-        } else {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
+        if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
+            spawnEnemy("mushroom")
         }
     }
 })
