@@ -159,6 +159,64 @@ function buildValid () {
         return 1
     }
 }
+// Game Systems
+// 
+// -----------
+// 
+// crafting
+// 
+// inventory
+// 
+// monsters
+// 
+// day/night cycle
+// 
+// equipment
+// 
+// - pickaxe
+// 
+// - axe
+// 
+// - hammer
+// 
+// - sword
+// 
+// multiplayer
+// 
+// bosses?
+// 
+// build
+// 
+// mining/getting resources
+// 
+// fun
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "pickaxe") {
+        if (!(char_button_direction < 0)) {
+            if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
+                if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
+                    inventoryAddItemByTileImage(tiles.tileImageAtLocation(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction)))
+                    if (isActionLocationAboveGround(char, char_button_direction)) {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
+                    } else {
+                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
+                    }
+                    tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
+                }
+            }
+        }
+    } else if (toolCurrentLabel() == "hammer") {
+        selected_block = sprites.create(buildables_tile_images[2], SpriteKind.Food)
+        sprites.setDataImage(selected_block, "img", selected_block.image)
+sprites.setDataString(selected_block, "label", "brick")
+        sprites.setDataNumber(selected_block, "id", 2)
+        sprites.setDataNumber(selected_block, "blink", 0)
+        sprites.setDataNumber(selected_block, "blink_at", 15)
+        sprites.setDataNumber(selected_block, "blink_max", 30)
+        selected_block.z = -1
+        grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
+    }
+})
 function buildablesIdForLabel (label: string) {
     return buildables_all.indexOf(label)
 }
@@ -340,11 +398,13 @@ function getPlayerBiome () {
     return world_biome_cols_lookup[char.tilemapLocation().column]
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-    pause(500)
-    char_health_current += -2
-    uiUpdateStatBars()
-    if (char_health_current < 1) {
-        game.over(false)
+    if (god_mode == false) {
+        pause(500)
+        char_health_current += -2
+        uiUpdateStatBars()
+        if (char_health_current < 1) {
+            game.over(false)
+        }
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -446,27 +506,6 @@ function setupPlayerTools () {
     tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
     tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
 }
-blockMenu.onMenuOptionSelected(function (option, index) {
-    if (blockMenu.isMenuOpen()) {
-        world_seed = 0
-        if (index == 1) {
-            world_seed = randint(0, 9999999999)
-        } else if (index == 2) {
-            world_seed = game.askForNumber("Enter world seed:", 10)
-        }
-        console.log("Using seed value of: " + world_seed)
-        blockMenu.closeMenu()
-        setupVariables()
-        setupUIMessages()
-        setupUIStatBars()
-        generateWorldNew()
-        setupPlayer()
-        setupBuildables()
-        setupBuildableTiles()
-        tooltest()
-        game_state = "running"
-    }
-})
 function uiUpdateStatBars () {
     char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
     char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
@@ -545,64 +584,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
 }
-// Game Systems
-// 
-// -----------
-// 
-// crafting
-// 
-// inventory
-// 
-// monsters
-// 
-// day/night cycle
-// 
-// equipment
-// 
-// - pickaxe
-// 
-// - axe
-// 
-// - hammer
-// 
-// - sword
-// 
-// multiplayer
-// 
-// bosses?
-// 
-// build
-// 
-// mining/getting resources
-// 
-// fun
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "pickaxe") {
-        if (!(char_button_direction < 0)) {
-            if (tiles.tileIsWall(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction))) {
-                if (!(tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`CORE`))) {
-                    inventoryAddItemByTileImage(tiles.tileImageAtLocation(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction)))
-                    if (isActionLocationAboveGround(char, char_button_direction)) {
-                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Stone_Background`)
-                    } else {
-                        tiles.setTileAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), assets.tile`Sky_Block`)
-                    }
-                    tiles.setWallAt(tiles.locationInDirection(tiles.locationOfSprite(char), char_button_direction), false)
-                }
-            }
-        }
-    } else if (toolCurrentLabel() == "hammer") {
-        selected_block = sprites.create(buildables_tile_images[2], SpriteKind.Food)
-        sprites.setDataImage(selected_block, "img", selected_block.image)
-sprites.setDataString(selected_block, "label", "brick")
-        sprites.setDataNumber(selected_block, "id", 2)
-        sprites.setDataNumber(selected_block, "blink", 0)
-        sprites.setDataNumber(selected_block, "blink_at", 15)
-        sprites.setDataNumber(selected_block, "blink_max", 30)
-        selected_block.z = -1
-        grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
-    }
-})
 function getRandomWorldBiome () {
     if (world_rand_gen.pseudoPercentChance(25)) {
         return "snow"
@@ -623,12 +604,35 @@ function tooltest () {
     char_tool_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     char_tool_sprite.z = 3
 }
+blockMenu.onMenuOptionSelected(function (option, index) {
+    if (blockMenu.isMenuOpen()) {
+        world_seed = 122911
+        if (index == 1) {
+            world_seed = randint(0, 9999999999)
+        } else if (index == 2) {
+            world_seed = game.askForNumber("Enter world seed:", 10)
+        }
+        console.log("Using seed value of: " + world_seed)
+        blockMenu.closeMenu()
+        setupVariables()
+        setupUIMessages()
+        setupUIStatBars()
+        generateWorldNew()
+        setupPlayer()
+        setupBuildables()
+        setupBuildableTiles()
+        tooltest()
+        game_state = "running"
+    }
+})
 function setupPlayerInventory () {
     items_all = [
     "wood",
     "brick",
     "stone",
-    "dirt"
+    "dirt",
+    "snow",
+    "sand"
     ]
     items_tile_images = [
     img`
@@ -651,7 +655,9 @@ function setupPlayerInventory () {
         `,
     assets.tile`brick_block`,
     assets.tile`stone`,
-    assets.tile`Dirt`
+    assets.tile`Dirt`,
+    assets.tile`SnowGrass`,
+    assets.tile`Sand`
     ]
     items_tile_images_alt = [
     img`
@@ -708,7 +714,43 @@ function setupPlayerInventory () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `,
-    assets.tile`Grass`
+    assets.tile`Grass`,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `
     ]
     items_inventory = []
     for (let value2 of items_all) {
@@ -737,10 +779,8 @@ let world_seed = 0
 let char_health_bar: Sprite = null
 let char_xp_max = 0
 let char_health_max = 0
-let char_button_direction = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
-let buildables_tile_images: Image[] = []
 let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
@@ -756,6 +796,8 @@ let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
 let buildables_all: string[] = []
+let buildables_tile_images: Image[] = []
+let char_button_direction = 0
 let char: Sprite = null
 let ground_current = 0
 let ground_max = 0
@@ -789,8 +831,10 @@ let temp_biome_x: any = null
 let temp_biome: any = null
 let world_ground_height: number[] = []
 let game_state = ""
+let god_mode = false
 let debug_mode = false
 debug_mode = false
+god_mode = true
 game_state = "menu"
 let selected_block: Sprite = null
 blockMenu.setColors(8, 0)
