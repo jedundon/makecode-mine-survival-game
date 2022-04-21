@@ -216,7 +216,7 @@ sprites.setDataString(selected_block, "label", "brick")
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
     } else if (toolCurrentLabel() == "hand") {
-        generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3)
+        generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
     }
 })
 function buildablesIdForLabel (label: string) {
@@ -335,7 +335,7 @@ function generatePlainsPlants (col_start: number, width: number) {
 function inventoryAddAmountByLabel (item: string, amount: number) {
     items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
 }
-function generateWorldCave (row: number, col: number, size: number) {
+function generateWorldCave (row: number, col: number, size: number, dir: number) {
     if (size <= 0) {
         return
     }
@@ -354,12 +354,12 @@ function generateWorldCave (row: number, col: number, size: number) {
             }
         }
     }
-    cave_direction = -1
     cave_drop_percent = 75
-    cave_shrink_percent = 25
+    cave_shrink_percent = 20
     cave_row = row
     cave_col = col
     cave_size = size
+    cave_direction = dir
     if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
         cave_row += 1
     }
@@ -367,6 +367,7 @@ function generateWorldCave (row: number, col: number, size: number) {
     if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
         cave_size += -1
     }
+    generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
 }
 function buildablesCanPlayerBuild (label: string) {
     temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
@@ -509,6 +510,10 @@ function generateWorldNew () {
     world_ground_height = []
     for (let b of world_biome_locations) {
         generateWorldBiome(b)
+    }
+    for (let index = 0; index < Math.floor(world_cols / 10) + world_rand_gen.getNumber(-2, 2, true); index++) {
+        temp_x = world_rand_gen.getNumber(0, world_cols - 1, true)
+        generateWorldCave(groundLevelAtColumn(temp_x), temp_x, world_rand_gen.getNumber(2, 3, true), world_rand_gen.getNumber(0, 1, true) * 2 - 1)
     }
 }
 function setupPlayerTools () {
@@ -808,7 +813,7 @@ function generateWorldBiome (biome_location: any[]) {
     }
 }
 function isLocationAboveGround (row: number, col: number) {
-    return row > groundLevelAtColumn(col)
+    return row < groundLevelAtColumn(col)
 }
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
