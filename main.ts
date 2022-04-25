@@ -277,6 +277,14 @@ scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
         sprite.sayText(sprite.vx)
     }
 })
+function isPlantHere (row: number, col: number) {
+    for (let p of world_plant_locations) {
+        if (row == p[0] && col == p[1]) {
+            return true
+        }
+    }
+    return false
+}
 function setupUIMessages () {
     ui_message = textsprite.create("", 1, 15)
     ui_message.setMaxFontHeight(3)
@@ -349,7 +357,7 @@ function generatePlainsPlants (col_start: number, width: number) {
         ground_current = world_ground_height[temp_x]
         if (world_rand_gen.pseudoPercentChance(10)) {
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushEmpty`)
-            savePlantLocation(ground_current - 1, temp_x, 0)
+            savePlantLocation(ground_current - 1, temp_x, 1)
             addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("bush_plains"))
         } else if (world_rand_gen.pseudoPercentChance(25)) {
             tree_height = world_rand_gen.getNumber(2, 5, true)
@@ -358,7 +366,7 @@ function generatePlainsPlants (col_start: number, width: number) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
             }
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
-            savePlantLocation(ground_current - 1, temp_x, 0)
+            savePlantLocation(ground_current - 1, temp_x, 1)
             addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("tree_plains"))
         }
     }
@@ -372,14 +380,13 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
     }
     for (let temp_x = 0; temp_x <= size - 1; temp_x++) {
         for (let temp_y = 0; temp_y <= size - 1; temp_y++) {
-            console.logValue("col", col + cave_direction * (temp_x - 1))
-            console.logValue("row", row + (temp_y - 1))
             if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)))) {
                 if (!(tiles.tileIs(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`CORE`))) {
                     if (!(isLocationAboveGround(row + (temp_y - 1), col + cave_direction * (temp_x - 1)))) {
-                        console.log("yep, gotta go!")
-                        tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
-                        tiles.setWallAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), false)
+                        if (!(isPlantHere(row + (temp_y - 1) - 1, col + cave_direction * (temp_x - 1)))) {
+                            tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
+                            tiles.setWallAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), false)
+                        }
                     }
                 }
             }
@@ -569,9 +576,27 @@ function generateWorldNew () {
     for (let b of world_biome_locations) {
         generateWorldBiome(b)
     }
-    for (let index = 0; index < Math.floor(world_cols / 10) + world_rand_gen.getNumber(-2, 2, true); index++) {
-        temp_x = world_rand_gen.getNumber(0, world_cols - 1, true)
-        generateWorldCave(groundLevelAtColumn(temp_x), temp_x, world_rand_gen.getNumber(2, 3, true), world_rand_gen.getNumber(0, 1, true) * 2 - 1)
+    cave_locations = []
+    for (let col = 0; col <= scene.screenWidth() - 1; col++) {
+        g = groundLevelAtColumn(col)
+        if (col > 0 && (!(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 1))))) {
+            cave_locations.push([
+            g + 3,
+            col,
+            world_rand_gen.getNumber(2, 3, true),
+            1
+            ])
+        } else if (col < scene.screenWidth() - 1 && (!(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 1))))) {
+            cave_locations.push([
+            g + 3,
+            col,
+            world_rand_gen.getNumber(2, 3, true),
+            -1
+            ])
+        }
+    }
+    for (let c of cave_locations) {
+        generateWorldCave(c[0], c[1], c[2], c[3])
     }
 }
 function setupPlayerTools () {
@@ -876,6 +901,8 @@ function isLocationAboveGround (row: number, col: number) {
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
+let g = 0
+let cave_locations: number[][] = []
 let world_seed = 0
 let char_health_bar: Sprite = null
 let char_xp_max = 0
