@@ -630,22 +630,29 @@ function generateWorldNew () {
         generateWorldBiome(b)
     }
     cave_locations = []
+    temp_skip = 0
     for (let col = 0; col <= scene.screenWidth() - 1; col++) {
-        g = groundLevelAtColumn(col)
-        if (col > 0 && (!(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 1))))) {
-            cave_locations.push([
-            g + 3,
-            col,
-            world_rand_gen.getNumber(2, 3, true),
-            1
-            ])
-        } else if (col < scene.screenWidth() - 1 && (!(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 1))))) {
-            cave_locations.push([
-            g + 3,
-            col,
-            world_rand_gen.getNumber(2, 3, true),
-            -1
-            ])
+        if (temp_skip <= 0) {
+            g = groundLevelAtColumn(col)
+            if (col > 1 && (!(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 1))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 2, g + 0))))) {
+                cave_locations.push([
+                g + 2,
+                col,
+                world_rand_gen.getNumber(3, 3, true),
+                1
+                ])
+                temp_skip = 8
+            } else if (col < scene.screenWidth() - 2 && (!(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 1))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 2, g + 0))))) {
+                cave_locations.push([
+                g + 2,
+                col,
+                world_rand_gen.getNumber(3, 3, true),
+                -1
+                ])
+                temp_skip = 8
+            }
+        } else {
+            temp_skip += -1
         }
     }
     for (let c of cave_locations) {
@@ -697,17 +704,17 @@ function itemsIdForLabel (item: string) {
 }
 function generateBiomeGroundHeight (biome: string, col_start: number, col_end: number) {
     if (biome == "desert") {
-        ground_chance_minor = 20
+        ground_chance_minor = 10
         ground_chance_major = 5
         ground_change_max = 3
     } else if (biome == "snow") {
-        ground_chance_minor = 20
-        ground_chance_major = 25
-        ground_change_max = 6
+        ground_chance_minor = 45
+        ground_chance_major = 15
+        ground_change_max = 2
     } else {
-        ground_chance_minor = 30
-        ground_chance_major = 10
-        ground_change_max = 5
+        ground_chance_minor = 25
+        ground_chance_major = 7
+        ground_change_max = 2
     }
     if (col_start > 0) {
         ground_prev = world_ground_height[world_ground_height.length - 1]
@@ -1001,6 +1008,7 @@ let ground_chance_minor = 0
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let g = 0
+let temp_skip = 0
 let cave_locations: number[][] = []
 let world_seed = 0
 let char_health_bar: Sprite = null
