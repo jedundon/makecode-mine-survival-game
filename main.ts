@@ -386,8 +386,10 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
                         if (!(isPlantHere(row + (temp_y - 1) - 1, col + cave_direction * (temp_x - 1)))) {
                             tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`transparency16`)
                             tiles.setWallAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), false)
-                            if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), groundLevelAtColumn(col + cave_direction * (temp_x - 1))))) {
-                                tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
+                            for (let index = 0; index <= row + (temp_y - 1) - 1; index++) {
+                                if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), index))) {
+                                    tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
+                                }
                             }
                         }
                     }
@@ -407,7 +409,7 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
     cave_col += cave_direction
     if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
         cave_size += -1
-    } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 10)) {
+    } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 5)) {
         cave_size += 1
     }
     generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
