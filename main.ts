@@ -71,7 +71,8 @@ function generateWorldBiomeLocations () {
     "snow",
     "desert",
     "middle",
-    "bottom"
+    "bottom",
+    "core"
     ]
     world_biome_locations = []
     world_biome_cols_lookup = []
@@ -81,14 +82,15 @@ function generateWorldBiomeLocations () {
     while (world_col_index < world_cols) {
         world_biome_width = Math.constrain(world_rand_gen.getNumber(world_biome_cols_min, world_biome_cols_max, true), 0, world_cols - world_col_index)
         temp_biome = getRandomWorldBiome()
-        world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
+        world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.ceil(world_rows / 2)))
         for (let index = 0; index < world_biome_width; index++) {
             world_biome_cols_lookup.push(temp_biome)
         }
         world_col_index += world_biome_width
     }
-    world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.floor(world_rows * 0.25)))
+    world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.ceil(world_rows * 0.25)))
     world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
+    world_biome_locations.push(generateWorldBiomeLocationArray("core", 0, world_rows - 1, world_cols, 1))
 }
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     if (toolCurrentLabel() == "hammer") {
@@ -243,6 +245,26 @@ sprites.setDataString(selected_block, "label", "brick")
         generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
     }
 })
+function generateWorldBiomeBottom (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (world_rand_gen.pseudoPercentChance(75)) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Lava`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            }
+        }
+    }
+}
 function savePlantLocation (row: number, col: number, _type: number) {
     world_plant_locations.push([row, col, _type])
 }
@@ -266,6 +288,21 @@ function setupVariables () {
     char_speed_jump = -150
     ui_message_queue = []
     entities_max = 10
+}
+function generateWorldBiomeCore (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`CORE`)
+            tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+        }
+    }
 }
 scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
     if (sprite.isHittingTile(CollisionDirection.Left)) {
@@ -301,7 +338,7 @@ function generateWorld () {
     for (let col2 = 0; col2 <= world_cols - 1; col2++) {
         for (let row = 0; row <= world_rows - 1; row++) {
             if (row == world_rows - 1) {
-                tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`CORE`)
+                tiles.setTileAt(tiles.getTileLocation(world_biome_types.indexOf("snow"), row), assets.tile`CORE`)
                 tiles.setWallAt(tiles.getTileLocation(col2, row), true)
             } else if (row > world_ground_height[col2]) {
                 if (Math.percentChance(75)) {
@@ -397,12 +434,19 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
             }
         }
     }
-    cave_drop_percent = 80
+    cave_drop_percent = 85
     cave_shrink_percent = Math.constrain(row / (scene.screenHeight() * 0.5) * 20, 5, 25)
+    cave_switch_percent = 5
     cave_row = row
     cave_col = col
     cave_size = size
-    cave_direction = dir
+    if (world_rand_gen.pseudoPercentChance(cave_switch_percent)) {
+        cave_direction = 0 - dir
+        // Make sure it drops to help with the look of the direction switch
+        cave_drop_percent = 100
+    } else {
+        cave_direction = dir
+    }
     if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
         cave_row += 1
     }
@@ -412,7 +456,9 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
     } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 5)) {
         cave_size += 1
     }
-    generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
+    if (cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
+        generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
+    }
 }
 function buildablesCanPlayerBuild (label: string) {
     temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
@@ -650,6 +696,19 @@ function itemsIdForLabel (item: string) {
     return items_all.indexOf(item)
 }
 function generateBiomeGroundHeight (biome: string, col_start: number, col_end: number) {
+    if (biome == "desert") {
+        ground_chance_minor = 20
+        ground_chance_major = 5
+        ground_change_max = 3
+    } else if (biome == "snow") {
+        ground_chance_minor = 20
+        ground_chance_major = 25
+        ground_change_max = 6
+    } else {
+        ground_chance_minor = 30
+        ground_chance_major = 10
+        ground_change_max = 5
+    }
     if (col_start > 0) {
         ground_prev = world_ground_height[world_ground_height.length - 1]
     } else {
@@ -658,14 +717,18 @@ function generateBiomeGroundHeight (biome: string, col_start: number, col_end: n
     ground_min = 8
     ground_max = 25
     for (let index = 0; index < col_end - col_start + 1; index++) {
-        if (world_rand_gen.pseudoPercentChance(15)) {
-            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
-        } else if (world_rand_gen.pseudoPercentChance(15)) {
-            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
-        } else if (world_rand_gen.pseudoPercentChance(5)) {
-            ground_current = Math.constrain(ground_prev - world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
-        } else if (world_rand_gen.pseudoPercentChance(5)) {
-            ground_current = Math.constrain(ground_prev + world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
+        if (world_rand_gen.pseudoPercentChance(ground_chance_minor)) {
+            if (world_rand_gen.pseudoPercentChance(50)) {
+                ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
+            } else {
+                ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
+            }
+        } else if (world_rand_gen.pseudoPercentChance(ground_chance_major)) {
+            if (world_rand_gen.pseudoPercentChance(50)) {
+                ground_current = Math.constrain(ground_prev - world_rand_gen.getNumber(2, ground_change_max, true), ground_min, ground_max)
+            } else {
+                ground_current = Math.constrain(ground_prev + world_rand_gen.getNumber(2, ground_change_max, true), ground_min, ground_max)
+            }
         } else {
             ground_current = ground_prev
         }
@@ -713,6 +776,26 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function toolCurrentImage () {
     return tools_all_images[tools_inventory[tool_selected]]
+}
+function generateWorldBiomeMiddle (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (world_rand_gen.pseudoPercentChance(75)) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`IronOre`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            }
+        }
+    }
 }
 function getRandomWorldBiome () {
     if (world_rand_gen.pseudoPercentChance(25)) {
@@ -900,12 +983,21 @@ function generateWorldBiome (biome_location: any[]) {
         generateWorldBiomeSnow(biome_location)
     } else if (temp_biome == 2) {
         generateWorldBiomeDesert(biome_location)
+    } else if (temp_biome == 3) {
+        generateWorldBiomeMiddle(biome_location)
+    } else if (temp_biome == 4) {
+        generateWorldBiomeBottom(biome_location)
+    } else if (temp_biome == 5) {
+        generateWorldBiomeCore(biome_location)
     }
 }
 function isLocationAboveGround (row: number, col: number) {
     return row < groundLevelAtColumn(col)
 }
 let enemy_sprite: Sprite = null
+let ground_change_max = 0
+let ground_chance_major = 0
+let ground_chance_minor = 0
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
 let g = 0
@@ -927,6 +1019,7 @@ let temp_recipe: number[][] = []
 let cave_size = 0
 let cave_col = 0
 let cave_row = 0
+let cave_switch_percent = 0
 let cave_shrink_percent = 0
 let cave_drop_percent = 0
 let cave_direction = 0
