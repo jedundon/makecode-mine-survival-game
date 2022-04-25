@@ -35,6 +35,19 @@ function generateWorldBiomePlains (biome_location: any[]) {
 function itemsLabelForId (id: number) {
     return items_all[id]
 }
+function checkPlantGrowth () {
+    if (world_plant_growth_timers.length > 0) {
+        console.log("Checking plants for growth.")
+        for (let index = 0; index < world_plant_growth_timers.length; index++) {
+            temp_p = world_plant_growth_timers.shift()
+            if (game.runtime() >= temp_p[3]) {
+                growPlant(temp_p)
+            } else {
+                world_plant_growth_timers.push(temp_p)
+            }
+        }
+    }
+}
 sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         otherSprite.destroy(effects.disintegrate, 500)
@@ -121,6 +134,17 @@ function toolChangeNext () {
     tool_selected_icon.setImage(toolCurrentIcon())
     char_tool_sprite.setImage(toolCurrentImage())
     uiAddMessageToQueue(toolCurrentLabel())
+}
+function getPlantTypeIDByLabel (label: string) {
+    return world_plant_types.indexOf(label)
+}
+function addPlantGrowthTimer (row: number, col: number, _type: number) {
+    world_plant_growth_timers.push([
+    row,
+    col,
+    _type,
+    game.runtime() + world_plant_growth_rate[_type] * 1000
+    ])
 }
 function generateGroundHeight () {
     world_ground_height = []
@@ -219,6 +243,9 @@ sprites.setDataString(selected_block, "label", "brick")
         generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
     }
 })
+function savePlantLocation (row: number, col: number, _type: number) {
+    world_plant_locations.push([row, col, _type])
+}
 function buildablesIdForLabel (label: string) {
     return buildables_all.indexOf(label)
 }
@@ -321,7 +348,9 @@ function generatePlainsPlants (col_start: number, width: number) {
         temp_x = col_start + col3
         ground_current = world_ground_height[temp_x]
         if (world_rand_gen.pseudoPercentChance(10)) {
-            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushFull`)
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushEmpty`)
+            savePlantLocation(ground_current - 1, temp_x, 0)
+            addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("bush_plains"))
         } else if (world_rand_gen.pseudoPercentChance(25)) {
             tree_height = world_rand_gen.getNumber(2, 5, true)
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`TreeTrunk0`)
@@ -329,6 +358,8 @@ function generatePlainsPlants (col_start: number, width: number) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
             }
             tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
+            savePlantLocation(ground_current - 1, temp_x, 0)
+            addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("tree_plains"))
         }
     }
 }
@@ -423,6 +454,29 @@ function generatePlants () {
         }
     }
 }
+function growPlant (plant: any[]) {
+    p_row = plant[0]
+    p_col = plant[1]
+    p_type = plant[2]
+    if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`BushEmpty`)) {
+        tiles.setTileAt(tiles.getTileLocation(p_col, p_row), assets.tile`BushFull`)
+        console.log("Grew bush berries at row: " + p_row + ", col: " + p_col)
+    } else if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`BushFull`)) {
+        tiles.setTileAt(tiles.getTileLocation(p_col, p_row), assets.tile`BushThorns`)
+    } else if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`TreeTrunk0`)) {
+        temp_row = p_row - 1
+        while (tiles.tileIs(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeLog0`)) {
+            temp_row += -1
+        }
+        if (tiles.tileIs(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeTop`)) {
+            if (p_row - temp_row < 5) {
+                tiles.setTileAt(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeLog0`)
+                tiles.setTileAt(tiles.getTileLocation(p_col, temp_row - 1), assets.tile`TreeTop`)
+                addPlantGrowthTimer(p_row, p_col, p_type)
+            }
+        }
+    }
+}
 function uiShowMessage (text: string) {
     ui_message.setText(text)
     ui_message.ay = 0
@@ -498,6 +552,10 @@ function setupUIStatBars () {
 }
 function generateWorldNew () {
     world_rand_gen = Math.createRando(world_seed)
+    world_plant_types = ["bush_plains", "tree_plains"]
+    world_plant_growth_rate = [15, 15]
+    world_plant_locations = []
+    world_plant_growth_timers = []
     tiles.setTilemap(tilemap`World`)
     scene.setBackgroundImage(assets.image`biomePlainsOLD`)
     scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
@@ -824,6 +882,10 @@ let char_xp_max = 0
 let char_health_max = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
+let temp_row = 0
+let p_type: any = null
+let p_col: any = null
+let p_row: any = null
 let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
@@ -845,6 +907,7 @@ let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
 let buildables_all: string[] = []
+let world_plant_locations: number[][] = []
 let buildables_tile_images: Image[] = []
 let char_button_direction = 0
 let char: Sprite = null
@@ -852,6 +915,8 @@ let ground_current = 0
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
+let world_plant_growth_rate: number[] = []
+let world_plant_types: string[] = []
 let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
@@ -869,6 +934,8 @@ let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
 let char_health_current = 0
 let char_xp_current = 0
+let temp_p: number[] = []
+let world_plant_growth_timers: number[][] = []
 let items_all: string[] = []
 let world_rand_gen: Rando = null
 let temp_y = 0
@@ -893,6 +960,9 @@ blockMenu.showMenu([
 "Random Seed",
 "Choose Seed"
 ], MenuStyle.List, MenuLocation.BottomHalf)
+game.onUpdateInterval(5000, function () {
+    checkPlantGrowth()
+})
 // For handling UI messages.
 game.onUpdateInterval(200, function () {
     if (game_state == "running") {
