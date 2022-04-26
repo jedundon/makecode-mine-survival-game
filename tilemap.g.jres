@@ -124,12 +124,6 @@
         "tilemapTile": true,
         "displayName": "cactus"
     },
-    "tile25": {
-        "data": "hwQQABAAAAARQURERERERBFEREREREREEUfU3UREREQRRNTdRERERBFB1N1ERE1EEUREREREREQRR0RERERERBFERERETUREEUFETUREREQRRERERERERBFHREREREREEUTU3UTU3UQRQdTdRNTdRBFE1N3U1N1EEUdEREREREQRRERERERERA==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "SnowGrass"
-    },
     "tile29": {
         "data": "hwQQABAAAADLu7vLu7u7u8u7u8u7u7u7y8zMzMzMzMzL///Pu/z/9Mvd/8/L/8/0yxH9z8v/zPTLFdHPy//M5MtU0c/L/8/ky1TRz8v/zOTLFdHPy//M5MsR/c/L/8z0y93/z8v///TL///Pu/z/9MvMzMzMzMzMy7u7y7u7u7vLu7vLu7u7uw==",
         "mimeType": "image/x-mkcd-f4",
@@ -178,6 +172,12 @@
         "tilemapTile": true,
         "displayName": "BushThorns"
     },
+    "tile25": {
+        "data": "hwQQABAAAAARQURERERERBFEREREREREEU3U3UREREQRRNTdRERERBFN1N1ERE1EEUREREREREQRQURERERERBFERERETUREEU1ETUREREQRRERERERERBFBREREREREEUTU3UTU3UQRQdTdRNTdRBFE1N3U1N1EEU1EREREREQRRERERERERA==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "SnowGrass"
+    },
     "level": {
         "id": "level",
         "mimeType": "application/mkcd-tilemap",
@@ -214,30 +214,6 @@
             "myTiles.transparency16"
         ],
         "displayName": "level3"
-    },
-    "level4": {
-        "id": "level4",
-        "mimeType": "application/mkcd-tilemap",
-        "data": "MTAxMDAwMTAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyMDIwMjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMwMzAyMDIwMjAyMDEwMDAwMDAwMDAwMDAwMDAwMDAwMzAzMDMwMzAyMDEwMTAxMDEwMDAwMDAwMDAwMDAwMDAzMDMwMzAzMDEwMTAxMDEwMTAxMDMwMzAxMDEwMTAxMDMwMzAxMDEwMTAxMDEwMTAzMDMwMzAzMDEwMTAxMDEwMzAxMDMwMTAxMDMwMzAzMDMwMzAzMDMwMzAxMDEwMTAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMTAxMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAxMDEwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA==",
-        "tileset": [
-            "myTiles.transparency16",
-            "myTiles.tile6",
-            "sprites.castle.tilePath2",
-            "sprites.castle.tilePath5"
-        ],
-        "displayName": "level4"
-    },
-    "level5": {
-        "id": "level5",
-        "mimeType": "application/mkcd-tilemap",
-        "data": "MTAxMDAwMTAwMDAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDAwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAyMDIwMjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDMwMzAzMDIwMjAyMDAwMDAxMDEwMTAxMDEwMTAxMDEwMzAzMDMwMzAzMDAwMzAzMDIwMjAyMDIwMjAxMDEwMTAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDIwMjAyMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA==",
-        "tileset": [
-            "myTiles.transparency16",
-            "sprites.builtin.field1",
-            "sprites.castle.tilePath2",
-            "sprites.castle.tilePath5"
-        ],
-        "displayName": "level5"
     },
     "*": {
         "mimeType": "image/x-mkcd-f4",

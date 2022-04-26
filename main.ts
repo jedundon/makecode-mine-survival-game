@@ -256,7 +256,7 @@ function generateWorldBiomeBottom (biome_location: any[]) {
             temp_x = temp_biome_x + col2
             temp_y = temp_biome_y + row
             if (world_rand_gen.pseudoPercentChance(75)) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Cokin`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             } else {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Lava`)
@@ -803,7 +803,7 @@ function generateWorldBiomeMiddle (biome_location: any[]) {
                 tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             } else {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`IronOre`)
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Cokin`)
                 tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
             }
         }
@@ -1093,8 +1093,8 @@ debug_mode = false
 god_mode = true
 game_state = "menu"
 let selected_block: Sprite = null
-blockMenu.setColors(8, 0)
-scene.setBackgroundImage(assets.image`biomePlainsOLD`)
+blockMenu.setColors(14, 0)
+scene.setBackgroundImage(assets.image`Title`)
 blockMenu.showMenu([
 "Preset Seed",
 "Random Seed",
@@ -1252,6 +1252,9 @@ game.onUpdate(function () {
             char_tool_sprite.setPosition(char.x + 5, char.y - 1)
         }
     }
+})
+forever(function () {
+	
 })
 game.onUpdateInterval(tick_speed * 2, function () {
     if (game_state == "running") {
