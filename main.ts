@@ -435,7 +435,7 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
         }
     }
     cave_drop_percent = 85
-    cave_shrink_percent = Math.constrain(row / (scene.screenHeight() * 0.5) * 20, 5, 25)
+    cave_shrink_percent = Math.constrain(row / (scene.screenHeight() * 0.5) * 10, 5, 25)
     cave_switch_percent = 5
     cave_row = row
     cave_col = col
@@ -447,17 +447,22 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
     } else {
         cave_direction = dir
     }
-    if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
-        cave_row += 1
-    }
-    cave_col += cave_direction
     if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
         cave_size += -1
-    } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 5)) {
+    } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 4)) {
         cave_size += 1
     }
-    if (cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
-        generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
+    if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
+        cave_row += 1
+        if (cave_size == 1) {
+            cave_size = 0
+        }
+    }
+    cave_col += cave_direction
+    if (cave_size > 0) {
+        if (cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
+            generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
+        }
     }
 }
 function buildablesCanPlayerBuild (label: string) {
