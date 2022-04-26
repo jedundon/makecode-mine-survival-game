@@ -12,7 +12,8 @@
         "settings-blocks": "github:microsoft/pxt-settings-blocks#v1.0.0",
         "arcade-background-scroll": "github:microsoft/arcade-background-scroll#6cfbf925b9a4d5ddf3e1078e6cf6ca6a1aebb301",
         "MakeCode PseudoRandomNumberGenerator Blocks": "github:jedundon/makecode-pseudorandomnumbergenerator-blocks#v1.1.4",
-        "block-menu": "github:riknoll/arcade-custom-menu#v0.0.1"
+        "block-menu": "github:riknoll/arcade-custom-menu#v0.0.1",
+        "arcade-character-animations": "github:microsoft/arcade-character-animations#v0.0.2"
     },
     "files": [
         "main.blocks",
