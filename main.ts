@@ -584,7 +584,7 @@ function uiAddMessageToQueue (text: string) {
     ui_message_queue.push(text)
 }
 function setupPlayer () {
-    char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
+    char = sprites.create(assets.image`PlayerSpawn`, SpriteKind.Player)
     char.ay = 250
     char.z = 1
     char_button_direction = -1
@@ -1257,13 +1257,13 @@ forever(function () {
     characterAnimations.loopFrames(
     char,
     assets.animation`playerIdleR`,
-    200,
+    100,
     characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
     )
     characterAnimations.loopFrames(
     char,
     assets.animation`playerIdleL`,
-    200,
+    100,
     characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
     )
     characterAnimations.loopFrames(
