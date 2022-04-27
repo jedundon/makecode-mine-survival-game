@@ -63,11 +63,25 @@ namespace myTiles {
     //% fixedInstance jres blockIdentity=images._tile
     export const tile31 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
-    export const tile32 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
     export const tile33 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile28 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile34 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile35 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile32 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile36 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile37 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile38 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile39 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile40 = image.ofBuffer(hex``);
 
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
@@ -315,12 +329,26 @@ namespace myTiles {
             case "tile30":return tile30;
             case "TreeTopA":
             case "tile31":return tile31;
-            case "TreeTopACOLD":
-            case "tile32":return tile32;
             case "cactus0":
             case "tile33":return tile33;
             case "cactusFood":
             case "tile28":return tile28;
+            case "Wood":
+            case "tile34":return tile34;
+            case "DoorShild":
+            case "tile35":return tile35;
+            case "TreeTopACOLD":
+            case "tile32":return tile32;
+            case "fullLog":
+            case "tile36":return tile36;
+            case "Bed":
+            case "tile37":return tile37;
+            case "Tresure Chsest":
+            case "tile38":return tile38;
+            case "orbCalm":
+            case "tile39":return tile39;
+            case "orbAwake":
+            case "tile40":return tile40;
         }
         return null;
     })
