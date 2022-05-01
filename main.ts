@@ -592,6 +592,30 @@ function setupPlayer () {
     tiles.placeOnRandomTile(char, assets.tile`Grass`)
     grid.move(char, 0, -1)
     tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
+    characterAnimations.loopFrames(
+    char,
+    assets.animation`playerIdleR`,
+    100,
+    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
+    )
+    characterAnimations.loopFrames(
+    char,
+    assets.animation`playerIdleL`,
+    100,
+    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
+    )
+    characterAnimations.loopFrames(
+    char,
+    assets.animation`playerMoveR`,
+    200,
+    characterAnimations.rule(Predicate.MovingRight)
+    )
+    characterAnimations.loopFrames(
+    char,
+    assets.animation`playerMoveL`,
+    200,
+    characterAnimations.rule(Predicate.MovingLeft)
+    )
     setupPlayerTools()
     setupPlayerInventory()
 }
@@ -1252,32 +1276,6 @@ game.onUpdate(function () {
             char_tool_sprite.setPosition(char.x + 5, char.y - 1)
         }
     }
-})
-forever(function () {
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerIdleR`,
-    100,
-    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerIdleL`,
-    100,
-    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerMoveR`,
-    200,
-    characterAnimations.rule(Predicate.MovingRight)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerMoveL`,
-    200,
-    characterAnimations.rule(Predicate.MovingLeft)
-    )
 })
 game.onUpdateInterval(tick_speed * 2, function () {
     if (game_state == "running") {
