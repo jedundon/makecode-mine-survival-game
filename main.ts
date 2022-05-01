@@ -65,6 +65,20 @@ function inventoryGetItemLabelByTileImage (image2: Image) {
         return ""
     }
 }
+function createSaveImagesFromTilemap () {
+    game_save_image_category = image.create(world_cols, world_rows)
+    game_save_image_id = image.create(world_cols, world_rows)
+    for (let id = 0; id <= game_tiles_global_id.length - 1; id++) {
+        temp_tile = game_tiles_global_id[id]
+        temp_tile_category = game_tiles_category[id]
+        temp_tile_category_id = game_tiles_category_id[id]
+        for (let t of tiles.getTilesByType(temp_tile)) {
+            game_save_image_category.setPixel(t.column, t.row, game_tiles_category[temp_tile_category])
+            game_save_image_id.setPixel(t.column, t.row, game_tiles_category_id[temp_tile_category])
+        }
+    }
+    mySprite = sprites.create(game_save_image_category, SpriteKind.Food)
+}
 function generateWorldBiomeLocations () {
     world_biome_types = [
     "plains",
@@ -374,8 +388,8 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
                             if (!(isPlantHere(cave_row + (temp_y - 1) - 1, cave_col + cave_direction * (temp_x - 1)))) {
                                 tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`transparency16`)
                                 tiles.setWallAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), false)
-                                for (let index = 0; index <= cave_row + (temp_y - 1) - 1; index++) {
-                                    if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), index))) {
+                                for (let cat = 0; cat <= cave_row + (temp_y - 1) - 1; cat++) {
+                                    if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cat))) {
                                         tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`Stone_Background`)
                                     }
                                 }
@@ -613,8 +627,8 @@ function generateWorldNew () {
             temp_skip += -1
         }
     }
-    for (let c of cave_locations) {
-        generateWorldCave(c[0], c[1], c[2], c[3])
+    for (let cat of cave_locations) {
+        generateWorldCave(cat[0], cat[1], cat[2], cat[3])
     }
 }
 function setupPlayerTools () {
@@ -699,6 +713,51 @@ function generateBiomeGroundHeight (biome: string, col_start: number, col_end: n
         }
         ground_prev = ground_current
         world_ground_height.push(ground_current)
+    }
+}
+function createTilesIndex () {
+    game_tiles_index = [
+    [
+    assets.tile`transparency16`,
+    assets.tile`Dirt`,
+    assets.tile`Grass`,
+    assets.tile`stone`,
+    assets.tile`Stone_Background`
+    ],
+    [assets.tile`SnowGrass`],
+    [assets.tile`Sand`],
+    [
+    assets.tile`CopperOre`,
+    assets.tile`RubyOre`,
+    assets.tile`IronOre`,
+    assets.tile`GoldOre`,
+    assets.tile`DimOre`
+    ],
+    [assets.tile`Darkstone`],
+    [
+    assets.tile`BushEmpty`,
+    assets.tile`BushFull`,
+    assets.tile`BushThorns`,
+    assets.tile`TreeTrunk0`,
+    assets.tile`TreeLog0`,
+    assets.tile`TreeTop`,
+    assets.tile`Sapling`,
+    assets.tile`TreeTopA`,
+    assets.tile`TreeTopCOLD`,
+    assets.tile`TreeTopACOLD`
+    ]
+    ]
+    game_tiles_global_id = []
+    game_tiles_category = []
+    game_tiles_category_id = []
+    for (let cat = 0; cat <= game_tiles_index.length - 1; cat++) {
+        for (let tile of game_tiles_index[cat]) {
+            game_tiles_global_id.push(tile)
+        }
+        for (let id = 0; id <= game_tiles_index[cat].length - 1; id++) {
+            game_tiles_category.push(cat)
+            game_tiles_category_id.push(id)
+        }
     }
 }
 function spawnEnemy (_type: string) {
@@ -795,7 +854,9 @@ blockMenu.onMenuOptionSelected(function (option, index) {
         setupVariables()
         setupUIMessages()
         setupUIStatBars()
+        createTilesIndex()
         generateWorldNew()
+        createSaveImagesFromTilemap()
         setupPlayer()
         setupBuildables()
         setupBuildableTiles()
@@ -960,6 +1021,7 @@ function isLocationAboveGround (row: number, col: number) {
     return row < groundLevelAtColumn(col)
 }
 let enemy_sprite: Sprite = null
+let game_tiles_index: Image[][] = []
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
@@ -1014,15 +1076,24 @@ let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
-let world_rows = 0
 let world_biome_width = 0
-let world_cols = 0
 let world_col_index = 0
 let world_biome_cols_max = 0
 let world_biome_cols_min = 0
 let world_biome_cols_lookup: any[] = []
 let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
+let mySprite: Sprite = null
+let game_tiles_category_id: number[] = []
+let temp_tile_category_id = 0
+let game_tiles_category: number[] = []
+let temp_tile_category = 0
+let temp_tile: Image = null
+let game_tiles_global_id: Image[] = []
+let game_save_image_id: Image = null
+let world_rows = 0
+let world_cols = 0
+let game_save_image_category: Image = null
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
 let char_health_current = 0
