@@ -73,11 +73,10 @@ function createSaveImagesFromTilemap () {
         temp_tile_category = game_tiles_category[id]
         temp_tile_category_id = game_tiles_category_id[id]
         for (let t of tiles.getTilesByType(temp_tile)) {
-            game_save_image_category.setPixel(t.column, t.row, game_tiles_category[temp_tile_category])
-            game_save_image_id.setPixel(t.column, t.row, game_tiles_category_id[temp_tile_category])
+            game_save_image_category.setPixel(t.column, t.row, temp_tile_category)
+            game_save_image_id.setPixel(t.column, t.row, temp_tile_category_id)
         }
     }
-    mySprite = sprites.create(game_save_image_category, SpriteKind.Food)
 }
 function generateWorldBiomeLocations () {
     world_biome_types = [
@@ -717,15 +716,10 @@ function generateBiomeGroundHeight (biome: string, col_start: number, col_end: n
 }
 function createTilesIndex () {
     game_tiles_index = [
-    [
-    assets.tile`transparency16`,
-    assets.tile`Dirt`,
-    assets.tile`Grass`,
-    assets.tile`stone`,
-    assets.tile`Stone_Background`
-    ],
-    [assets.tile`SnowGrass`],
+    [assets.tile`transparency16`, assets.tile`Stone_Background`],
+    [assets.tile`stone`, assets.tile`Dirt`, assets.tile`Grass`],
     [assets.tile`Sand`],
+    [assets.tile`SnowGrass`],
     [
     assets.tile`CopperOre`,
     assets.tile`RubyOre`,
@@ -733,7 +727,7 @@ function createTilesIndex () {
     assets.tile`GoldOre`,
     assets.tile`DimOre`
     ],
-    [assets.tile`Darkstone`],
+    [assets.tile`Darkstone`, assets.tile`Cokin`],
     [
     assets.tile`BushEmpty`,
     assets.tile`BushFull`,
@@ -1083,7 +1077,6 @@ let world_biome_cols_min = 0
 let world_biome_cols_lookup: any[] = []
 let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
-let mySprite: Sprite = null
 let game_tiles_category_id: number[] = []
 let temp_tile_category_id = 0
 let game_tiles_category: number[] = []
