@@ -1080,6 +1080,34 @@ game.onUpdateInterval(500, function () {
         }
     }
 })
+forever(function () {
+    if (Math.percentChance(75)) {
+        music.playMelody("C B A G A G F G ", 150)
+        music.playMelody("G F G A B A D G ", 150)
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("E D G F B A C5 B ", 150)
+            music.playMelody("B C5 G A E F D E ", 150)
+        }
+        music.playMelody("C D E F G A B C ", 150)
+        music.playMelody("C5 B A G F E D C5 ", 150)
+    } else {
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C5 E D B D F B - ", 150)
+        }
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("C5 B A G F E D C ", 150)
+            music.playMelody("C D E F G A B C5 ", 150)
+        }
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C C C C5 C5 C C C ", 150)
+        }
+        music.playMelody("C C C C5 C5 C F C ", 150)
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("E B C5 A B G A F ", 150)
+        }
+        music.playMelody("A F E F D G E F ", 150)
+    }
+})
 // Enemy AI Logic
 game.onUpdateInterval(tick_speed / 5, function () {
     for (let e of sprites.allOfKind(SpriteKind.Enemy)) {
@@ -1185,33 +1213,5 @@ game.onUpdateInterval(tick_speed * 2, function () {
         if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
             spawnEnemy("mushroom")
         }
-    }
-})
-game.onUpdate(function () {
-    if (Math.percentChance(75)) {
-        music.playMelody("C B A G A G F G ", 150)
-        music.playMelody("G F G A B A D G ", 150)
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("E D G F B A C5 B ", 150)
-            music.playMelody("B C5 G A E F D E ", 150)
-        }
-        music.playMelody("C D E F G A B C ", 150)
-        music.playMelody("C5 B A G F E D C5 ", 150)
-    } else {
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("C5 E D B D F B - ", 150)
-        }
-        for (let index = 0; index < 4; index++) {
-            music.playMelody("C5 B A G F E D C ", 150)
-            music.playMelody("C D E F G A B C5 ", 150)
-        }
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("C C C C5 C5 C C C ", 150)
-        }
-        music.playMelody("C C C C5 C5 C F C ", 150)
-        for (let index = 0; index < 4; index++) {
-            music.playMelody("E B C5 A B G A F ", 150)
-        }
-        music.playMelody("A F E F D G E F ", 150)
     }
 })
