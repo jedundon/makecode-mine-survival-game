@@ -148,27 +148,6 @@ function addPlantGrowthTimer (row: number, col: number, _type: number) {
     game.runtime() + world_plant_growth_rate[_type] * 1000
     ])
 }
-function generateGroundHeight () {
-    world_ground_height = []
-    ground_prev = 15
-    ground_min = 8
-    ground_max = 25
-    for (let col = 0; col <= world_cols - 1; col++) {
-        if (Math.percentChance(15)) {
-            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
-        } else if (Math.percentChance(15)) {
-            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
-        } else if (Math.percentChance(5)) {
-            ground_current = Math.constrain(ground_prev - randint(2, 5), ground_min, ground_max)
-        } else if (Math.percentChance(5)) {
-            ground_current = Math.constrain(ground_prev + randint(2, 5), ground_min, ground_max)
-        } else {
-            ground_current = ground_prev
-        }
-        ground_prev = ground_current
-        world_ground_height.push(ground_current)
-    }
-}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
         if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) - grid.spriteRow(selected_block) < 3) {
@@ -327,39 +306,6 @@ function setupUIMessages () {
     ui_message.setMaxFontHeight(3)
     ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
 }
-function generateWorld () {
-    tiles.setTilemap(tilemap`World`)
-    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
-    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
-    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer0)
-    world_rows = tiles.tilemapRows() - 0
-    world_cols = tiles.tilemapColumns() - 0
-    generateGroundHeight()
-    for (let col2 = 0; col2 <= world_cols - 1; col2++) {
-        for (let row = 0; row <= world_rows - 1; row++) {
-            if (row == world_rows - 1) {
-                tiles.setTileAt(tiles.getTileLocation(world_biome_types.indexOf("snow"), row), assets.tile`CORE`)
-                tiles.setWallAt(tiles.getTileLocation(col2, row), true)
-            } else if (row > world_ground_height[col2]) {
-                if (Math.percentChance(75)) {
-                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`stone`)
-                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
-                } else {
-                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Dirt`)
-                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
-                }
-            } else if (Math.percentChance(100)) {
-                if (row == world_ground_height[col2]) {
-                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Grass`)
-                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
-                }
-            } else {
-            	
-            }
-        }
-    }
-    generatePlants()
-}
 function isActionLocationAboveGround (char: Sprite, button_direction: number) {
     return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
 }
@@ -501,21 +447,6 @@ function setupBuildableTiles () {
     [[itemsIdForLabel("stone"), 1]],
     [[itemsIdForLabel("stone"), 2]]
     ]
-}
-function generatePlants () {
-    for (let col3 = 0; col3 <= world_cols - 1; col3++) {
-        ground_current = world_ground_height[col3]
-        if (Math.percentChance(10)) {
-            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`BushEmpty`)
-        } else if (Math.percentChance(25)) {
-            tree_height = randint(2, 5)
-            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`TreeTrunk0`)
-            for (let temp_row = 0; temp_row <= tree_height - 2; temp_row++) {
-                tiles.setTileAt(tiles.getTileLocation(col3, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
-            }
-            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - tree_height), assets.tile`TreeTop`)
-        }
-    }
 }
 function growPlant (plant: any[]) {
     p_row = plant[0]
@@ -1029,6 +960,9 @@ function isLocationAboveGround (row: number, col: number) {
     return row < groundLevelAtColumn(col)
 }
 let enemy_sprite: Sprite = null
+let ground_max = 0
+let ground_min = 0
+let ground_prev = 0
 let ground_change_max = 0
 let ground_chance_major = 0
 let ground_chance_minor = 0
@@ -1060,6 +994,7 @@ let cave_col = 0
 let cave_row = 0
 let items_inventory: number[] = []
 let tree_height = 0
+let ground_current = 0
 let ui_message: TextSprite = null
 let entities_max = 0
 let ui_message_queue: string[] = []
@@ -1073,10 +1008,6 @@ let world_plant_locations: number[][] = []
 let buildables_tile_images: Image[] = []
 let char_button_direction = 0
 let char: Sprite = null
-let ground_current = 0
-let ground_max = 0
-let ground_min = 0
-let ground_prev = 0
 let world_plant_growth_rate: number[] = []
 let world_plant_types: string[] = []
 let char_tool_sprite: Sprite = null
@@ -1122,9 +1053,6 @@ blockMenu.showMenu([
 "Random Seed",
 "Choose Seed"
 ], MenuStyle.List, MenuLocation.BottomHalf)
-game.onUpdateInterval(5000, function () {
-    checkPlantGrowth()
-})
 // For handling UI messages.
 game.onUpdateInterval(200, function () {
     if (game_state == "running") {
@@ -1150,34 +1078,6 @@ game.onUpdateInterval(500, function () {
             scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
             scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
         }
-    }
-})
-forever(function () {
-    if (Math.percentChance(75)) {
-        music.playMelody("C B A G A G F G ", 150)
-        music.playMelody("G F G A B A D G ", 150)
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("E D G F B A C5 B ", 150)
-            music.playMelody("B C5 G A E F D E ", 150)
-        }
-        music.playMelody("C D E F G A B C ", 150)
-        music.playMelody("C5 B A G F E D C5 ", 150)
-    } else {
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("C5 E D B D F B - ", 150)
-        }
-        for (let index = 0; index < 4; index++) {
-            music.playMelody("C5 B A G F E D C ", 150)
-            music.playMelody("C D E F G A B C5 ", 150)
-        }
-        for (let index = 0; index < 2; index++) {
-            music.playMelody("C C C C5 C5 C C C ", 150)
-        }
-        music.playMelody("C C C C5 C5 C F C ", 150)
-        for (let index = 0; index < 4; index++) {
-            music.playMelody("E B C5 A B G A F ", 150)
-        }
-        music.playMelody("A F E F D G E F ", 150)
     }
 })
 // Enemy AI Logic
@@ -1275,10 +1175,43 @@ game.onUpdate(function () {
         }
     }
 })
+game.onUpdateInterval(5000, function () {
+    if (game_state == "running") {
+        checkPlantGrowth()
+    }
+})
 game.onUpdateInterval(tick_speed * 2, function () {
     if (game_state == "running") {
         if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
             spawnEnemy("mushroom")
         }
+    }
+})
+game.onUpdate(function () {
+    if (Math.percentChance(75)) {
+        music.playMelody("C B A G A G F G ", 150)
+        music.playMelody("G F G A B A D G ", 150)
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("E D G F B A C5 B ", 150)
+            music.playMelody("B C5 G A E F D E ", 150)
+        }
+        music.playMelody("C D E F G A B C ", 150)
+        music.playMelody("C5 B A G F E D C5 ", 150)
+    } else {
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C5 E D B D F B - ", 150)
+        }
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("C5 B A G F E D C ", 150)
+            music.playMelody("C D E F G A B C5 ", 150)
+        }
+        for (let index = 0; index < 2; index++) {
+            music.playMelody("C C C C5 C5 C C C ", 150)
+        }
+        music.playMelody("C C C C5 C5 C F C ", 150)
+        for (let index = 0; index < 4; index++) {
+            music.playMelody("E B C5 A B G A F ", 150)
+        }
+        music.playMelody("A F E F D G E F ", 150)
     }
 })
