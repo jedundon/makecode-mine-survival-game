@@ -415,17 +415,23 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
     if (size <= 0) {
         return
     }
-    for (let temp_x = 0; temp_x <= size - 1; temp_x++) {
-        for (let temp_y = 0; temp_y <= size - 1; temp_y++) {
-            if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)))) {
-                if (!(tiles.tileIs(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`CORE`))) {
-                    if (!(isLocationAboveGround(row + (temp_y - 1), col + cave_direction * (temp_x - 1)))) {
-                        if (!(isPlantHere(row + (temp_y - 1) - 1, col + cave_direction * (temp_x - 1)))) {
-                            tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`transparency16`)
-                            tiles.setWallAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), false)
-                            for (let index = 0; index <= row + (temp_y - 1) - 1; index++) {
-                                if (tiles.tileIsWall(tiles.getTileLocation(col + cave_direction * (temp_x - 1), index))) {
-                                    tiles.setTileAt(tiles.getTileLocation(col + cave_direction * (temp_x - 1), row + (temp_y - 1)), assets.tile`Stone_Background`)
+    cave_row = row
+    cave_col = col
+    cave_size = size
+    cave_direction = dir
+    while (cave_size > 0 && cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
+        for (let temp_x = 0; temp_x <= cave_size - 1; temp_x++) {
+            for (let temp_y = 0; temp_y <= cave_size - 1; temp_y++) {
+                if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)))) {
+                    if (!(tiles.tileIs(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`CORE`))) {
+                        if (!(isLocationAboveGround(cave_row + (temp_y - 1), cave_col + cave_direction * (temp_x - 1)))) {
+                            if (!(isPlantHere(cave_row + (temp_y - 1) - 1, cave_col + cave_direction * (temp_x - 1)))) {
+                                tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`transparency16`)
+                                tiles.setWallAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), false)
+                                for (let index = 0; index <= cave_row + (temp_y - 1) - 1; index++) {
+                                    if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), index))) {
+                                        tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`Stone_Background`)
+                                    }
                                 }
                             }
                         }
@@ -433,36 +439,28 @@ function generateWorldCave (row: number, col: number, size: number, dir: number)
                 }
             }
         }
-    }
-    cave_drop_percent = 85
-    cave_shrink_percent = Math.constrain(row / (scene.screenHeight() * 0.5) * 10, 5, 25)
-    cave_switch_percent = 5
-    cave_row = row
-    cave_col = col
-    cave_size = size
-    if (world_rand_gen.pseudoPercentChance(cave_switch_percent)) {
-        cave_direction = 0 - dir
-        // Make sure it drops to help with the look of the direction switch
-        cave_drop_percent = 100
-    } else {
-        cave_direction = dir
-    }
-    if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
-        cave_size += -1
-    } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent / 4)) {
-        cave_size += 1
-    }
-    if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
-        cave_row += 1
-        if (cave_size == 1) {
-            cave_size = 0
+        cave_drop_percent = 85
+        cave_shrink_percent = Math.constrain(cave_row / (scene.screenHeight() * 0.5) * 7, 5, 25)
+        cave_switch_percent = 10
+        if (cave_col + cave_direction * cave_size <= 0 || cave_col + cave_direction * cave_size >= world_cols - 1) {
+            cave_switch_percent = 100
         }
-    }
-    cave_col += cave_direction
-    if (cave_size > 0) {
-        if (cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
-            generateWorldCave(cave_row, cave_col, cave_size, cave_direction)
+        if (world_rand_gen.pseudoPercentChance(cave_switch_percent)) {
+            cave_direction = 0 - cave_direction
+            cave_col += 1
         }
+        if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
+            cave_size += -1
+        } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent * 0.35)) {
+            cave_size += 1
+        }
+        if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
+            cave_row += 1
+            if (cave_size == 1) {
+                cave_size = 0
+            }
+        }
+        cave_col += cave_direction
     }
 }
 function buildablesCanPlayerBuild (label: string) {
@@ -1053,13 +1051,13 @@ let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
 let temp_recipe: number[][] = []
-let cave_size = 0
-let cave_col = 0
-let cave_row = 0
 let cave_switch_percent = 0
 let cave_shrink_percent = 0
 let cave_drop_percent = 0
 let cave_direction = 0
+let cave_size = 0
+let cave_col = 0
+let cave_row = 0
 let items_inventory: number[] = []
 let tree_height = 0
 let ui_message: TextSprite = null
