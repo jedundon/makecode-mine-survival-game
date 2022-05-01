@@ -184,6 +184,12 @@
         "tilemapTile": true,
         "displayName": "TreeTopA"
     },
+    "tile32": {
+        "data": "hwQQABAAAAAAAAAAEXEHAAAAEBEREXcAABEREdERdwAQERFhiB13ABDREYeIEXfdEB1xgWjRd0QRERHRERF1TREREREdEXdNERERERERd0QREW2IEXFHRBHRh4gRcddEEHGBaBFx190QEREREVEHABARERERdQAAAAAAERF3AAAAAAAREQcAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "TreeTopACOLD"
+    },
     "tile33": {
         "data": "hwQQABAAAAB3d3d3d3d3d3d1d3d3d3d3d3V3d3d3d3d3dXd3d3d3d3d3d3d3V3d3d3d3d3dXd3d3d3d1d1d3d3d3d3V3d3d3d3d3dXd3d3d3d3d3d3d3d3d3d3d3d1d3d1d3d3V3V3d3V3d3dXdXd3dXd3d1d3d3d3d3d3d3d3d3d3d3d3d3dw==",
         "mimeType": "image/x-mkcd-f4",
@@ -195,54 +201,6 @@
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true,
         "displayName": "cactusFood"
-    },
-    "tile34": {
-        "data": "hwQQABAAAABORORERERORORE5ERERE5ERE7kRERETkRE5ORERERORERE7kRERE5ERETkRERETkRERORORERORERE5ORERE5ERETkRE5ETkRERORE5ERORERE5ERETk5ERETkRETkTkRERORERERORERE5ERERO5ERETkRERETk5ERORERERO5A==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "Wood"
-    },
-    "tile35": {
-        "data": "hwQQABAAAADMzMzMzMzMzLy7u7u7u7vLvE5ERERE5Mu85EREREROy7xETkRE5ETLvETkRERORMu8RERO5EREy7xERORORETLvERE5E5ERMu8RERO5EREy7xE5ERETkTLvERORETkRMu85EREREROy7xOREREROTLvLu7u7u7u8vMzMzMzMzMzA==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "DoorShild"
-    },
-    "tile32": {
-        "data": "hwQQABAAAAAAAAAAEXEHAAAAEBEREXcAABEREdERdwAQERGRaB13ABDREYeIEXfdEB1xYZjRd0QRERHRERF1TREREREdEXdNERERERERd0QREZ1oEXFHRBHRh4gRcddEEHFhmBFx190QEREREVEHABARERERdQAAAAAAERF3AAAAAAAREQcAAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "TreeTopACOLD"
-    },
-    "tile36": {
-        "data": "hwQQABAAAADu3u7u7e7t7k7URERNRE3kTtRERE1ETeTu3u7u7e7t7k7URERNRE3kTtRERE1ETeTu3u7u7e7t7k7URERNRE3kTtRERE1ETeTu3u7u7e7t7k7URERNRE3kTtRERE1ETeTu3u7u7e7t7k7URERNRE3kTtRERE1ETeTu3u7u7e7t7g==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "fullLog"
-    },
-    "tile37": {
-        "data": "hwQQABAAAADMzMzMLCLi7ry7u7srROLkvMu7uytE4uS8vLu7K0Ti5Ly7u7srROLkvLu7uytE4uS8u7u7K0Ti5Ly7u7srROLkvLu7uytE4uS8u7u7K0Ti5Ly7u7srROLkvLu7uytE4uS8u7vLK0Ti5Ly7u7wrROLkvLu7uytE4uTMzMzMLCLi7g==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "Bed"
-    },
-    "tile38": {
-        "data": "hwQQABAAAADu7u7u7u7u7k5ETlRFRETkTkJeJUJEROROQk4kQkRE5E5CTiRCRETkTkJOJFJEROROQk4kQkVE5E6yvCUiIiLlTrK8JSIiIuVOQk4kQkVE5E5CTiRSRETkTkJOJEJEROROQk4kQkRE5E5CXiVCRETkTkROVEVEROTu7u7u7u7u7g==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "Tresure Chsest"
-    },
-    "tile39": {
-        "data": "hwQQABAAAAD///////////////////////+ZmZmZ////n5mZmZn5//+Z+f//n5n//5n/////mf//mf////+Z//9mZmZmZmb//2ZmZmZmZv//mf////+Z//+Z/////5n//5n5//+fmf//n5mZmZn5////mZmZmf///////////////////////w==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "orbCalm"
-    },
-    "tile40": {
-        "data": "hwQQABAAAAD//////////////////////y8iIiLy////IiIiIiL//y8i////IvL/L/L///8v8v8v8v///y/y/09ERERERPT/T0RERERE9P8v8v///y/y/y/y////L/L/LyL///8i8v//IiIiIiL///8vIiIi8v///////////////////////w==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "orbAwake"
     },
     "level": {
         "id": "level",
