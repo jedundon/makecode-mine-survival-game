@@ -66,17 +66,18 @@ function inventoryGetItemLabelByTileImage (image2: Image) {
     }
 }
 function createSaveImagesFromTilemap () {
-    game_save_image_category = image.create(world_cols, world_rows)
-    game_save_image_id = image.create(world_cols, world_rows)
+    temp_image_category = image.create(world_cols, world_rows)
+    temp_image_id = image.create(world_cols, world_rows)
     for (let id = 0; id <= game_tiles_global_id.length - 1; id++) {
         temp_tile = game_tiles_global_id[id]
         temp_tile_category = game_tiles_category[id]
         temp_tile_category_id = game_tiles_category_id[id]
         for (let t of tiles.getTilesByType(temp_tile)) {
-            game_save_image_category.setPixel(t.column, t.row, temp_tile_category)
-            game_save_image_id.setPixel(t.column, t.row, temp_tile_category_id)
+            temp_image_category.setPixel(t.column, t.row, temp_tile_category)
+            temp_image_id.setPixel(t.column, t.row, temp_tile_category_id)
         }
     }
+    return [temp_image_category, temp_image_id]
 }
 function generateWorldBiomeLocations () {
     world_biome_types = [
@@ -105,19 +106,6 @@ function generateWorldBiomeLocations () {
     world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
     world_biome_locations.push(generateWorldBiomeLocationArray("core", 0, world_rows - 1, world_cols, 1))
 }
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    if (toolCurrentLabel() == "hammer") {
-        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
-            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
-            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
-            selected_block.destroy()
-        } else {
-            selected_block.destroy(effects.disintegrate, 100)
-        }
-    } else {
-    	
-    }
-})
 function generateWorldBiomeDesert (biome_location: any[]) {
     temp_biome = biome_location[0]
     temp_biome_x = biome_location[1]
@@ -177,6 +165,28 @@ function buildValid () {
         return 1
     }
 }
+function getSaveableTileChanges () {
+    game_save_images_current = createSaveImagesFromTilemap()
+    temp_changes = []
+    for (let temp_y = 0; temp_y <= world_rows - 1; temp_y++) {
+        for (let temp_x = 0; temp_x <= world_cols - 1; temp_x++) {
+            temp_pixel_orig_cat = game_save_images_original[0].getPixel(temp_x, temp_y)
+            temp_pixel_orig_id = game_save_images_original[1].getPixel(temp_x, temp_y)
+            temp_pixel_current_cat = game_save_images_current[0].getPixel(temp_x, temp_y)
+            temp_pixel_current_id = game_save_images_current[1].getPixel(temp_x, temp_y)
+            if (temp_pixel_orig_cat != temp_pixel_current_cat || temp_pixel_orig_id != temp_pixel_current_id) {
+                // Skip category 0 tiles for changes (background). Eventually should expand this.
+                if (temp_pixel_current_cat != 0) {
+                    temp_changes.push(temp_y)
+                    temp_changes.push(temp_x)
+                    temp_changes.push(temp_pixel_current_cat)
+                    temp_changes.push(temp_pixel_current_id)
+                }
+            }
+        }
+    }
+    return temp_changes
+}
 // Game Systems
 // 
 // -----------
@@ -234,7 +244,11 @@ sprites.setDataString(selected_block, "label", "brick")
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
     } else if (toolCurrentLabel() == "hand") {
-        generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
+        if (god_mode == true) {
+            if (char.vy < 1) {
+                generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
+            }
+        }
     }
 })
 function generateWorldBiomeBottom (biome_location: any[]) {
@@ -370,6 +384,16 @@ function generatePlainsPlants (col_start: number, width: number) {
 function inventoryAddAmountByLabel (item: string, amount: number) {
     items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
 }
+function applyTileChangesToWorld (changes: any[]) {
+    temp_changes = changes
+    while (temp_changes.length > 0) {
+        temp_y = temp_changes.shift()
+        temp_x = temp_changes.shift()
+        temp_pixel_current_cat = temp_changes.shift()
+        temp_pixel_current_id = temp_changes.shift()
+        tiles.setTileAt(tiles.getTileLocation(temp_y, temp_x), game_tiles_index[temp_pixel_current_cat][temp_pixel_current_id])
+    }
+}
 function generateWorldCave (row: number, col: number, size: number, dir: number) {
     if (size <= 0) {
         return
@@ -456,7 +480,7 @@ function setupBuildableTiles () {
     buildables_recipe_items = [
     [[itemsIdForLabel("dirt"), 1]],
     [[itemsIdForLabel("dirt"), 1]],
-    [[itemsIdForLabel("dirt"), 1], [itemsIdForLabel("stone"), 1]],
+    [[itemsIdForLabel("dirt"), 0], [itemsIdForLabel("stone"), 0]],
     [[itemsIdForLabel("stone"), 1]],
     [[itemsIdForLabel("stone"), 2]]
     ]
@@ -494,6 +518,19 @@ function uiShowMessage (text: string) {
 function getPlayerBiome () {
     return world_biome_cols_lookup[char.tilemapLocation().column]
 }
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    if (toolCurrentLabel() == "hammer") {
+        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
+            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
+            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
+            selected_block.destroy()
+        } else {
+            selected_block.destroy(effects.disintegrate, 100)
+        }
+    } else {
+    	
+    }
+})
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
     if (god_mode == false) {
         pause(500)
@@ -511,6 +548,16 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function loadGame () {
+    console.log("Checking for saved game.")
+    if (blockSettings.readNumber("world_seed") == world_seed) {
+        if (blockSettings.exists("tile_changes")) {
+            console.log("Loading and applying tile changes from save.")
+            game_save_changes = blockSettings.readNumberArray("tile_changes")
+            applyTileChangesToWorld(game_save_changes)
+        }
+    }
+}
 function toolCurrentLabel () {
     return tools_all[tools_inventory[tool_selected]]
 }
@@ -560,6 +607,14 @@ function setupPlayer () {
     )
     setupPlayerTools()
     setupPlayerInventory()
+}
+function saveGame () {
+    blockSettings.writeNumber("world_seed", world_seed)
+    game_save_changes = getSaveableTileChanges()
+    if (game_save_changes.length < 1) {
+        return
+    }
+    blockSettings.writeNumberArray("tile_changes", game_save_changes)
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -739,7 +794,8 @@ function createTilesIndex () {
     assets.tile`TreeTopA`,
     assets.tile`TreeTopCOLD`,
     assets.tile`TreeTopACOLD`
-    ]
+    ],
+    [assets.tile`brick_block`]
     ]
     game_tiles_global_id = []
     game_tiles_category = []
@@ -850,11 +906,12 @@ blockMenu.onMenuOptionSelected(function (option, index) {
         setupUIStatBars()
         createTilesIndex()
         generateWorldNew()
-        createSaveImagesFromTilemap()
+        game_save_images_original = createSaveImagesFromTilemap()
         setupPlayer()
         setupBuildables()
         setupBuildableTiles()
         tooltest()
+        loadGame()
         game_state = "running"
     }
 })
@@ -989,6 +1046,10 @@ function setupPlayerInventory () {
     for (let value2 of items_all) {
         items_inventory.push(0)
     }
+    if (god_mode == true) {
+        inventoryAddAmountByLabel("wood", 1000)
+        inventoryAddAmountByLabel("stone", 1000)
+    }
 }
 function generateWorldBiome (biome_location: any[]) {
     temp_biome = biome_location[0]
@@ -1015,7 +1076,6 @@ function isLocationAboveGround (row: number, col: number) {
     return row < groundLevelAtColumn(col)
 }
 let enemy_sprite: Sprite = null
-let game_tiles_index: Image[][] = []
 let ground_max = 0
 let ground_min = 0
 let ground_prev = 0
@@ -1027,12 +1087,13 @@ let tools_all_icons: Image[] = []
 let g = 0
 let temp_skip = 0
 let cave_locations: number[][] = []
-let world_seed = 0
 let char_health_bar: Sprite = null
 let char_xp_max = 0
 let char_health_max = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
+let game_save_changes: any[] = []
+let world_seed = 0
 let temp_row = 0
 let p_type: any = null
 let p_col: any = null
@@ -1048,6 +1109,7 @@ let cave_direction = 0
 let cave_size = 0
 let cave_col = 0
 let cave_row = 0
+let game_tiles_index: Image[][] = []
 let items_inventory: number[] = []
 let tree_height = 0
 let ground_current = 0
@@ -1063,6 +1125,13 @@ let buildables_all: string[] = []
 let world_plant_locations: number[][] = []
 let buildables_tile_images: Image[] = []
 let char_button_direction = 0
+let temp_pixel_current_id: any = null
+let temp_pixel_current_cat: any = null
+let temp_pixel_orig_id = 0
+let game_save_images_original: Image[] = []
+let temp_pixel_orig_cat = 0
+let temp_changes: any[] = []
+let game_save_images_current: Image[] = []
 let char: Sprite = null
 let world_plant_growth_rate: number[] = []
 let world_plant_types: string[] = []
@@ -1083,10 +1152,10 @@ let game_tiles_category: number[] = []
 let temp_tile_category = 0
 let temp_tile: Image = null
 let game_tiles_global_id: Image[] = []
-let game_save_image_id: Image = null
+let temp_image_id: Image = null
 let world_rows = 0
 let world_cols = 0
-let game_save_image_category: Image = null
+let temp_image_category: Image = null
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
 let char_health_current = 0
@@ -1095,7 +1164,7 @@ let temp_p: number[] = []
 let world_plant_growth_timers: number[][] = []
 let items_all: string[] = []
 let world_rand_gen: Rando = null
-let temp_y = 0
+let temp_y: any = null
 let temp_x = 0
 let temp_biome_height: any = null
 let temp_biome_width: any = null
@@ -1117,6 +1186,17 @@ blockMenu.showMenu([
 "Random Seed",
 "Choose Seed"
 ], MenuStyle.List, MenuLocation.BottomHalf)
+game.onUpdateInterval(5000, function () {
+    if (game_state == "running") {
+        timer.throttle("autosave", 60000, function () {
+            timer.after(10000, function () {
+                console.log("Starting autosave.")
+                saveGame()
+                console.log("Finished autosave.")
+            })
+        })
+    }
+})
 // For handling UI messages.
 game.onUpdateInterval(200, function () {
     if (game_state == "running") {
