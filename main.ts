@@ -35,27 +35,6 @@ function generateWorldBiomePlains (biome_location: any[]) {
 function itemsLabelForId (id: number) {
     return items_all[id]
 }
-function checkPlantGrowth () {
-    if (world_plant_growth_timers.length > 0) {
-        console.log("Checking plants for growth.")
-        for (let index = 0; index < world_plant_growth_timers.length; index++) {
-            temp_p = world_plant_growth_timers.shift()
-            if (game.runtime() >= temp_p[3]) {
-                growPlant(temp_p)
-            } else {
-                world_plant_growth_timers.push(temp_p)
-            }
-        }
-    }
-}
-sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (controller.A.isPressed()) {
-        otherSprite.destroy(effects.disintegrate, 500)
-        char_xp_current += 5
-        char_health_current += 3
-        uiUpdateStatBars()
-    }
-})
 function inventoryGetItemLabelByTileImage (image2: Image) {
     if (items_tile_images.indexOf(image2) > 0) {
         return itemsLabelForId(items_tile_images.indexOf(image2))
@@ -65,28 +44,13 @@ function inventoryGetItemLabelByTileImage (image2: Image) {
         return ""
     }
 }
-function createSaveImagesFromTilemap () {
-    temp_image_category = image.create(world_cols, world_rows)
-    temp_image_id = image.create(world_cols, world_rows)
-    for (let id = 0; id <= game_tiles_global_id.length - 1; id++) {
-        temp_tile = game_tiles_global_id[id]
-        temp_tile_category = game_tiles_category[id]
-        temp_tile_category_id = game_tiles_category_id[id]
-        for (let t of tiles.getTilesByType(temp_tile)) {
-            temp_image_category.setPixel(t.column, t.row, temp_tile_category)
-            temp_image_id.setPixel(t.column, t.row, temp_tile_category_id)
-        }
-    }
-    return [temp_image_category, temp_image_id]
-}
 function generateWorldBiomeLocations () {
     world_biome_types = [
     "plains",
     "snow",
     "desert",
     "middle",
-    "bottom",
-    "core"
+    "bottom"
     ]
     world_biome_locations = []
     world_biome_cols_lookup = []
@@ -96,16 +60,28 @@ function generateWorldBiomeLocations () {
     while (world_col_index < world_cols) {
         world_biome_width = Math.constrain(world_rand_gen.getNumber(world_biome_cols_min, world_biome_cols_max, true), 0, world_cols - world_col_index)
         temp_biome = getRandomWorldBiome()
-        world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.ceil(world_rows / 2)))
+        world_biome_locations.push(generateWorldBiomeLocationArray(temp_biome, world_col_index, 0, world_biome_width, Math.floor(world_rows / 2)))
         for (let index = 0; index < world_biome_width; index++) {
             world_biome_cols_lookup.push(temp_biome)
         }
         world_col_index += world_biome_width
     }
-    world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.ceil(world_rows * 0.25)))
+    world_biome_locations.push(generateWorldBiomeLocationArray("middle", 0, Math.floor(world_rows / 2) + 1, world_cols, Math.floor(world_rows * 0.25)))
     world_biome_locations.push(generateWorldBiomeLocationArray("bottom", 0, Math.floor(world_rows * 0.75) + 1, world_cols, Math.floor(world_rows * 0.25)))
-    world_biome_locations.push(generateWorldBiomeLocationArray("core", 0, world_rows - 1, world_cols, 1))
 }
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    if (toolCurrentLabel() == "hammer") {
+        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
+            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
+            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
+            selected_block.destroy()
+        } else {
+            selected_block.destroy(effects.disintegrate, 100)
+        }
+    } else {
+    	
+    }
+})
 function generateWorldBiomeDesert (biome_location: any[]) {
     temp_biome = biome_location[0]
     temp_biome_x = biome_location[1]
@@ -138,16 +114,26 @@ function toolChangeNext () {
     char_tool_sprite.setImage(toolCurrentImage())
     uiAddMessageToQueue(toolCurrentLabel())
 }
-function getPlantTypeIDByLabel (label: string) {
-    return world_plant_types.indexOf(label)
-}
-function addPlantGrowthTimer (row: number, col: number, _type: number) {
-    world_plant_growth_timers.push([
-    row,
-    col,
-    _type,
-    game.runtime() + world_plant_growth_rate[_type] * 1000
-    ])
+function generateGroundHeight () {
+    world_ground_height = []
+    ground_prev = 15
+    ground_min = 8
+    ground_max = 25
+    for (let col = 0; col <= world_cols - 1; col++) {
+        if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
+        } else if (Math.percentChance(15)) {
+            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev - randint(2, 5), ground_min, ground_max)
+        } else if (Math.percentChance(5)) {
+            ground_current = Math.constrain(ground_prev + randint(2, 5), ground_min, ground_max)
+        } else {
+            ground_current = ground_prev
+        }
+        ground_prev = ground_current
+        world_ground_height.push(ground_current)
+    }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
@@ -165,27 +151,369 @@ function buildValid () {
         return 1
     }
 }
-function getSaveableTileChanges () {
-    game_save_images_current = createSaveImagesFromTilemap()
-    temp_changes = []
-    for (let temp_y = 0; temp_y <= world_rows - 1; temp_y++) {
-        for (let temp_x = 0; temp_x <= world_cols - 1; temp_x++) {
-            temp_pixel_orig_cat = game_save_images_original[0].getPixel(temp_x, temp_y)
-            temp_pixel_orig_id = game_save_images_original[1].getPixel(temp_x, temp_y)
-            temp_pixel_current_cat = game_save_images_current[0].getPixel(temp_x, temp_y)
-            temp_pixel_current_id = game_save_images_current[1].getPixel(temp_x, temp_y)
-            if (temp_pixel_orig_cat != temp_pixel_current_cat || temp_pixel_orig_id != temp_pixel_current_id) {
-                // Skip category 0 tiles for changes (background). Eventually should expand this.
-                if (temp_pixel_current_cat != 0) {
-                    temp_changes.push(temp_y)
-                    temp_changes.push(temp_x)
-                    temp_changes.push(temp_pixel_current_cat)
-                    temp_changes.push(temp_pixel_current_id)
+function buildablesIdForLabel (label: string) {
+    return buildables_all.indexOf(label)
+}
+function generateWorldBiomeLocationArray (biome: string, x: number, y: number, w: number, h: number) {
+    return [
+    world_biome_types.indexOf(biome),
+    x,
+    y,
+    w,
+    h
+    ]
+}
+function setupVariables () {
+    tick_speed = 1000
+    char_speed_max = 125
+    char_speed_rate = 10
+    char_speed_decel_rate = 0.85
+    char_speed_jump = -150
+    ui_message_queue = []
+    entities_max = 10
+}
+scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
+    if (sprite.isHittingTile(CollisionDirection.Left)) {
+        sprites.setDataNumber(sprite, "direction", 1)
+    } else if (sprite.isHittingTile(CollisionDirection.Right)) {
+        sprites.setDataNumber(sprite, "direction", -1)
+    }
+    if (debug_mode) {
+        sprite.sayText(sprite.vx)
+    }
+})
+function setupUIMessages () {
+    ui_message = textsprite.create("", 1, 15)
+    ui_message.setMaxFontHeight(3)
+    ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
+}
+function generateWorld () {
+    tiles.setTilemap(tilemap`World`)
+    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
+    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
+    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer0)
+    world_rows = tiles.tilemapRows() - 0
+    world_cols = tiles.tilemapColumns() - 0
+    generateGroundHeight()
+    for (let col2 = 0; col2 <= world_cols - 1; col2++) {
+        for (let row = 0; row <= world_rows - 1; row++) {
+            if (row == world_rows - 1) {
+                tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`CORE`)
+                tiles.setWallAt(tiles.getTileLocation(col2, row), true)
+            } else if (row > world_ground_height[col2]) {
+                if (Math.percentChance(75)) {
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
+                } else {
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
+                }
+            } else if (Math.percentChance(100)) {
+                if (row == world_ground_height[col2]) {
+                    tiles.setTileAt(tiles.getTileLocation(col2, row), assets.tile`Grass`)
+                    tiles.setWallAt(tiles.getTileLocation(col2, row), true)
+                }
+            } else {
+            	
+            }
+        }
+    }
+    generatePlants()
+}
+function isActionLocationAboveGround (char: Sprite, button_direction: number) {
+    return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
+}
+function generateWorldBiomeSnow (biome_location: any[]) {
+    temp_biome = biome_location[0]
+    temp_biome_x = biome_location[1]
+    temp_biome_y = biome_location[2]
+    temp_biome_width = biome_location[3]
+    temp_biome_height = biome_location[4]
+    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
+        for (let row = 0; row <= temp_biome_height - 1; row++) {
+            temp_x = temp_biome_x + col2
+            temp_y = temp_biome_y + row
+            if (temp_y == world_ground_height[temp_x]) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`SnowGrass`)
+                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+            } else if (temp_y > world_ground_height[temp_x]) {
+                if (world_rand_gen.pseudoPercentChance(75)) {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
+                } else {
+                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Dirt`)
+                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
                 }
             }
         }
     }
-    return temp_changes
+}
+function generatePlainsPlants (col_start: number, width: number) {
+    for (let col3 = 0; col3 <= width - 1; col3++) {
+        temp_x = col_start + col3
+        ground_current = world_ground_height[temp_x]
+        if (world_rand_gen.pseudoPercentChance(10)) {
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushFull`)
+        } else if (world_rand_gen.pseudoPercentChance(25)) {
+            tree_height = world_rand_gen.getNumber(2, 5, true)
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`TreeTrunk0`)
+            for (let index = 0; index <= tree_height - 2; index++) {
+                tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            }
+            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
+        }
+    }
+}
+function inventoryAddAmountByLabel (item: string, amount: number) {
+    items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
+}
+function buildablesCanPlayerBuild (label: string) {
+    temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
+    for (let b of temp_recipe) {
+        temp_recipe_item = itemsLabelForId(b[0])
+        temp_recipe_amount = b[1]
+        if (inventoryGetAmountByLabel(temp_recipe_item) < temp_recipe_amount) {
+            return false
+        } else {
+            inventoryAddAmountByLabel(temp_recipe_item, temp_recipe_amount * -1)
+        }
+    }
+    return true
+}
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    toolChangeNext()
+})
+function setupBuildableTiles () {
+    buildables_all = [
+    "dirt",
+    "dirt_grass",
+    "brick",
+    "stone",
+    "rock_block"
+    ]
+    buildables_tile_images = [
+    assets.tile`Dirt`,
+    assets.tile`Grass`,
+    assets.tile`brick_block`,
+    assets.tile`stone`,
+    assets.tile`Rock_Block`
+    ]
+    buildables_recipe_items = [
+    [[itemsIdForLabel("dirt"), 1]],
+    [[itemsIdForLabel("dirt"), 1]],
+    [[itemsIdForLabel("dirt"), 1], [itemsIdForLabel("stone"), 1]],
+    [[itemsIdForLabel("stone"), 1]],
+    [[itemsIdForLabel("stone"), 2]]
+    ]
+}
+function generatePlants () {
+    for (let col3 = 0; col3 <= world_cols - 1; col3++) {
+        ground_current = world_ground_height[col3]
+        if (Math.percentChance(10)) {
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`BushEmpty`)
+        } else if (Math.percentChance(25)) {
+            tree_height = randint(2, 5)
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - 1), assets.tile`TreeTrunk0`)
+            for (let index = 0; index <= tree_height - 2; index++) {
+                tiles.setTileAt(tiles.getTileLocation(col3, ground_current - (index + 2)), assets.tile`TreeLog0`)
+            }
+            tiles.setTileAt(tiles.getTileLocation(col3, ground_current - tree_height), assets.tile`TreeTop`)
+        }
+    }
+}
+function uiShowMessage (text: string) {
+    ui_message.setText(text)
+    ui_message.ay = 0
+    ui_message.setVelocity(0, 0)
+    ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
+    ui_message.ay = 2
+}
+function getPlayerBiome () {
+    return world_biome_cols_lookup[char.tilemapLocation().column]
+}
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
+            grid.move(selected_block, -1, 0)
+        }
+    }
+})
+function toolCurrentLabel () {
+    return tools_all[tools_inventory[tool_selected]]
+}
+function setupBuildables () {
+    buildable_blocks = []
+    buildable_blocks.push(assets.tile`brick_block`)
+    buildable_blocks.push(assets.tile`Rock_Block`)
+    buildable_blocks.push(assets.tile`Dirt`)
+    buildable_blocks.push(assets.tile`stone`)
+    buildable_blocks.push(assets.tile`BushEmpty`)
+}
+function uiAddMessageToQueue (text: string) {
+    ui_message_queue.push(text)
+}
+function setupPlayer () {
+    char = sprites.create(assets.image`PlayerIdle0`, SpriteKind.Player)
+    char.ay = 250
+    char.z = 1
+    char_button_direction = -1
+    scene.cameraFollowSprite(char)
+    tiles.placeOnRandomTile(char, assets.tile`Grass`)
+    grid.move(char, 0, -1)
+    tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
+    setupPlayerTools()
+    setupPlayerInventory()
+}
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
+            grid.move(selected_block, 1, 0)
+        }
+    }
+})
+function inventoryGetAmountByLabel (item: string) {
+    return items_inventory[itemsIdForLabel(item)]
+}
+function setupUIStatBars () {
+    char_health_max = 25
+    char_xp_max = 100
+    char_health_current = char_health_max
+    char_xp_current = 0
+    char_health_bar = sprites.create(image.create(scene.screenWidth() - 22, 9), SpriteKind.UI)
+    char_health_bar.setFlag(SpriteFlag.RelativeToCamera, true)
+    char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
+    uiUpdateStatBars()
+}
+function generateWorldNew () {
+    world_rand_gen = Math.createRando(world_seed)
+    tiles.setTilemap(tilemap`World`)
+    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
+    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
+    scroller.setCameraScrollingMultipliers(0.15, 0, scroller.BackgroundLayer.Layer0)
+    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer1)
+    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer1)
+    world_rows = tiles.tilemapRows() - 0
+    world_cols = tiles.tilemapColumns() - 0
+    generateWorldBiomeLocations()
+    world_ground_height = []
+    for (let b of world_biome_locations) {
+        generateWorldBiome(b)
+    }
+}
+function setupPlayerTools () {
+    tools_all = [
+    "pickaxe",
+    "hammer",
+    "hand",
+    "axe"
+    ]
+    tools_all_icons = [
+    assets.image`TOOLpicaxePLATE`,
+    assets.image`TOOLhammer`,
+    assets.image`TOOLhand`,
+    assets.image`TOOLaxePLATE`
+    ]
+    tools_all_images = [
+    assets.image`toolPickaxe0`,
+    assets.image`toolHammer`,
+    assets.image`Empty`,
+    assets.image`toolAxe0`
+    ]
+    tools_inventory = [
+    2,
+    1,
+    0,
+    3
+    ]
+    tool_selected = 0
+    tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
+    tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
+    tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
+}
+function uiUpdateStatBars () {
+    char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
+    char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
+    char_health_bar.image.fillRect(1, 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 2)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 6)
+    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_xp_current / char_xp_max), char_health_bar.height / 2 - 1, 7)
+}
+function toolCurrentIcon () {
+    return tools_all_icons[tools_inventory[tool_selected]]
+}
+sprites.onOverlap(SpriteKind.Tool, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        otherSprite.destroy(effects.disintegrate, 500)
+        char_xp_current += 5
+        uiUpdateStatBars()
+    }
+})
+function itemsIdForLabel (item: string) {
+    return items_all.indexOf(item)
+}
+function generateBiomeGroundHeight (biome: string, col_start: number, col_end: number) {
+    if (col_start > 0) {
+        ground_prev = world_ground_height[world_ground_height.length - 1]
+    } else {
+        ground_prev = 15
+    }
+    ground_min = 8
+    ground_max = 25
+    for (let index = 0; index < col_end - col_start + 1; index++) {
+        if (world_rand_gen.pseudoPercentChance(15)) {
+            ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
+        } else if (world_rand_gen.pseudoPercentChance(15)) {
+            ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
+        } else if (world_rand_gen.pseudoPercentChance(5)) {
+            ground_current = Math.constrain(ground_prev - world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
+        } else if (world_rand_gen.pseudoPercentChance(5)) {
+            ground_current = Math.constrain(ground_prev + world_rand_gen.getNumber(2, 5, true), ground_min, ground_max)
+        } else {
+            ground_current = ground_prev
+        }
+        ground_prev = ground_current
+        world_ground_height.push(ground_current)
+    }
+}
+function spawnEnemy (_type: string) {
+    if (_type == "mushroom") {
+        sprites.allOfKind(SpriteKind.Enemy).push(enemy_sprite)
+        enemy_sprite = sprites.create(assets.image`animalMushroom0`, SpriteKind.Enemy)
+        sprites.setDataNumber(enemy_sprite, "gravity", 250)
+        sprites.setDataNumber(enemy_sprite, "jump", randint(-100, -125))
+        sprites.setDataNumber(enemy_sprite, "detection", 60)
+        sprites.setDataBoolean(enemy_sprite, "detected", false)
+        if (Math.percentChance(50)) {
+            sprites.setDataNumber(enemy_sprite, "direction", 1)
+        } else {
+            sprites.setDataNumber(enemy_sprite, "direction", -1)
+        }
+        sprites.setDataNumber(enemy_sprite, "speed_normal", 10)
+        sprites.setDataNumber(enemy_sprite, "speed_detected", 20)
+        enemy_sprite.vx = sprites.readDataNumber(enemy_sprite, "speed_normal") * sprites.readDataNumber(enemy_sprite, "direction")
+        if (Math.percentChance(50)) {
+            enemy_sprite.x = char.x + (scene.screenWidth() + randint(-10, 20))
+        } else {
+            enemy_sprite.x = char.x - (scene.screenWidth() - randint(-10, 20))
+        }
+        enemy_sprite.y = 0
+        enemy_sprite.ay = sprites.readDataNumber(enemy_sprite, "gravity")
+        animation.runImageAnimation(
+        enemy_sprite,
+        assets.animation`AnimalMushroomWalking`,
+        200,
+        true
+        )
+    }
+}
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        if (grid.spriteRow(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) < 3) {
+            grid.move(selected_block, 0, 1)
+        }
+    }
+})
+function toolCurrentImage () {
+    return tools_all_images[tools_inventory[tool_selected]]
 }
 // Game Systems
 // 
@@ -243,634 +571,8 @@ sprites.setDataString(selected_block, "label", "brick")
         sprites.setDataNumber(selected_block, "blink_max", 30)
         selected_block.z = -1
         grid.place(selected_block, tiles.locationInDirection(tiles.locationInDirection(tiles.locationOfSprite(char), CollisionDirection.Bottom), CollisionDirection.Bottom))
-    } else if (toolCurrentLabel() == "hand") {
-        if (god_mode == true) {
-            if (char.vy < 1) {
-                generateWorldCave(char.tilemapLocation().row + 2, char.tilemapLocation().column, 3, 1)
-            }
-        }
     }
 })
-function generateWorldBiomeBottom (biome_location: any[]) {
-    temp_biome = biome_location[0]
-    temp_biome_x = biome_location[1]
-    temp_biome_y = biome_location[2]
-    temp_biome_width = biome_location[3]
-    temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
-        for (let row = 0; row <= temp_biome_height - 1; row++) {
-            temp_x = temp_biome_x + col2
-            temp_y = temp_biome_y + row
-            if (world_rand_gen.pseudoPercentChance(75)) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Cokin`)
-                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-            } else {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Lava`)
-                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-            }
-        }
-    }
-}
-function savePlantLocation (row: number, col: number, _type: number) {
-    world_plant_locations.push([row, col, _type])
-}
-function buildablesIdForLabel (label: string) {
-    return buildables_all.indexOf(label)
-}
-function generateWorldBiomeLocationArray (biome: string, x: number, y: number, w: number, h: number) {
-    return [
-    world_biome_types.indexOf(biome),
-    x,
-    y,
-    w,
-    h
-    ]
-}
-function setupVariables () {
-    tick_speed = 1000
-    char_speed_max = 125
-    char_speed_rate = 10
-    char_speed_decel_rate = 0.85
-    char_speed_jump = -150
-    ui_message_queue = []
-    entities_max = 10
-}
-function generateWorldBiomeCore (biome_location: any[]) {
-    temp_biome = biome_location[0]
-    temp_biome_x = biome_location[1]
-    temp_biome_y = biome_location[2]
-    temp_biome_width = biome_location[3]
-    temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
-        for (let row = 0; row <= temp_biome_height - 1; row++) {
-            temp_x = temp_biome_x + col2
-            temp_y = temp_biome_y + row
-            tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`CORE`)
-            tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-        }
-    }
-}
-scene.onHitWall(SpriteKind.Enemy, function (sprite, location) {
-    if (sprite.isHittingTile(CollisionDirection.Left)) {
-        sprites.setDataNumber(sprite, "direction", 1)
-    } else if (sprite.isHittingTile(CollisionDirection.Right)) {
-        sprites.setDataNumber(sprite, "direction", -1)
-    }
-    if (debug_mode) {
-        sprite.sayText(sprite.vx)
-    }
-})
-function isPlantHere (row: number, col: number) {
-    for (let p of world_plant_locations) {
-        if (row == p[0] && col == p[1]) {
-            return true
-        }
-    }
-    return false
-}
-function setupUIMessages () {
-    ui_message = textsprite.create("", 1, 15)
-    ui_message.setMaxFontHeight(3)
-    ui_message.setFlag(SpriteFlag.RelativeToCamera, true)
-}
-function isActionLocationAboveGround (char: Sprite, button_direction: number) {
-    return tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.row) >= groundLevelAtColumn(tiles.locationXY(tiles.locationInDirection(tiles.locationOfSprite(char), button_direction), tiles.XY.column))
-}
-function generateWorldBiomeSnow (biome_location: any[]) {
-    temp_biome = biome_location[0]
-    temp_biome_x = biome_location[1]
-    temp_biome_y = biome_location[2]
-    temp_biome_width = biome_location[3]
-    temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
-        for (let row = 0; row <= temp_biome_height - 1; row++) {
-            temp_x = temp_biome_x + col2
-            temp_y = temp_biome_y + row
-            if (temp_y == world_ground_height[temp_x]) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`SnowGrass`)
-                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-            } else if (temp_y > world_ground_height[temp_x]) {
-                if (world_rand_gen.pseudoPercentChance(75)) {
-                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
-                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-                } else {
-                    tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Dirt`)
-                    tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-                }
-            }
-        }
-    }
-}
-function generatePlainsPlants (col_start: number, width: number) {
-    for (let col3 = 0; col3 <= width - 1; col3++) {
-        temp_x = col_start + col3
-        ground_current = world_ground_height[temp_x]
-        if (world_rand_gen.pseudoPercentChance(10)) {
-            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`BushEmpty`)
-            savePlantLocation(ground_current - 1, temp_x, 1)
-            addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("bush_plains"))
-        } else if (world_rand_gen.pseudoPercentChance(25)) {
-            tree_height = world_rand_gen.getNumber(2, 5, true)
-            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - 1), assets.tile`TreeTrunk0`)
-            for (let temp_row = 0; temp_row <= tree_height - 2; temp_row++) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - (temp_row + 2)), assets.tile`TreeLog0`)
-            }
-            tiles.setTileAt(tiles.getTileLocation(temp_x, ground_current - tree_height), assets.tile`TreeTop`)
-            savePlantLocation(ground_current - 1, temp_x, 1)
-            addPlantGrowthTimer(ground_current - 1, temp_x, getPlantTypeIDByLabel("tree_plains"))
-        }
-    }
-}
-function inventoryAddAmountByLabel (item: string, amount: number) {
-    items_inventory[itemsIdForLabel(item)] = Math.constrain(inventoryGetAmountByLabel(item) + amount, 0, 9999)
-}
-function applyTileChangesToWorld (changes: any[]) {
-    temp_changes = changes
-    while (temp_changes.length > 0) {
-        temp_y = temp_changes.shift()
-        temp_x = temp_changes.shift()
-        temp_pixel_current_cat = temp_changes.shift()
-        temp_pixel_current_id = temp_changes.shift()
-        tiles.setTileAt(tiles.getTileLocation(temp_y, temp_x), game_tiles_index[temp_pixel_current_cat][temp_pixel_current_id])
-    }
-}
-function generateWorldCave (row: number, col: number, size: number, dir: number) {
-    if (size <= 0) {
-        return
-    }
-    cave_row = row
-    cave_col = col
-    cave_size = size
-    cave_direction = dir
-    while (cave_size > 0 && cave_row + Math.ceil(cave_size / 2) < world_rows - 1) {
-        for (let temp_x = 0; temp_x <= cave_size - 1; temp_x++) {
-            for (let temp_y = 0; temp_y <= cave_size - 1; temp_y++) {
-                if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)))) {
-                    if (!(tiles.tileIs(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`CORE`))) {
-                        if (!(isLocationAboveGround(cave_row + (temp_y - 1), cave_col + cave_direction * (temp_x - 1)))) {
-                            if (!(isPlantHere(cave_row + (temp_y - 1) - 1, cave_col + cave_direction * (temp_x - 1)))) {
-                                tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`transparency16`)
-                                tiles.setWallAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), false)
-                                for (let cat = 0; cat <= cave_row + (temp_y - 1) - 1; cat++) {
-                                    if (tiles.tileIsWall(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cat))) {
-                                        tiles.setTileAt(tiles.getTileLocation(cave_col + cave_direction * (temp_x - 1), cave_row + (temp_y - 1)), assets.tile`Stone_Background`)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        cave_drop_percent = 85
-        cave_shrink_percent = Math.constrain(cave_row / (scene.screenHeight() * 0.5) * 7, 5, 25)
-        cave_switch_percent = 10
-        if (cave_col + cave_direction * cave_size <= 0 || cave_col + cave_direction * cave_size >= world_cols - 1) {
-            cave_switch_percent = 100
-        }
-        if (world_rand_gen.pseudoPercentChance(cave_switch_percent)) {
-            cave_direction = 0 - cave_direction
-            cave_col += 1
-        }
-        if (world_rand_gen.pseudoPercentChance(cave_shrink_percent)) {
-            cave_size += -1
-        } else if (world_rand_gen.pseudoPercentChance(cave_shrink_percent * 0.35)) {
-            cave_size += 1
-        }
-        if (world_rand_gen.pseudoPercentChance(cave_drop_percent)) {
-            cave_row += 1
-            if (cave_size == 1) {
-                cave_size = 0
-            }
-        }
-        cave_col += cave_direction
-    }
-}
-function buildablesCanPlayerBuild (label: string) {
-    temp_recipe = buildables_recipe_items[buildablesIdForLabel(label)]
-    for (let b of temp_recipe) {
-        temp_recipe_item = itemsLabelForId(b[0])
-        temp_recipe_amount = b[1]
-        if (inventoryGetAmountByLabel(temp_recipe_item) < temp_recipe_amount) {
-            return false
-        } else {
-            inventoryAddAmountByLabel(temp_recipe_item, temp_recipe_amount * -1)
-        }
-    }
-    return true
-}
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    toolChangeNext()
-})
-function setupBuildableTiles () {
-    buildables_all = [
-    "dirt",
-    "dirt_grass",
-    "brick",
-    "stone",
-    "rock_block"
-    ]
-    buildables_tile_images = [
-    assets.tile`Dirt`,
-    assets.tile`Grass`,
-    assets.tile`brick_block`,
-    assets.tile`stone`,
-    assets.tile`Rock_Block`
-    ]
-    buildables_recipe_items = [
-    [[itemsIdForLabel("dirt"), 1]],
-    [[itemsIdForLabel("dirt"), 1]],
-    [[itemsIdForLabel("dirt"), 0], [itemsIdForLabel("stone"), 0]],
-    [[itemsIdForLabel("stone"), 1]],
-    [[itemsIdForLabel("stone"), 2]]
-    ]
-}
-function growPlant (plant: any[]) {
-    p_row = plant[0]
-    p_col = plant[1]
-    p_type = plant[2]
-    if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`BushEmpty`)) {
-        tiles.setTileAt(tiles.getTileLocation(p_col, p_row), assets.tile`BushFull`)
-        console.log("Grew bush berries at row: " + p_row + ", col: " + p_col)
-    } else if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`BushFull`)) {
-        tiles.setTileAt(tiles.getTileLocation(p_col, p_row), assets.tile`BushThorns`)
-    } else if (tiles.tileIs(tiles.getTileLocation(p_col, p_row), assets.tile`TreeTrunk0`)) {
-        temp_row = p_row - 1
-        while (tiles.tileIs(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeLog0`)) {
-            temp_row += -1
-        }
-        if (tiles.tileIs(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeTop`)) {
-            if (p_row - temp_row < 5) {
-                tiles.setTileAt(tiles.getTileLocation(p_col, temp_row), assets.tile`TreeLog0`)
-                tiles.setTileAt(tiles.getTileLocation(p_col, temp_row - 1), assets.tile`TreeTop`)
-                addPlantGrowthTimer(p_row, p_col, p_type)
-            }
-        }
-    }
-}
-function uiShowMessage (text: string) {
-    ui_message.setText(text)
-    ui_message.ay = 0
-    ui_message.setVelocity(0, 0)
-    ui_message.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 10)
-    ui_message.ay = 2
-}
-function getPlayerBiome () {
-    return world_biome_cols_lookup[char.tilemapLocation().column]
-}
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    if (toolCurrentLabel() == "hammer") {
-        if (buildValid() == 1 && buildablesCanPlayerBuild(sprites.readDataString(selected_block, "label"))) {
-            tiles.setTileAt(tiles.locationOfSprite(selected_block), sprites.readDataImage(selected_block, "img"))
-            tiles.setWallAt(tiles.locationOfSprite(selected_block), true)
-            selected_block.destroy()
-        } else {
-            selected_block.destroy(effects.disintegrate, 100)
-        }
-    } else {
-    	
-    }
-})
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-    if (god_mode == false) {
-        pause(500)
-        char_health_current += -2
-        uiUpdateStatBars()
-        if (char_health_current < 1) {
-            game.over(false)
-        }
-    }
-})
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) - grid.spriteCol(selected_block) < 4) {
-            grid.move(selected_block, -1, 0)
-        }
-    }
-})
-function loadGame () {
-    console.log("Checking for saved game.")
-    if (blockSettings.readNumber("world_seed") == world_seed) {
-        if (blockSettings.exists("tile_changes")) {
-            console.log("Loading and applying tile changes from save.")
-            game_save_changes = blockSettings.readNumberArray("tile_changes")
-            applyTileChangesToWorld(game_save_changes)
-        }
-    }
-}
-function toolCurrentLabel () {
-    return tools_all[tools_inventory[tool_selected]]
-}
-function setupBuildables () {
-    buildable_blocks = []
-    buildable_blocks.push(assets.tile`brick_block`)
-    buildable_blocks.push(assets.tile`Rock_Block`)
-    buildable_blocks.push(assets.tile`Dirt`)
-    buildable_blocks.push(assets.tile`stone`)
-    buildable_blocks.push(assets.tile`BushEmpty`)
-}
-function uiAddMessageToQueue (text: string) {
-    ui_message_queue.push(text)
-}
-function setupPlayer () {
-    char = sprites.create(assets.image`PlayerSpawn`, SpriteKind.Player)
-    char.ay = 250
-    char.z = 1
-    char_button_direction = -1
-    scene.cameraFollowSprite(char)
-    tiles.placeOnRandomTile(char, assets.tile`Grass`)
-    grid.move(char, 0, -1)
-    tiles.placeOnTile(char, tiles.getTileLocation(50, groundLevelAtColumn(50) - 2))
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerIdleR`,
-    100,
-    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingRight)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerIdleL`,
-    100,
-    characterAnimations.rule(Predicate.NotMoving, Predicate.FacingLeft)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerMoveR`,
-    200,
-    characterAnimations.rule(Predicate.MovingRight)
-    )
-    characterAnimations.loopFrames(
-    char,
-    assets.animation`playerMoveL`,
-    200,
-    characterAnimations.rule(Predicate.MovingLeft)
-    )
-    setupPlayerTools()
-    setupPlayerInventory()
-}
-function saveGame () {
-    blockSettings.writeNumber("world_seed", world_seed)
-    game_save_changes = getSaveableTileChanges()
-    if (game_save_changes.length < 1) {
-        return
-    }
-    blockSettings.writeNumberArray("tile_changes", game_save_changes)
-}
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (grid.spriteCol(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.column) < 4) {
-            grid.move(selected_block, 1, 0)
-        }
-    }
-})
-function inventoryGetAmountByLabel (item: string) {
-    return items_inventory[itemsIdForLabel(item)]
-}
-function setupUIStatBars () {
-    char_health_max = 25
-    char_xp_max = 100
-    char_health_current = char_health_max
-    char_xp_current = 0
-    char_health_bar = sprites.create(image.create(scene.screenWidth() - 22, 9), SpriteKind.UI)
-    char_health_bar.setFlag(SpriteFlag.RelativeToCamera, true)
-    char_health_bar.setPosition(char_health_bar.width / 2 + 2, char_health_bar.height / 2 + 2)
-    uiUpdateStatBars()
-}
-function generateWorldNew () {
-    world_rand_gen = Math.createRando(world_seed)
-    world_plant_types = ["bush_plains", "tree_plains"]
-    world_plant_growth_rate = [15, 15]
-    world_plant_locations = []
-    world_plant_growth_timers = []
-    tiles.setTilemap(tilemap`World`)
-    scene.setBackgroundImage(assets.image`biomePlainsOLD`)
-    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer0)
-    scroller.setCameraScrollingMultipliers(0.15, 0, scroller.BackgroundLayer.Layer0)
-    scroller.scrollBackgroundWithCamera(scroller.CameraScrollMode.OnlyHorizontal, scroller.BackgroundLayer.Layer1)
-    scroller.setCameraScrollingMultipliers(0.25, 0, scroller.BackgroundLayer.Layer1)
-    world_rows = tiles.tilemapRows() - 0
-    world_cols = tiles.tilemapColumns() - 0
-    generateWorldBiomeLocations()
-    world_ground_height = []
-    for (let b of world_biome_locations) {
-        generateWorldBiome(b)
-    }
-    cave_locations = []
-    temp_skip = 0
-    for (let col = 0; col <= scene.screenWidth() - 1; col++) {
-        if (temp_skip <= 0) {
-            g = groundLevelAtColumn(col)
-            if (col > 1 && (!(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 1, g + 1))) && !(tiles.tileIsWall(tiles.getTileLocation(col - 2, g + 0))))) {
-                cave_locations.push([
-                g + 2,
-                col,
-                world_rand_gen.getNumber(3, 3, true),
-                1
-                ])
-                temp_skip = 8
-            } else if (col < scene.screenWidth() - 2 && (!(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 0))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 1, g + 1))) && !(tiles.tileIsWall(tiles.getTileLocation(col + 2, g + 0))))) {
-                cave_locations.push([
-                g + 2,
-                col,
-                world_rand_gen.getNumber(3, 3, true),
-                -1
-                ])
-                temp_skip = 8
-            }
-        } else {
-            temp_skip += -1
-        }
-    }
-    for (let cat of cave_locations) {
-        generateWorldCave(cat[0], cat[1], cat[2], cat[3])
-    }
-}
-function setupPlayerTools () {
-    tools_all = [
-    "pickaxe",
-    "hammer",
-    "hand",
-    "axe"
-    ]
-    tools_all_icons = [
-    assets.image`TOOLpicaxePLATE`,
-    assets.image`TOOLhammer`,
-    assets.image`TOOLhand`,
-    assets.image`TOOLaxePLATE`
-    ]
-    tools_all_images = [
-    assets.image`toolPickaxe0`,
-    assets.image`toolHammer`,
-    assets.image`Empty`,
-    assets.image`toolAxe0`
-    ]
-    tools_inventory = [
-    2,
-    1,
-    0,
-    3
-    ]
-    tool_selected = 0
-    tool_selected_icon = sprites.create(toolCurrentIcon(), SpriteKind.Icon)
-    tool_selected_icon.setFlag(SpriteFlag.RelativeToCamera, true)
-    tool_selected_icon.setPosition(scene.screenWidth() - 10, 10)
-}
-function uiUpdateStatBars () {
-    char_health_bar.image.fillRect(0, 0, char_health_bar.width, char_health_bar.height, 15)
-    char_health_bar.image.fillRect(1, 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 12)
-    char_health_bar.image.fillRect(1, 1, (char_health_bar.width - 2) * (char_health_current / char_health_max), char_health_bar.height / 2 - 1, 2)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, char_health_bar.width - 2, char_health_bar.height / 2 - 1, 6)
-    char_health_bar.image.fillRect(1, char_health_bar.height / 2 + 1, (char_health_bar.width - 2) * (char_xp_current / char_xp_max), char_health_bar.height / 2 - 1, 7)
-}
-function toolCurrentIcon () {
-    return tools_all_icons[tools_inventory[tool_selected]]
-}
-function itemsIdForLabel (item: string) {
-    return items_all.indexOf(item)
-}
-function generateBiomeGroundHeight (biome: string, col_start: number, col_end: number) {
-    if (biome == "desert") {
-        ground_chance_minor = 10
-        ground_chance_major = 5
-        ground_change_max = 3
-    } else if (biome == "snow") {
-        ground_chance_minor = 45
-        ground_chance_major = 15
-        ground_change_max = 2
-    } else {
-        ground_chance_minor = 25
-        ground_chance_major = 7
-        ground_change_max = 2
-    }
-    if (col_start > 0) {
-        ground_prev = world_ground_height[world_ground_height.length - 1]
-    } else {
-        ground_prev = 15
-    }
-    ground_min = 8
-    ground_max = 25
-    for (let index = 0; index < col_end - col_start + 1; index++) {
-        if (world_rand_gen.pseudoPercentChance(ground_chance_minor)) {
-            if (world_rand_gen.pseudoPercentChance(50)) {
-                ground_current = Math.constrain(ground_prev - 1, ground_min, ground_max)
-            } else {
-                ground_current = Math.constrain(ground_prev + 1, ground_min, ground_max)
-            }
-        } else if (world_rand_gen.pseudoPercentChance(ground_chance_major)) {
-            if (world_rand_gen.pseudoPercentChance(50)) {
-                ground_current = Math.constrain(ground_prev - world_rand_gen.getNumber(2, ground_change_max, true), ground_min, ground_max)
-            } else {
-                ground_current = Math.constrain(ground_prev + world_rand_gen.getNumber(2, ground_change_max, true), ground_min, ground_max)
-            }
-        } else {
-            ground_current = ground_prev
-        }
-        ground_prev = ground_current
-        world_ground_height.push(ground_current)
-    }
-}
-function createTilesIndex () {
-    game_tiles_index = [
-    [assets.tile`transparency16`, assets.tile`Stone_Background`],
-    [assets.tile`stone`, assets.tile`Dirt`, assets.tile`Grass`],
-    [assets.tile`Sand`],
-    [assets.tile`SnowGrass`],
-    [
-    assets.tile`CopperOre`,
-    assets.tile`RubyOre`,
-    assets.tile`IronOre`,
-    assets.tile`GoldOre`,
-    assets.tile`DimOre`
-    ],
-    [assets.tile`Darkstone`, assets.tile`Cokin`],
-    [
-    assets.tile`BushEmpty`,
-    assets.tile`BushFull`,
-    assets.tile`BushThorns`,
-    assets.tile`TreeTrunk0`,
-    assets.tile`TreeLog0`,
-    assets.tile`TreeTop`,
-    assets.tile`Sapling`,
-    assets.tile`TreeTopA`,
-    assets.tile`TreeTopCOLD`,
-    assets.tile`TreeTopACOLD`
-    ],
-    [assets.tile`brick_block`]
-    ]
-    game_tiles_global_id = []
-    game_tiles_category = []
-    game_tiles_category_id = []
-    for (let cat = 0; cat <= game_tiles_index.length - 1; cat++) {
-        for (let tile of game_tiles_index[cat]) {
-            game_tiles_global_id.push(tile)
-        }
-        for (let id = 0; id <= game_tiles_index[cat].length - 1; id++) {
-            game_tiles_category.push(cat)
-            game_tiles_category_id.push(id)
-        }
-    }
-}
-function spawnEnemy (_type: string) {
-    if (_type == "mushroom") {
-        sprites.allOfKind(SpriteKind.Enemy).push(enemy_sprite)
-        enemy_sprite = sprites.create(assets.image`animalMushroom0`, SpriteKind.Enemy)
-        sprites.setDataNumber(enemy_sprite, "gravity", 250)
-        sprites.setDataNumber(enemy_sprite, "jump", randint(-100, -125))
-        sprites.setDataNumber(enemy_sprite, "detection", 60)
-        sprites.setDataBoolean(enemy_sprite, "detected", false)
-        if (Math.percentChance(50)) {
-            sprites.setDataNumber(enemy_sprite, "direction", 1)
-        } else {
-            sprites.setDataNumber(enemy_sprite, "direction", -1)
-        }
-        sprites.setDataNumber(enemy_sprite, "speed_normal", 10)
-        sprites.setDataNumber(enemy_sprite, "speed_detected", 20)
-        enemy_sprite.vx = sprites.readDataNumber(enemy_sprite, "speed_normal") * sprites.readDataNumber(enemy_sprite, "direction")
-        if (Math.percentChance(50)) {
-            enemy_sprite.x = char.x + (scene.screenWidth() + randint(-10, 20))
-        } else {
-            enemy_sprite.x = char.x - (scene.screenWidth() - randint(-10, 20))
-        }
-        enemy_sprite.y = 0
-        enemy_sprite.ay = sprites.readDataNumber(enemy_sprite, "gravity")
-        animation.runImageAnimation(
-        enemy_sprite,
-        assets.animation`AnimalMushroomWalking`,
-        200,
-        true
-        )
-    }
-}
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-        if (grid.spriteRow(selected_block) - tiles.locationXY(tiles.locationOfSprite(char), tiles.XY.row) < 3) {
-            grid.move(selected_block, 0, 1)
-        }
-    }
-})
-function toolCurrentImage () {
-    return tools_all_images[tools_inventory[tool_selected]]
-}
-function generateWorldBiomeMiddle (biome_location: any[]) {
-    temp_biome = biome_location[0]
-    temp_biome_x = biome_location[1]
-    temp_biome_y = biome_location[2]
-    temp_biome_width = biome_location[3]
-    temp_biome_height = biome_location[4]
-    for (let col2 = 0; col2 <= temp_biome_width - 1; col2++) {
-        for (let row = 0; row <= temp_biome_height - 1; row++) {
-            temp_x = temp_biome_x + col2
-            temp_y = temp_biome_y + row
-            if (world_rand_gen.pseudoPercentChance(75)) {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`stone`)
-                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-            } else {
-                tiles.setTileAt(tiles.getTileLocation(temp_x, temp_y), assets.tile`Cokin`)
-                tiles.setWallAt(tiles.getTileLocation(temp_x, temp_y), true)
-            }
-        }
-    }
-}
 function getRandomWorldBiome () {
     if (world_rand_gen.pseudoPercentChance(25)) {
         return "snow"
@@ -892,37 +594,30 @@ function tooltest () {
     char_tool_sprite.z = 3
 }
 blockMenu.onMenuOptionSelected(function (option, index) {
-    if (blockMenu.isMenuOpen()) {
-        world_seed = 122911
-        if (index == 1) {
-            world_seed = randint(0, 9999999999)
-        } else if (index == 2) {
-            world_seed = game.askForNumber("Enter world seed:", 10)
-        }
-        console.log("Using seed value of: " + world_seed)
-        blockMenu.closeMenu()
-        setupVariables()
-        setupUIMessages()
-        setupUIStatBars()
-        createTilesIndex()
-        generateWorldNew()
-        game_save_images_original = createSaveImagesFromTilemap()
-        setupPlayer()
-        setupBuildables()
-        setupBuildableTiles()
-        tooltest()
-        loadGame()
-        game_state = "running"
+    world_seed = 0
+    if (index == 1) {
+        world_seed = randint(0, 9999999999)
+    } else if (index == 2) {
+        world_seed = game.askForNumber("Enter world seed:", 10)
     }
+    console.log("Using seed value of: " + world_seed)
+    blockMenu.closeMenu()
+    setupVariables()
+    setupUIMessages()
+    setupUIStatBars()
+    generateWorldNew()
+    setupPlayer()
+    setupBuildables()
+    setupBuildableTiles()
+    tooltest()
+    game_state = "running"
 })
 function setupPlayerInventory () {
     items_all = [
     "wood",
     "brick",
     "stone",
-    "dirt",
-    "snow",
-    "sand"
+    "dirt"
     ]
     items_tile_images = [
     img`
@@ -945,9 +640,7 @@ function setupPlayerInventory () {
         `,
     assets.tile`brick_block`,
     assets.tile`stone`,
-    assets.tile`Dirt`,
-    assets.tile`SnowGrass`,
-    assets.tile`Sand`
+    assets.tile`Dirt`
     ]
     items_tile_images_alt = [
     img`
@@ -1004,51 +697,11 @@ function setupPlayerInventory () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `,
-    assets.tile`Grass`,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `
+    assets.tile`Grass`
     ]
     items_inventory = []
     for (let value2 of items_all) {
         items_inventory.push(0)
-    }
-    if (god_mode == true) {
-        inventoryAddAmountByLabel("wood", 1000)
-        inventoryAddAmountByLabel("stone", 1000)
     }
 }
 function generateWorldBiome (biome_location: any[]) {
@@ -1064,55 +717,27 @@ function generateWorldBiome (biome_location: any[]) {
         generateWorldBiomeSnow(biome_location)
     } else if (temp_biome == 2) {
         generateWorldBiomeDesert(biome_location)
-    } else if (temp_biome == 3) {
-        generateWorldBiomeMiddle(biome_location)
-    } else if (temp_biome == 4) {
-        generateWorldBiomeBottom(biome_location)
-    } else if (temp_biome == 5) {
-        generateWorldBiomeCore(biome_location)
     }
 }
-function isLocationAboveGround (row: number, col: number) {
-    return row < groundLevelAtColumn(col)
-}
 let enemy_sprite: Sprite = null
-let ground_max = 0
-let ground_min = 0
-let ground_prev = 0
-let ground_change_max = 0
-let ground_chance_major = 0
-let ground_chance_minor = 0
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
-let g = 0
-let temp_skip = 0
-let cave_locations: number[][] = []
+let world_seed = 0
 let char_health_bar: Sprite = null
+let char_xp_current = 0
+let char_health_current = 0
 let char_xp_max = 0
 let char_health_max = 0
+let char_button_direction = 0
 let buildable_blocks: Image[] = []
 let tools_all: string[] = []
-let game_save_changes: any[] = []
-let world_seed = 0
-let temp_row = 0
-let p_type: any = null
-let p_col: any = null
-let p_row: any = null
+let buildables_tile_images: Image[] = []
 let temp_recipe_amount = 0
 let temp_recipe_item = ""
 let buildables_recipe_items: number[][][] = []
 let temp_recipe: number[][] = []
-let cave_switch_percent = 0
-let cave_shrink_percent = 0
-let cave_drop_percent = 0
-let cave_direction = 0
-let cave_size = 0
-let cave_col = 0
-let cave_row = 0
-let game_tiles_index: Image[][] = []
 let items_inventory: number[] = []
 let tree_height = 0
-let ground_current = 0
 let ui_message: TextSprite = null
 let entities_max = 0
 let ui_message_queue: string[] = []
@@ -1122,49 +747,29 @@ let char_speed_rate = 0
 let char_speed_max = 0
 let tick_speed = 0
 let buildables_all: string[] = []
-let world_plant_locations: number[][] = []
-let buildables_tile_images: Image[] = []
-let char_button_direction = 0
-let temp_pixel_current_id: any = null
-let temp_pixel_current_cat: any = null
-let temp_pixel_orig_id = 0
-let game_save_images_original: Image[] = []
-let temp_pixel_orig_cat = 0
-let temp_changes: any[] = []
-let game_save_images_current: Image[] = []
 let char: Sprite = null
-let world_plant_growth_rate: number[] = []
-let world_plant_types: string[] = []
+let ground_current = 0
+let ground_max = 0
+let ground_min = 0
+let ground_prev = 0
 let char_tool_sprite: Sprite = null
 let tool_selected_icon: Sprite = null
 let tools_inventory: number[] = []
 let tool_selected = 0
+let world_rows = 0
 let world_biome_width = 0
+let world_cols = 0
 let world_col_index = 0
 let world_biome_cols_max = 0
 let world_biome_cols_min = 0
 let world_biome_cols_lookup: any[] = []
 let world_biome_locations: number[][] = []
 let world_biome_types: string[] = []
-let game_tiles_category_id: number[] = []
-let temp_tile_category_id = 0
-let game_tiles_category: number[] = []
-let temp_tile_category = 0
-let temp_tile: Image = null
-let game_tiles_global_id: Image[] = []
-let temp_image_id: Image = null
-let world_rows = 0
-let world_cols = 0
-let temp_image_category: Image = null
 let items_tile_images_alt: Image[] = []
 let items_tile_images: Image[] = []
-let char_health_current = 0
-let char_xp_current = 0
-let temp_p: number[] = []
-let world_plant_growth_timers: number[][] = []
 let items_all: string[] = []
 let world_rand_gen: Rando = null
-let temp_y: any = null
+let temp_y = 0
 let temp_x = 0
 let temp_biome_height: any = null
 let temp_biome_width: any = null
@@ -1173,28 +778,21 @@ let temp_biome_x: any = null
 let temp_biome: any = null
 let world_ground_height: number[] = []
 let game_state = ""
-let god_mode = false
 let debug_mode = false
 debug_mode = false
-god_mode = true
 game_state = "menu"
 let selected_block: Sprite = null
-blockMenu.setColors(14, 0)
-scene.setBackgroundImage(assets.image`Title`)
+blockMenu.setColors(8, 1)
 blockMenu.showMenu([
 "Preset Seed",
 "Random Seed",
 "Choose Seed"
 ], MenuStyle.List, MenuLocation.BottomHalf)
-game.onUpdateInterval(5000, function () {
+game.onUpdateInterval(tick_speed * 2, function () {
     if (game_state == "running") {
-        timer.throttle("autosave", 60000, function () {
-            timer.after(10000, function () {
-                console.log("Starting autosave.")
-                saveGame()
-                console.log("Finished autosave.")
-            })
-        })
+        if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
+            spawnEnemy("mushroom")
+        }
     }
 })
 // For handling UI messages.
@@ -1207,20 +805,6 @@ game.onUpdateInterval(200, function () {
                 ui_message.ay = 0
                 ui_message.setVelocity(0, 0)
             }
-        }
-    }
-})
-game.onUpdateInterval(500, function () {
-    if (game_state == "running") {
-        if (getPlayerBiome() == "snow") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
-        } else if (getPlayerBiome() == "desert") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
-        } else {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
         }
     }
 })
@@ -1347,15 +931,17 @@ game.onUpdate(function () {
         }
     }
 })
-game.onUpdateInterval(5000, function () {
+game.onUpdateInterval(500, function () {
     if (game_state == "running") {
-        checkPlantGrowth()
-    }
-})
-game.onUpdateInterval(tick_speed * 2, function () {
-    if (game_state == "running") {
-        if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
-            spawnEnemy("mushroom")
+        if (getPlayerBiome() == "snow") {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
+        } else if (getPlayerBiome() == "desert") {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
+        } else {
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
         }
     }
 })

@@ -9,6 +9,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "Apple"
     },
+    "image3": {
+        "data": "hwQJAAkAAAAAAAAAAAAAAAAnInICAAAAACIkIgIAAAAAQiIiAgAAAHAiciICAAAAByIiQgIAAAAAIiJ0AgAAAAAnIiICAAAAAAAAAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "OldApple"
+    },
     "image2": {
         "data": "hwQFAAUAAAAgIgAAQiICACIiAgAiQgIAICIAAA==",
         "mimeType": "image/x-mkcd-f4",
@@ -23,6 +28,11 @@
         "data": "hwQOAAoAAAAA/wAAAAAAAP//AEAAAAAAIiIANAQAAAACAERDRAAAAP8PNDNDAAAA//A0M0QAAAAiIjQzBAAAACIANDMEAAAAQP9PNAQAAABAMzM0BAAAAEAzMzREAAAAQDMzNEMAAABAMzNERAAAAED/TwQAAAAA",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "anamalPigderpmcderp"
+    },
+    "/K)%327V~S~iy1ajTrIh": {
+        "data": "hwQKAA4AAAAAAADg7gAAAAAAAODkAAAA7u7u4O4ACAD+/+SIiIgIAE5E5GhmCAAATkTkaGYIAAD+/+SIiIgIAO7u7uDuAAgAAAAA4OQAAAAAAADg7gAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "PlayerIdle0"
     },
     "image9": {
         "data": "hwQMAA4AAAAAAAAA7g4AAAAAAABODgAAAAAAAO4OAADu7u4AAAAIAP7/5IiIiAgATkTkaGYIAABORORoZggAAP7/5IiIiAgA7u7uAAAACAAAAAAA7g4AAAAAAABODgAAAAAAAO4OAAA=",
@@ -164,55 +174,12 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "biomeSnowCLOUDS"
     },
-    "image33": {
-        "data": "hwSgAHgAAABERFS7u7u7u7u7u7v///////////////////////////////////////////////////////////////8kRFS7u7u7u7u7u7v///////////////////////////////////////////////////////////////8iQlS7u7u7u7u7u7v///////////////////////////////////////////////////////////////9CQlS7u7u7u7u7u/v///////////////////////////////////////////////////////////////9EQlS7u7u7u7u7u/v///////////////////////////////////////////////////////////////9ERLW7u7u7u7u7u/v//////////////////8/MzMzM/P////////////////////////////////////9EVLu7u7u7u7u7u/v////////////////PzPz/////z/z///////////////////////////////////9EVbu7u7u7u7u7u/v//////////////8/8/////////8////////////////////////////////////9Uu7u7u7u7u7u7u///////////////z/z////////////8/////////////////////8////////////9Uu7u7u7u7u7u7u///////////////z//////////////8//////////////////////z///////////+1u7u7u7u7u7u7u//////////////////////////////8//////////////////////z///////////+7u7u7u7u7u7u7+//////////////////////PzP/////8//////////////////////z///////////+7u7u7u7u7u7u7+////////////////////8/M///////8//////////////////////z///////////+7u7u7u7u7u7u7//////////////////////z////////8//////////////////////z///////////+7u7u7u7u7u7u7//////////////////////z////////8///////8//////////////z///////////+7u7u7u7u7u7v7//////////////////////z////////8///////8//////////////z///////////+7u7u7u7u7u7v7//////////////////////z////////8/////8////////////////z//8/M/P////+7u7u7u7u7u7v7//////////////////////z//////8////////zMzMz///////////z//8//z/////+7u7u7u7u7u7v///////////////////////z//////8///////8z//8////////////z//8//z/////+7u7u7u7u7u7v///////////////////////z///////z/////z8///8////////////z//8////z///+7u7u7u7u7u/v//////////////////////8////////z/////z8/////8//////////z//8////z///+7u7u7u7u7u/v//////////////////////8//////z////////M/////8//////////z//8////z///+7u7u7u7u7u////////////////////////P/////M/P///////M/////P//////////z///z///z///+7u7u7u7u7u////////////////////////P///8/////////P/8/////P//////////z///z///z///+7u7u7u7u7+///////////////////////z/z/z8z////////P/8///////P////////z///////z///+7u7u7u7u7+////////////////////////8/M/P/////////P/8///////P////////z/////z/////+7u7u7u7u7+////yIiIiIiIiIiIiIiIiIiIiIiIv/////////P/8///////P////////z/////z/////+7u7u7u7u7////////LyL////////////////////////////P/8//////z/////////z/////z/////+7u7u7u7u7//////////8iIv/////////////////////////P///8////z////////8///////P////+7u7u7u7v7/////////////yIi///////////////////////P///P////z////////8///////P////+7u7u7u7v/////////////////IvL////////////////////P///P////z////////8/M/////P////+7u7u7u7v//////////////////y8i8v/////////////////P///P////z///////////zMzM//////+7u7u7u/v/////////////////////LyLy///////////////P///P////z/////////////////////+7u7u7u/v///////////////////////8vIv/////////////P///P////z/////////////////////+7u7u7u////////////////////////////yIi///////////P/////P//z/////////////////////+7u7u7u///////////////////////////////8v/////////P/////P//z/////////////////////+7u7u7+////////////////////////////yIi///////////P////////z/////////////////////+7u7u7+/////////////////////////8iIv/////////////P/////////P////////////////////+7u7u7//////////////////////8vIiL////////////////P/////////P////////////////////+7u7v7////////////////////LyLy///////////////////P/////////P////////////////////+7u7v//////////////////y8i8v/////////////////////P/////////P////////////////////+7u7v///////////////8vIvL//////////////////////////P///////P////////////////////+7u/v/////////////IiLy/////////////////////////////P///////P////////////////////+7u////////////yIi/////////////////////////////////P/////P//////////////////////+7+////////1VV9SIiIiIiIiIiIiIiIiIiIiIiIv///////////P/////P//////////////////////+7/////////0VEVfX/////////////////////////////////z//////P/////////////////////////////////0UkRFX///////////////////////////////////z////8/////////////////////////////////0UiRERERERERERERERERERERERERP///////////8/////8/////////////////////////////////1VERFX//////////////////////////////////8/MzMz//////////////////////////////////19EVPX//////////////////////////////////////////////////////////////////////////19V9f///////////////////////////////////////////////////////////////////////////////yIiIiIiIiIiIiIiIiIiIiIiIv///////////////////////////////////////////////////////y8iIvL//////////////////////////////////////////////8/8/////////////////////////////y8iIv/////////////////////////////////////////PzPzP/P///////////////////////////////yIiIv///////////////////8/MzPz//////////8/8////z////////////////////////////////////yIi8v//////////////z/z//8////////////z///////z/////////////////////////////////////LyIi8v/////////P/P/////8////////z/////////z/////////////////////////////////////////LyIi///////8///////8////////z/////////z//////////////////////yIiIiIiIiIiIiIiIiIiIiIi8v///8///8z8///8/////////P///////8////////////////////////////////////////////////////z/zPz//8///////////P///////8////////////////////////////////////////////////////zP/P//z/z////////P/////P///8//////////////////////////////////IiLy//////////////zP///P/P/////////P/////P///8//////////////////////////////IiIi8v8vIiLy////////z//PzMzM///////////P/////P///8//////////////////////////IiIi//////////8iIvL////////////////////////8/////P///8////////////////////////8i/////////////////yLy///////////////////////8/////P///8///////////////////////y/////////////////////y/////////////////////8///////P///8///////////////////////y////////////////////8v/////////////////////////////P///8///////////////////////y////////////////////8v/////////////////////////////P///8///////////////////////y/y//////////////////8v/////////////////////////////P////z////////////////////////y//////////////////8v/////////////////////////////P////z////////////////////////y/////y////////////8v/////////////////////////////P//z///////////////////z//////y/////y////////////8v/////////////////////////////P///P///////////////////P/////y/////y////////////8v/////////////P///////////////P/P/////////////////////P////8i/////y////////////8v///////////P////////////////z8zM///////////////////P//////8v/////y////////////8v///////////P///////////////////////////////////////P//////8v/////y/////////////y///////////8///////////////////////////////////////8////////8v///y/////////////y///////////8///////////////////////////////////////8////////Iv///y/////////////y/////////8///////////////////////////////////////8//////////L/L///L//////////////////////8///////////////////////////////////////8///////////yL/L/L//////////////////////8///////////////////////////////////////8///////////y8iIv////////////////////////z//////////////8/MzP////////////////////z///////////////////////////////////////z/////////////zPz///////////////////////z///////////////////////////////////////z////////////M//////////////////////////z///////////////////////////////////////z//////////8z///////////////////////////z//////////yIiIiL//////////y//////////z//M/P//////z///z8z8//////////////////////z/////////IvL//y/y/////////y//////////z8///P///////P///P/P/P//////////////////z/////////8i///////y/////////y//////////z8///P/////P///P////z/z/////////////////z//////////y///////y/////////y//////////z8///P/////P///P//////z/////////////////z////8z8///y//////8v/////////yL/////////z8///P/////8///P/////8///////////////////P/////8///y//////8v//////////L/////////z8///P/////8///P/////8///////////////////P//z//8///y//////8v//////////L/////////z////P/////8///P///////8/////////////////P//z//8///y//////8v//////////L/////////z////P///8/////P///////8/////////////////P///P/8///y//////8v////////L/L//////////P///P///8/////////////8///////////////P/////M/////y//////8v////////Iv///////////P/P/////8/////////////8///////////////P///P/M/////y//////8v//////8i/////////////P/P//////z////////////8///////////////P///P/8/////y//////8v/////yLy/////////////P/P//////z////////////8///////////////8///P/8////////////8vIiIiIvL//////////////P/P//////z//////////8/////////////////8///P/8///////////////////////////////////P/8//////z//////////8/////////////////8///P//z//////////////////////////////////P/8//////z//////////8/////////////////8///8//z/////////////////////////////////zMz///////z///////////z////////////////8///8//z///////////////////////////////////////////z/////////z//////////////////8///8//z/////LyIiIiLy/////////////////////////////8zM/P///////P/////////////////8///8//z///////////8i8v//////////////////////////////z8zMzMzM///////////////////8//////z/////////////LyLy///////////////////////////////////////////////////////8//////z///////////////8i///////////////////////////////////////////////////////8//////z/////////////////Iv/////////////////////////////////////////////////////8//////z//////////////////yL////////////////////////////////////////////////////8//////z//////////////////y/y///////////////////////////////////////////////////8////z/z////////////////////y///////////////////////////////////////////////////8//////z////////////////////y/////////////8/MzMzMzP/////////////////////////////8////z/z////////////////////y//////////////z///////z////////////////////////////8///P/P///////////////////y/y////////////z/////////z////////////////////////////MzMz8//////////////////////L//////////////P////////z/////////////////////////////////////////////////////L/L////////////P//////////z///////////////////////////////////////////////////8iIv/////////////8////zP///8//////////////////////////////////////////LyIiIiIiIiL//////////////8/////P/P///8///////////////////////////////////////////////////////////////////8/////P/////8////////////////////////////////////////////////////////8iIiL//////8/////P/////8////////////////////////////////////////////////////8vIiL//////////8/////P/////8//////////////////////////////////////////////////LyLy//////////////z////P//////z////////////PzMz///////////////////////////////8i8v////////////////z////PzP/PzP///////////8z8///M////////////////////////////IiL///////////////////z//////8z8////////////zP///////P///////////////////////y8i///////////////////////////////////////////M////////z/////////////////////////L//////////////////////////////////////////8//////////z///////////////////////L/////////////////////////////////////////////z/////////z///////////////////////8v//////////////////////////////////////////z///////////z/////////////////////8v8v///////////////////////////////////////////P//////////z/////////////////////8v///////////////////////////////////////////P////////////z/////////////////////8v///////////////////////////////////////////Pz8zM////////z/////////////////////8v///////////////////////////////////////////8/P//zPz/////z/////////////////////8v/////////////////////////8zMzMzMzMz//////8///P///8/8////z/////////////////////8v///////////////////////PzP///////8////////z//P/////P/P//z/////////////////////8v8v///////////////////8/8///////////8////z////P///////P//z///////////////////////IvL/////////////////z/z////////////8////z////P///////P//z////////////////////////y/////////////////P/MzMzMzM///////8/////P///P//////////z//////////////////////////////////////////8z///////zPz////8///P/////P//////////z////////////////////////////////////////8//z/////////z////8///P/////P///////////P////////////////////////////////////////z/z/////////z////8///8/////P///////////P/////////////////////////////////////////P///8//////z////8/8///////P///////////P/////////////////////////////////////////P///8//////z////8//z/////z//////////P///////8////////////////////////zMzM/P/////P///8/////8/////8////////z//////////P///////M/////////////////////8/M/////P/////8///8/////8z////8//////////z////////P///////M/P//////////////////z/z//////P/////8///8///////////8//////////z////////8///////M/P/////////////////P/P///////P///8/////P/////////8///////////8///////8z////////MzP///////////////8/8/////////P///8///////P///////8/////////////8////zP/////////MzP//////////////z/z//////////P////z//////P///////8/////////////PzMzM///////////MzPz//////////////P/////////P/////////////P///////8/////////////////////////////MzPz////////////M///////MzPzP////////////z////////8/////////////////////////////MzMz////////////8////zMz////8/////////////8z8////zPz////////////////////////////MzMz8/////////8/////P///////8///////////////PzMzM///////////////////////////////MzMzM//////////z////P/////8/8///////////////////////////////////////////////////MzMzM///////////////P//////z///////////////////////////////////////////////////9VzMzM/P/////////////P////z/////////////////////////////////////////////////////9UzMzM/P//////////////zMzMzP////////////////////////////////////////////////////9ExczM/P////////////////////////////////////////////////////////////////////////9ExczMzP////////////////////////////////////////////////////////////////////////8ixczMzP////////////////////////////////////////////////////////////////////////8kVMzMzP////////////////////////////////////////////////////////////////////////8kVMzMzP////////////////////////////////////////////////////////////////////////8kVMzMzP////////////////////////////////////////////////////////////////////////8=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "Title"
-    },
-    "image34": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO4OAADu7u4ATo4IAE5E5IjujgAA/k/kaGYIAABORORoZogIAP5P5IiIiAAA7u7uAE4OAAAAAAAA7g4AAAAAAAAAAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerJumpR"
-    },
-    "image35": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAO4OAAAAAAAATg4AAADu7u7uDgAAAE5E5IiIiAAATvTvaGYICABORORoZogIAE7074iIiAAA7u7u7g4ACAAAAAAAAIAIAAAAAAAAAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerJFallR"
-    },
-    "image36": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO4OAADu7u4ATg4AAP5P5IiIiAAATkTkaGaICAD+T+RoZggAAE5E5IjujgAA7u7uAE6OCAAAAAAA7g4AAAAAAAAAAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerJumpL"
-    },
-    "image37": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACADu7u7uDgAIAE7074iIiAAATkTkaGaICABO9O9oZggIAE5E5IiIiAAA7u7u7g4AAAAAAABODgAAAAAAAO4OAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerJFallL"
-    },
-    "image3": {
-        "data": "hwQJAAkAAAAAAAAAAAAAAAAiIiICAAAAACIkIgIAAAAAQiIiAgAAAOAiIiICAAAADiIiQgIAAAAAIiIkAgAAAAAiIiICAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "OldApple"
-    },
-    "image38": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIDwDu7u4AAAgPAE5E5IiICA8A/v/kaGYIDwBORORoZggIAP7/5IiIiAgA7u7uAAAADwDg7gAAAAAPAODkAAAAAAAA4O4AAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerHoldL"
-    },
-    "image39": {
-        "data": "hwQMAA4AAADg7gAAAAAAAODkAAAAAAAA4O4AAAAADwDu7u4AAAAPAP7/5IiIiAgATkTkaGYICAD+/+RoZggPAE5E5IiICA8A7u7uAAAIDwAAAAAAgAgPAAAAAAAAAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "playerHoldR"
-    },
-    "/K)%327V~S~iy1ajTrIh": {
-        "data": "hwQMAA4AAAAAAAAAAAAAAAAAAODuAAAAAAAA4OQADwDu7u7g7gAIAP7/5IiIiAgATkTkaGYIDwBORORoZggPAP7/5IiIiAgA7u7u4O4ACAAAAADg5AAPAAAAAODuAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "PlayerSpawn"
-    },
-    "image40": {
-        "data": "hwQJAAkAAAAAAAAAAAAAAACIiIgIAAAAAIiJhggAAAAAmIhoCAAAANCIiIgIAAAADWiImAgAAAAAiIaJCAAAAACIiIgIAAAAAAAAAAAAAAA=",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "AppleCOLD"
+    "anim1": {
+        "namespace": "myAnimations",
+        "id": "anim1",
+        "mimeType": "application/mkcd-animation",
+        "data": "YzgwMDBjMDAwZTAwMDIwMDAwZTBlZWVlMGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMGUwZWU2ODg2ZWUwZWUwZTQ2ODg2NGUwZWUwZWU2ODg2ZWUwZTAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMGVlMGU2ODg2ZTBlZTRlMGU2ODg2ZTBlNGVlMGU4ODg4ZTBlZTAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMA==",
+        "displayName": "playerIdle"
     },
     ")``yG!ptO17Z4[?-,o,p": {
         "namespace": "myImages",
@@ -220,76 +187,6 @@
         "mimeType": "application/mkcd-animation",
         "data": "ZjQwMTBkMDAwZDAwMDMwMDAwMDBiYmJiMGIwMDAwMDBiYjMzYjMwYjAwMDBiYjMxMTNiMzBiMDBiYjExMzMzM2IxMGJiYjMzMzMzMTEzYjFiYjEzMzMzMzMzMzNiM2JiYmJmZGZkYmRiYjBiMDBkYmRmZGYwYjAwMDBiYmRkZGRiZDBiMDBiMGRkZGRkZGJkMDAwMGRiZGRkYmRkMGIwMGIwZGRiZGRkYmQwMDAwYmJiYmJiYmIwYjAwMDAwMGJiYmIwYjAwMDAwMGJiMzNiMzBiMDAwMGJiMzExM2IzMGIwMGJiMTEzMzMzYjEwYmJiMzMzMzMxMTNiMWJiMTMzMzMzMzMzM2IzYmJiYmZkZmRiZGJiMGIwMGRiZGZkZjBiMDBiMGJiZGRkZGJkYmIwMGRiZGRkZGRkZGQwYmIwZGRiZGJiZGRiZDAwZGJkZDBiZGJkZDBiYjBiYmJiYjBiYmJiMDAwMDAwMDAwMDAwMDAwMDAwYjBiYmJiMDAwMDAwYjAzYjMzYmIwMDAwYjAxYjMzMzFiYjAwYjAxYjMxMzMxM2JiYjAzYjMzMTMzMzExYmIzYjMxMzMzMzMzMzNiYmJiZGJkZmRmYmJiYjAwYmJmZGZkYmQwYjAwYjBkZGRkZGRiZDAwMDBkYmRkZGJkZDBiMDBiMGRkYmRkZGJkMDAwMGJiYmJiYmJiMGIwMA==",
         "displayName": "AnimalMushroomWalking"
-    },
-    "anim5": {
-        "namespace": "myAnimations",
-        "id": "anim5",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDMwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwODAwODg4MDAwMDAwODAwMDA4MDAwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU2ZTg2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwMDA4ODgwMDgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBlZWVlMGUwMGUwZWU4ODg4MGUwMGUwZTQ2ODg2MGUwMGUwZWU2ODg2MGUwMDAwMDA2ODg2MDAwMDAwMDA4ODg4MDAwMDAwMDAwODg4ODAwMDAwMDA4MDA4ODgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerJumpR_DEFADE"
-    },
-    "anim6": {
-        "namespace": "myAnimations",
-        "id": "anim6",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDMwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDA4ODgwMDgwMDAwMDA4MDAwMDgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU2OGU2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODg4MDAwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTBlZWVlMGUwMDAwZTA4ODg4ZWUwZTAwZTA2ODg2NGUwZTAwZTA2ODg2ZWUwZTAwMDA2ODg2MDAwMDAwMDA4ODg4MDAwMDAwMDg4ODgwMDAwMDAwODg4MDA4MDAwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerJumpL_DEFADE"
-    },
-    "anim3": {
-        "namespace": "myAnimations",
-        "id": "anim3",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDQwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMGUwZWU2ODg2ZWUwZWUwZTQ2ODg2NGUwZWUwZWU2ODg2OGUwZTAwODg4ODg4ODgwMDAwMDgwMDAwMDAwMDAwZmZmZmZmZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU2ZTg2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwZmY4ODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZTBlZTg2MGUwMDAwZTBlNDg2MGUwMDAwZTBlZTg2MGUwMDAwMDA4ODg4ODAwMDAwODg4ODg4ODgwMDAwZjhmZmZmZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU2ZTg2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwZmY4ODhmZjgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerMoveR"
-    },
-    "anim4": {
-        "namespace": "myAnimations",
-        "id": "anim4",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDQwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMGUwZWU2ODg2ZWUwZWUwZTQ2ODg2NGUwZWUwZTg2ODg2ZWUwZTAwODg4ODg4ODgwMDAwMDAwMDAwODAwMDAwZmZmZmZmZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU2OGU2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODg4ZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZTA2OGVlMGUwMDAwZTA2ODRlMGUwMDAwZTA2OGVlMGUwMDAwMDg4ODg4MDAwMDAwODg4ODg4ODgwMDAwZmZmZmZmOGYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU2OGU2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODg4ZmYwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerMoveL"
-    },
-    "anim7": {
-        "namespace": "myAnimations",
-        "id": "anim7",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDMwMDAwZTBlZWVlMGUwMGVlZWU0ZjRmMGUwMDRlZWU0ZjRmMGUwMGVlZWU0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2ODAwMDAwMDA4ODg4ODgwMDAwMDAwODAwMDAwMDAwZmY4OGZmZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlZWVlZTAwZTA0ZmY0ZWVlNDAwZTA0ZmY0ZWVlZTAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDA4ODg4ODAwMDAwMDAwODAwODgwMDAwZmY4OGZmZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2ZTBlZTAwMDA2ODg2ZTBlNDAwMDA4ODg4ZTBlZTAwMDAwODgwMDAwMDAwZmY4ODhmZjgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerItemR"
-    },
-    "anim8": {
-        "namespace": "myAnimations",
-        "id": "anim8",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDMwMDAwZTBlZWVlMGUwMDAwZTBmNGY0ZWVlZTAwZTBmNGY0ZWVlNDAwZTBmNGY0ZWVlZTAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDg2ODg2MDAwMDAwODg4ODg4MDAwMDAwMDAwMDgwMDAwMDAwZmZmZjg4ZmYwMDAwMDAwMDAwMDAwMGVlZWVlZWVlMGUwMDRlZWU0ZmY0MGUwMGVlZWU0ZmY0MGUwMDAwZTA0ZmY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDA2ODg2MDAwMDAwMDg4ODg4MDAwMDAwODgwMDgwMDAwMDAwZmZmZjg4ZmYwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMGVlMGU2ODg2MDAwMDRlMGU2ODg2MDAwMGVlMGU4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODg4MDAwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerItemL"
-    },
-    "anim1": {
-        "namespace": "myAnimations",
-        "id": "anim1",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDQwMDAwMDBlZWVlZWUwMDAwMDA0ZTRmZWYwMDAwMDA0ZTRmZWYwMDAwMDA0ZTRmZWYwMDAwMDA0ZTQ0ZTQwMDAwMDBlZWVlZWUwMDAwMDA4ODg4MDAwMDAwZTBlZTg2ZWUwZTAwZTBlNDg2NGUwZTAwZTBlZTg2ZWUwZTAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwZTBlZTg4ZWUwZTAwZTBlNDg2NGUwZTAwZTBlZTg2ZWUwZTAwMDA4ODg2MDAwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZWVlZWVlMDAwMDAwNGU0ZmVmMDAwMDAwNGU0ZmVmMDAwMDAwNGU0ZmVmMDAwMDAwNGU0NGU0MDAwMDAwZWVlZWVlMDAwMDAwMDA4ODg4MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU2ZTg2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwZWU4ZTg4ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU2ZTg2ZWUwMDAwMDA2ODg2MDAwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerIdleR0"
-    },
-    "anim2": {
-        "namespace": "myAnimations",
-        "id": "anim2",
-        "mimeType": "application/mkcd-animation",
-        "data": "YzgwMDBjMDAwZTAwMDQwMDAwZWVlZWVlMDAwMDAwZmVmNGU0MDAwMDAwZmVmNGU0MDAwMDAwZmVmNGU0MDAwMDAwNGU0NGU0MDAwMDAwZWVlZWVlMDAwMDAwMDA4ODg4MDAwMGUwZWU2OGVlMGUwMGUwZTQ2ODRlMGUwMGUwZWU2OGVlMGUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMGUwZWU4OGVlMGUwMGUwZTQ2ODRlMGUwMGUwZWU2OGVlMGUwMDAwMDA2ODg4MDAwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMDAwMDBlZWVlZWUwMDAwMDBmZWY0ZTQwMDAwMDBmZWY0ZTQwMDAwMDBmZWY0ZTQwMDAwMDA0ZTQ0ZTQwMDAwMDBlZWVlZWUwMDAwMDA4ODg4MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU2OGU2ZWUwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwZWU4OGU4ZWUwMDAwNGU2OGU2ZTQwMDAwZWU2OGU2ZWUwMDAwMDA2ODg2MDAwMDAwMDA4ODg4MDAwMDAwMDAwODgwMDAwMDAwODAwODgwMDgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerIdleL0"
-    },
-    "anim9": {
-        "namespace": "myAnimations",
-        "id": "anim9",
-        "mimeType": "application/mkcd-animation",
-        "data": "NjQwMDBjMDAwZTAwMGIwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTBmNGY0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2ZTg2ZWUwMDAwNGU2ZTg2ZTQwMDAwZWU4ZTg4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerIdleR"
-    },
-    "anim10": {
-        "namespace": "myAnimations",
-        "id": "anim10",
-        "mimeType": "application/mkcd-animation",
-        "data": "NjQwMDBjMDAwZTAwMGIwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0NDQ0MGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMDAwZTBlZWVlMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0ZjRmMGUwMDAwZTA0NDQ0MGUwMDAwZTBlZWVlMGUwMDAwMDA4ODg4MDAwMDAwMDA2ODg2MDAwMDAwZWU2OGU2ZWUwMDAwNGU2OGU2ZTQwMDAwZWU4OGU4ZWUwMDAwMDAwODgwMDAwMDAwOGZmODhmZjgwMDAwMDAwMDAwMDAwMA==",
-        "displayName": "playerIdleL"
     },
     "*": {
         "mimeType": "image/x-mkcd-f4",
