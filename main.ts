@@ -593,25 +593,6 @@ function tooltest () {
     char_tool_sprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     char_tool_sprite.z = 3
 }
-blockMenu.onMenuOptionSelected(function (option, index) {
-    world_seed = 0
-    if (index == 1) {
-        world_seed = randint(0, 9999999999)
-    } else if (index == 2) {
-        world_seed = game.askForNumber("Enter world seed:", 10)
-    }
-    console.log("Using seed value of: " + world_seed)
-    blockMenu.closeMenu()
-    setupVariables()
-    setupUIMessages()
-    setupUIStatBars()
-    generateWorldNew()
-    setupPlayer()
-    setupBuildables()
-    setupBuildableTiles()
-    tooltest()
-    game_state = "running"
-})
 function setupPlayerInventory () {
     items_all = [
     "wood",
@@ -722,7 +703,6 @@ function generateWorldBiome (biome_location: any[]) {
 let enemy_sprite: Sprite = null
 let tools_all_images: Image[] = []
 let tools_all_icons: Image[] = []
-let world_seed = 0
 let char_health_bar: Sprite = null
 let char_xp_current = 0
 let char_health_current = 0
@@ -777,33 +757,66 @@ let temp_biome_y: any = null
 let temp_biome_x: any = null
 let temp_biome: any = null
 let world_ground_height: number[] = []
-let game_state = ""
+let world_seed = 0
 let debug_mode = false
 debug_mode = false
-game_state = "menu"
+let seed_prompt = false
+world_seed = randint(0, 1000000)
+if (seed_prompt) {
+    world_seed = game.askForNumber("What seed would you like to use?", 10)
+}
+console.log("Using seed value of: " + world_seed)
 let selected_block: Sprite = null
-blockMenu.setColors(8, 1)
-blockMenu.showMenu([
-"Preset Seed",
-"Random Seed",
-"Choose Seed"
-], MenuStyle.List, MenuLocation.BottomHalf)
-game.onUpdateInterval(tick_speed * 2, function () {
-    if (game_state == "running") {
-        if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
-            spawnEnemy("mushroom")
+setupVariables()
+setupUIMessages()
+setupUIStatBars()
+generateWorldNew()
+setupPlayer()
+setupBuildables()
+setupBuildableTiles()
+tooltest()
+// For handling UI messages.
+game.onUpdateInterval(200, function () {
+    if (ui_message_queue.length > 0) {
+        uiShowMessage(ui_message_queue.shift())
+    } else {
+        if (ui_message.y > scene.screenHeight() + 200) {
+            ui_message.ay = 0
+            ui_message.setVelocity(0, 0)
         }
     }
 })
-// For handling UI messages.
-game.onUpdateInterval(200, function () {
-    if (game_state == "running") {
-        if (ui_message_queue.length > 0) {
-            uiShowMessage(ui_message_queue.shift())
+game.onUpdate(function () {
+    if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
+        char.vx = 0
+        if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
+            selected_block.setImage(assets.image`Target`)
         } else {
-            if (ui_message.y > scene.screenHeight() + 200) {
-                ui_message.ay = 0
-                ui_message.setVelocity(0, 0)
+            selected_block.setImage(sprites.readDataImage(selected_block, "img"))
+        }
+        sprites.changeDataNumberBy(selected_block, "blink", 1)
+        if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_max")) {
+            sprites.setDataNumber(selected_block, "blink", 0)
+        }
+    } else {
+        if (char.isHittingTile(CollisionDirection.Bottom)) {
+            if (controller.up.isPressed()) {
+                char.vy = char_speed_jump
+            }
+        }
+        if (controller.left.isPressed()) {
+            if (!(char.isHittingTile(CollisionDirection.Left))) {
+                char.vx = Math.constrain(char.vx - char_speed_rate, 0 - char_speed_max, char_speed_max)
+            }
+        } else if (controller.right.isPressed()) {
+            if (!(char.isHittingTile(CollisionDirection.Right))) {
+                char.vx = Math.constrain(char.vx + char_speed_rate, 0 - char_speed_max, char_speed_max)
+            }
+        } else {
+            if (Math.abs(char.vx) > 1) {
+                char.vx = char.vx * char_speed_decel_rate
+            } else {
+                char.vx = 0
             }
         }
     }
@@ -858,90 +871,52 @@ game.onUpdateInterval(tick_speed / 5, function () {
         }
     }
 })
-game.onUpdate(function () {
-    if (game_state == "running") {
-        if (controller.down.isPressed()) {
-            char_button_direction = 3
-        } else if (controller.up.isPressed()) {
-            char_button_direction = 1
-        } else if (controller.right.isPressed()) {
-            char_button_direction = 2
-        } else if (controller.left.isPressed()) {
-            char_button_direction = 0
-        } else {
-            char_button_direction = -1
-        }
+game.onUpdateInterval(tick_speed * 2, function () {
+    if (sprites.allOfKind(SpriteKind.Enemy).length < entities_max) {
+        spawnEnemy("mushroom")
     }
 })
 game.onUpdate(function () {
-    if (game_state == "running") {
-        if (toolCurrentLabel() == "hammer" && controller.A.isPressed()) {
-            char.vx = 0
-            if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_at")) {
-                selected_block.setImage(assets.image`Target`)
-            } else {
-                selected_block.setImage(sprites.readDataImage(selected_block, "img"))
-            }
-            sprites.changeDataNumberBy(selected_block, "blink", 1)
-            if (sprites.readDataNumber(selected_block, "blink") >= sprites.readDataNumber(selected_block, "blink_max")) {
-                sprites.setDataNumber(selected_block, "blink", 0)
-            }
-        } else {
-            if (char.isHittingTile(CollisionDirection.Bottom)) {
-                if (controller.up.isPressed()) {
-                    char.vy = char_speed_jump
-                }
-            }
-            if (controller.left.isPressed()) {
-                if (!(char.isHittingTile(CollisionDirection.Left))) {
-                    char.vx = Math.constrain(char.vx - char_speed_rate, 0 - char_speed_max, char_speed_max)
-                }
-            } else if (controller.right.isPressed()) {
-                if (!(char.isHittingTile(CollisionDirection.Right))) {
-                    char.vx = Math.constrain(char.vx + char_speed_rate, 0 - char_speed_max, char_speed_max)
-                }
-            } else {
-                if (Math.abs(char.vx) > 1) {
-                    char.vx = char.vx * char_speed_decel_rate
-                } else {
-                    char.vx = 0
-                }
-            }
-        }
-    }
-})
-game.onUpdate(function () {
-    if (game_state == "running") {
-        if (char_button_direction == 0) {
-            sprites.setDataNumber(char_tool_sprite, "direction", -1)
-            if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
-                char_tool_sprite.setImage(toolCurrentImage().clone())
-                char_tool_sprite.image.flipX()
-            }
-        } else if (char_button_direction == 2) {
-            sprites.setDataNumber(char_tool_sprite, "direction", 1)
-            if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
-                char_tool_sprite.setImage(toolCurrentImage().clone())
-            }
-        }
-        if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
-            char_tool_sprite.setPosition(char.x - 5, char.y - 1)
-        } else {
-            char_tool_sprite.setPosition(char.x + 5, char.y - 1)
-        }
+    if (controller.down.isPressed()) {
+        char_button_direction = 3
+    } else if (controller.up.isPressed()) {
+        char_button_direction = 1
+    } else if (controller.right.isPressed()) {
+        char_button_direction = 2
+    } else if (controller.left.isPressed()) {
+        char_button_direction = 0
+    } else {
+        char_button_direction = -1
     }
 })
 game.onUpdateInterval(500, function () {
-    if (game_state == "running") {
-        if (getPlayerBiome() == "snow") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
-        } else if (getPlayerBiome() == "desert") {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
-        } else {
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
-            scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
+    if (getPlayerBiome() == "snow") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeSnowCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeSnowFRONT`)
+    } else if (getPlayerBiome() == "desert") {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomeDesertCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomeDesertFRONT`)
+    } else {
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer0, assets.image`biomePlainsCLOUDS`)
+        scroller.setLayerImage(scroller.BackgroundLayer.Layer1, assets.image`biomePlainsFRONT`)
+    }
+})
+game.onUpdate(function () {
+    if (char_button_direction == 0) {
+        sprites.setDataNumber(char_tool_sprite, "direction", -1)
+        if (char_tool_sprite.image.equals(toolCurrentImage().clone())) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+            char_tool_sprite.image.flipX()
         }
+    } else if (char_button_direction == 2) {
+        sprites.setDataNumber(char_tool_sprite, "direction", 1)
+        if (!(char_tool_sprite.image.equals(toolCurrentImage().clone()))) {
+            char_tool_sprite.setImage(toolCurrentImage().clone())
+        }
+    }
+    if (sprites.readDataNumber(char_tool_sprite, "direction") == -1) {
+        char_tool_sprite.setPosition(char.x - 5, char.y - 1)
+    } else {
+        char_tool_sprite.setPosition(char.x + 5, char.y - 1)
     }
 })
