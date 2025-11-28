@@ -41,6 +41,10 @@ namespace myTiles {
     //% fixedInstance jres blockIdentity=images._tile
     export const tile26 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
+    export const tile28 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile25 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
     export const tile29 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile18 = image.ofBuffer(hex``);
@@ -56,18 +60,6 @@ namespace myTiles {
     export const tile11 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile16 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile25 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile30 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile31 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile32 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile33 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile28 = image.ofBuffer(hex``);
 
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
@@ -154,6 +146,10 @@ namespace myTiles {
             case "tile27":return tile27;
             case "Sand":
             case "tile26":return tile26;
+            case "cactus":
+            case "tile28":return tile28;
+            case "SnowGrass":
+            case "tile25":return tile25;
             case "advanceBurner":
             case "tile29":return tile29;
             case "BushFull":
@@ -170,18 +166,6 @@ namespace myTiles {
             case "tile11":return tile11;
             case "BushThorns":
             case "tile16":return tile16;
-            case "SnowGrass":
-            case "tile25":return tile25;
-            case "TreeTopCOLD":
-            case "tile30":return tile30;
-            case "TreeTopA":
-            case "tile31":return tile31;
-            case "TreeTopACOLD":
-            case "tile32":return tile32;
-            case "cactus0":
-            case "tile33":return tile33;
-            case "cactusFood":
-            case "tile28":return tile28;
         }
         return null;
     })
