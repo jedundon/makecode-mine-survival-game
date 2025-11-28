@@ -1,5 +1,5 @@
 {
-    "name": "MineSur",
+    "name": "MineSur (Restored)",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -26,11 +26,11 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.8.22",
+        "target": "2.0.62",
         "targetId": "arcade"
     },
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }

@@ -1608,5 +1608,12 @@ b b b b d f d f d b b b b
         return null;
     })
 
+    helpers._registerFactory("song", function(name: string) {
+        switch(helpers.stringTrim(name)) {
+
+        }
+        return null;
+    })
+
 }
 // Auto-generated code. Do not edit.
